@@ -4,15 +4,42 @@
  *  @details  FreeRTOS Real Time Stats Example 'real_time_stats_example_main'
  *
  *  @author   Justin Reina, Firmware Engineer
- *  @created  2/3/25
- *  @last rev 2/3/25
+ *  @created  3/2/25
+ *  @last rev 3/6/25
  *
  *   @section 	Opens
+ *		#ifdefs here
+ *		CMakeLists reloc
+ *		vTaskDelay to cmsis wrappwea
+ *		Complete demo
+ *		...
+ *		Sync with STM32
+ *		_b2 laundry list & dev
+ *		Publish & host 'v1'!
+ *		...
  * 		post both updates to new www rtos page
+ *		Disable display of input field names
+ * 		Relocate main\CMakeLists.txt & close main\ dir
  *   		
+ *	 @section 	Development Flow
+ *		1. Integrate existing STM 'v0'
+ *		2. Update STM 'v1' (squash PM work)
+ *		3.Integrate existing STM 'v1'
+ *		4. Adapt to Espressif SMP demo
+ *		5. Integrate Bluetooth (branch)
+ *		6. Integrate WiFi (branch)
+ *
+ *	 @section 	Sources
+ *		 FreeRTOS Real Time Stats Example 'real_time_stats_example_main'
+ *		 CubeMx_RTOS_Demo 'r0'
+ *
  *   @section 	Deferred
  * 		Get 'F11' to launch debug
  * 		Relocate main\CMakeLists.txt & close main\
+ * 		post both updates to new www rtos page
+ *		Get multi-line comments 'Enter' to lead with a new '*' char
+ *		Consider renaming proj 'Espressif_RTOS'
+ *		Ctrl + '/' for commenting out lines
  *
  *  @section    Legal Disclaimer
  * 		©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other
@@ -28,6 +55,7 @@
 //Standard Library Includes
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <inttypes.h>
 
 //SDK Includes
@@ -41,6 +69,8 @@
 
 
 //Project Includes
+#include "utils.h"
+#include "Rtos/freertos.h"				  /* @open 	drop dir from path							  */
 #include "main.h"
 
 
@@ -50,17 +80,9 @@
 
 //-----------------------------------------  Definitions -----------------------------------------//
 
-//Task Definitions
-#define NUM_OF_SPIN_TASKS   (6)
-#define SPIN_ITER           (500000)  	/* Actual ct used will depend on compiler optimization	  */
-#define SPIN_TASK_PRIO      (2)
-
-//Statistic Definitions
-#define STATS_TASK_PRIO     (3)
-#define STATS_TICKS         pdMS_TO_TICKS(1000)
-
 //Error Support
 #define ARRAY_SIZE_OFFSET   (5)   		/* Soln ++ iff ESP_ERR_INVALID_SIZE					      */
+
 
 //-------------------------------------------- Macros --------------------------------------------//
 
@@ -93,7 +115,7 @@ static SemaphoreHandle_t sync_stats_task;
 //************************************************************************************************//
 
 /**************************************************************************************************/
-/** @fcn        static esp_err_t print_real_time_stats(TickType_t xTicksToWait)
+/** @fcn        esp_err_t print_real_time_stats(TickType_t xTicksToWait)
  *  @brief      Function to print the CPU usage of tasks over a given duration.
  *  @details    x
  *
@@ -122,9 +144,9 @@ static SemaphoreHandle_t sync_stats_task;
  *       When running in dual core mode, each core will correspond to 50% of the run time.
  */
 /**************************************************************************************************/
-static esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
-	
-	//Locaks
+esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
+
+	//Locals
     TaskStatus_t *start_array = NULL, *end_array = NULL;
     UBaseType_t start_array_size, end_array_size;
     configRUN_TIME_COUNTER_TYPE start_run_time, end_run_time;
@@ -133,6 +155,9 @@ static esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
     //Allocate array to store current task states
     start_array_size = uxTaskGetNumberOfTasks() + ARRAY_SIZE_OFFSET;
     start_array = malloc(sizeof(TaskStatus_t) * start_array_size);
+    
+    //Notify
+    printf("print_real_time_stats(): Getting real time stats\n");
     
     if (start_array == NULL) {
         ret = ESP_ERR_NO_MEM;
@@ -176,7 +201,7 @@ static esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
         goto exit;
     }
 
-    printf("| Task X Run Time | Percentage\n");
+    printf("| Task   | Run Time | Percentage\n");
     
     //Match each task in start_array to those in the end_array
     for (int i = 0; i < start_array_size; i++) {
@@ -200,12 +225,51 @@ static esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
         //Check if matching task found
         if (k >= 0) {
 			
+			//Elapsed time count
             uint32_t task_elapsed_time = end_array[k].ulRunTimeCounter - start_array[i].ulRunTimeCounter;
-            uint32_t percentage_time = (task_elapsed_time * 100UL) / (total_elapsed_time * CONFIG_FREERTOS_NUMBER_OF_CORES);
             
-            printf("| %s | %"PRIu32" | %"PRIu32"%%\n", start_array[i].pcTaskName, task_elapsed_time, percentage_time);
+            //Percentage complete
+            uint32_t percentage_time = (task_elapsed_time * 100UL) / (total_elapsed_time * CONFIG_FREERTOS_NUMBER_OF_CORES);
+			
+			//----------------------------------- Calc Spacing -----------------------------------//
+			 
+			int num_elapsed_digits = numPlaces(task_elapsed_time);
+ 
+			char *spaceOneStr = "!";
+			char *spaceTwoStr = "?";
+
+			int sizeOne      = strlen(start_array[i].pcTaskName);
+			int sizeOneMax   = 6;
+			int sizeOneSpace = (sizeOneMax-sizeOne+1);
+
+			int sizeTwo      = num_elapsed_digits;
+			int sizeTwoMax   = 8;					/* pick a big size for KISS					  */					
+			int sizeTwoSpace = (sizeTwoMax-sizeTwo);
+			
+			char stringOne[10] = {0};				/* static size for KISS						  */
+			char stringTwo[10] = {0};
+			
+			//Gen Spaces
+			for(int i=0; i<sizeOneSpace; i++) { stringOne[i] = ' '; }
+			for(int i=0; i<sizeTwoSpace; i++) { stringTwo[i] = ' '; }
+			stringOne[sizeOneSpace] = 0x00;			// EOS
+			stringTwo[sizeTwoSpace] = 0x00;			// EOS
+
+			spaceOneStr = &stringOne[0];
+			spaceTwoStr = &stringTwo[0];
+
+
+			//----------------------------------- Print Console-----------------------------------//
+			
+            printf("| %s%s| %"PRIu32" %s| %"PRIu32"%%\n", start_array[i].pcTaskName, 
+											              spaceOneStr, 
+											              task_elapsed_time, 
+											              spaceTwoStr, 
+											              percentage_time);
         }
     }
+    
+    printf("\nTasks:\n");
 
     //Print unmatched tasks
     for (int i = 0; i < start_array_size; i++) {
@@ -293,6 +357,7 @@ static void stats_task(void *arg) {
  *  @details    x
  */
 /**************************************************************************************************/
+#define DEMO_IMPORT
 void app_main(void) {
 	
     //Allow other core to finish initialization
@@ -307,11 +372,24 @@ void app_main(void) {
         snprintf(task_names[i], configMAX_TASK_NAME_LEN, "spin%d", i);
         xTaskCreatePinnedToCore(spin_task, task_names[i], 1024, NULL, SPIN_TASK_PRIO, NULL, tskNO_AFFINITY);
     }
-
-    //Create and start stats task
+    
+    //Create and start stats task @open NO MAGIC NUMS & use struct fot task config info omg
     xTaskCreatePinnedToCore(stats_task, "stats", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
     xSemaphoreGive(sync_stats_task);
+
+    //Create and start system task
+	//@open swap to cmsis wrappers & use structs for defs
+    xTaskCreatePinnedToCore(sysTask, "system", 4096, NULL, SYSTEM_TASK_PRIO, NULL, tskNO_AFFINITY);
     
+    //Create and start data task
+    xTaskCreatePinnedToCore(dataTask, "data", 4096, NULL, DATA_TASK_PRIO, NULL, tskNO_AFFINITY);
+    
+    //Create and start display task
+    xTaskCreatePinnedToCore(dispTask, "data", 4096, NULL, DISPLAY_TASK_PRIO, NULL, tskNO_AFFINITY);
+    
+    //Create and start control task
+    xTaskCreatePinnedToCore(ctrlTask, "data", 4096, NULL, CONTROL_TASK_PRIO, NULL, tskNO_AFFINITY);
+   
     return;
 }
 

@@ -1,2 +1,10 @@
-idf_component_register(SRCS "../Core/main.c"
-                    INCLUDE_DIRS ".")
+idf_component_register(
+	SRCS 
+		"../Core/main.c" 
+		"../Core/Rtos/freertos.c"
+		"../Core/System/utils.c"
+	INCLUDE_DIRS
+		"."
+		"../Core/System" 
+		"../Middlewares/FreeRTOS/Source/CMSIS_RTOS_V2"
+)
