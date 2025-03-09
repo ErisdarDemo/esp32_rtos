@@ -9,11 +9,11 @@
  *
  *   @section 	Opens
  *		CMakeLists reloc
+ *		SEMAPHORE_BUG
  *		vTaskDelay to cmsis wrapper
  *		Complete demo
  *		...
  *		Sync with STM32
- *		_b2 laundry list & dev
  *		Publish & host 'v1'!
  *		...
  * 		post both updates to new www rtos page
@@ -22,8 +22,7 @@
  *   		
  *	 @section 	Development Flow
  *		1. Integrate existing STM 'v0'
- *		2. Update STM 'v1' (squash PM work)
- *		3.Integrate existing STM 'v1'
+ *		2. Update w/STM to 'v1'
  *		4. Adapt to Espressif SMP demo
  *		5. Integrate Bluetooth (branch)
  *		6. Integrate WiFi (branch)
@@ -39,6 +38,7 @@
  *		Get multi-line comments 'Enter' to lead with a new '*' char
  *		Consider renaming proj 'Espressif_RTOS'
  *		Ctrl + '/' for commenting out lines
+ *		Include paths are direct
  *
  *  @section    Legal Disclaimer
  * 		©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other
@@ -294,6 +294,9 @@ exit:    //Common return path
 /** @fcn        int app_main(void)
  *  @brief      x
  *  @details    x
+ *
+ *	@section 	Opens
+ *		add a loop delay to the ui fcn that makes sense, for the runtime demo to work w/o a halt
  */
 /**************************************************************************************************/
 void app_main(void) {

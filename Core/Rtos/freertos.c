@@ -8,7 +8,7 @@
  *		unused-includes bug?
  *		switch to cmsis_os2 cleaner api for fcn calls
  *
- *  @note	freertos.c uses main.h as the interface file
+ *  @note	freertos.c uses main.h for task value definitions 
  */
 /**************************************************************************************************/
 
@@ -19,6 +19,9 @@
 //Standard Library Includes
 #include <string.h>
 #include <stdio.h>
+
+//FreeRTOS Includes
+#include "cmsis_os2.h"
 
 //RTOS Includes
 #include "freertos/FreeRTOS.h"
@@ -37,14 +40,16 @@
 //-----------------------------------------  Definitions -----------------------------------------//
 
 //Task Definitions
-#define SYSTEM_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(2500)
-#define DATA_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(2500)
-#define DISPLAY_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(2500)
-#define CONTROL_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(2500)
+#define SPIN_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(2000)	/* @warn  requires spin==stat*/
+#define STATS_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(2000)
+#define SYSTEM_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
+#define DATA_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
+#define DISPLAY_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
+#define CONTROL_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
 
 //Timing Definitions
-#define MAGIC_NUM_ONE					(100)
-#define MAGIC_NUM_TWO					(1000)
+#define MAGIC_NUM_ONE		(100)
+#define MAGIC_NUM_TWO 		(4096)
 
 
 //************************************************************************************************//
@@ -55,8 +60,10 @@
 char task_names[NUM_OF_SPIN_TASKS][configMAX_TASK_NAME_LEN];
 
 //Semaphores
-SemaphoreHandle_t sync_spin_task;
-SemaphoreHandle_t sync_stats_task;
+#ifdef SEMAPHORE_BUG
+	SemaphoreHandle_t sync_spin_task;
+	SemaphoreHandle_t sync_stats_task;
+#endif
 
 
 //--------------------------------------------- Tasks --------------------------------------------//
@@ -170,40 +177,45 @@ void stats_task(void *arg);
  *
  *	@section 	Opens
  *		cmsis_os2!
+ *		share task string names wow
  */
 /**************************************************************************************************/
 void rtos_init(void) {
 
 	//Allow other core to finish initialization
-  	vTaskDelay(pdMS_TO_TICKS(100));
+  	vTaskDelay(pdMS_TO_TICKS(MAGIC_NUM_ONE));
 
     //Create semaphores to synchronize
-    sync_spin_task = xSemaphoreCreateCounting(NUM_OF_SPIN_TASKS, 0);
+#ifdef SEMAPHORE_BUG    
+    sync_spin_task  = xSemaphoreCreateCounting(NUM_OF_SPIN_TASKS, 0);
     sync_stats_task = xSemaphoreCreateBinary();
 
     //Create spin tasks
     for(int i = 0; i < NUM_OF_SPIN_TASKS; i++) {
-
+		
+		//Name
         snprintf(task_names[i], configMAX_TASK_NAME_LEN, "spin%d", i);
-
+        
+		//Init
         xTaskCreatePinnedToCore(spin_task, task_names[i], 1024, NULL, SPIN_TASK_PRIO, NULL, tskNO_AFFINITY);
     }
 
     //Create and start stats task
     xTaskCreatePinnedToCore(stats_task, "stats", 4096, NULL, STAT_TASK_PRIO, NULL, tskNO_AFFINITY);
-    xSemaphoreGive(sync_stats_task);
+    xSemaphoreGive(sync_stats_task);				/* @open why does stats_task Take?            */
+#endif
 
     //Create and start system task
-    xTaskCreatePinnedToCore(sysTask, "system", 4096, NULL, SYS_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(sysTask, "system", MAGIC_NUM_TWO, NULL, SYS_TASK_PRIO, NULL, tskNO_AFFINITY);
     
     //Create and start data task
-    xTaskCreatePinnedToCore(dataTask, "data", 4096, NULL, DATA_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(dataTask, "data", MAGIC_NUM_TWO, NULL, DATA_TASK_PRIO, NULL, tskNO_AFFINITY);
 
     //Create and start display task
-    xTaskCreatePinnedToCore(dispTask, "data", 4096, NULL, DISP_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(dispTask, "display", MAGIC_NUM_TWO, NULL, DISP_TASK_PRIO, NULL, tskNO_AFFINITY);
     
     //Create and start control task
-    xTaskCreatePinnedToCore(ctrlTask, "data", 4096, NULL, CTRL_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(ctrlTask, "control", MAGIC_NUM_TWO, NULL, CTRL_TASK_PRIO, NULL, tskNO_AFFINITY);
 
 	return;
 }
@@ -221,7 +233,7 @@ void rtos_init(void) {
  *  	!35 ms (!~728 * (!127-!80)) and !46 ms (!~728 * !64)
  *
  *	@section 	Opens
- *		consider moving loop header to subroutine
+ *		move loop header to subroutine
  *		handle #defs!
  */
 /**************************************************************************************************/
@@ -381,14 +393,21 @@ void ctrlTask(void *argument) {
 /**************************************************************************************************/
 void spin_task(void *arg) {
 	
-    xSemaphoreTake(sync_spin_task, portMAX_DELAY);
+#ifdef SEMAPHORE_BUG	
+    xSemaphoreTake(sync_spin_task, portMAX_DELAY);s
+#endif
     
     for(;;) {
+		
+		//Notify
+		printTaskHeader("Spin");
+		
         //Consume CPU cycles
         for (int i = 0; i < SPIN_ITER; i++) {
-            __asm__ __volatile__("NOP");
+            _nop();
         }
-        vTaskDelay(pdMS_TO_TICKS(100));
+        
+        vTaskDelay(SPIN_TASK_LOOP_DELAY_CTS);
     }
 }
 
@@ -403,28 +422,32 @@ void spin_task(void *arg) {
 /**************************************************************************************************/
 void stats_task(void *arg) {
 	
+	
+	//------------------------------------ Semaphore Practice ------------------------------------//
+
+	//Grab
+#ifdef SEMAPHORE_BUG
     xSemaphoreTake(sync_stats_task, portMAX_DELAY);
+#endif
 
     //Start all the spin tasks
     for(int i = 0; i < NUM_OF_SPIN_TASKS; i++) {
+		
+		//Release
+#ifdef SEMAPHORE_BUG
         xSemaphoreGive(sync_spin_task);
+#endif
     }
 
-    //Print real time stats periodically
+
+	//------------------------------------------ Print -------------------------------------------//
     for(;;) {
         
-        printf("\n\nSweating real time stats over %"PRIu32" ticks\n", STATS_TICKS);
+		//Notify
+		printTaskHeader("Statistics");
         
-        if (print_real_time_stats(STATS_TICKS) == ESP_OK) {
-			
-            printf("Real time stats obtained\n");
-            
-        } else {
-			
-            printf("Error getting real time stats\n");
-            
-        }
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        //Loop
+        vTaskDelay(STATS_TASK_LOOP_DELAY_CTS);
     }
     
     return;
