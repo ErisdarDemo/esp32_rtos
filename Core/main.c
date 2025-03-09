@@ -5,12 +5,11 @@
  *
  *  @author   Justin Reina, Firmware Engineer
  *  @created  3/2/25
- *  @last rev 3/6/25
+ *  @last rev 3/9/25
  *
  *   @section 	Opens
- *		#ifdefs here
  *		CMakeLists reloc
- *		vTaskDelay to cmsis wrappwea
+ *		vTaskDelay to cmsis wrapper
  *		Complete demo
  *		...
  *		Sync with STM32
@@ -69,7 +68,7 @@
 
 
 //Project Includes
-#include "utils.h"
+#include "System/utils.h"
 #include "Rtos/freertos.h"				  /* @open 	drop dir from path							  */
 #include "main.h"
 
@@ -292,104 +291,17 @@ exit:    //Common return path
 
 
 /**************************************************************************************************/
-/** @fcn        static void spin_task(void *arg)
- *  @brief      x
- *  @details    x
- *
- *  @param    [in]  (void *) arg - ?
- */
-/**************************************************************************************************/
-static void spin_task(void *arg) {
-	
-    xSemaphoreTake(sync_spin_task, portMAX_DELAY);
-    
-    for(;;) {
-        //Consume CPU cycles
-        for (int i = 0; i < SPIN_ITER; i++) {
-            __asm__ __volatile__("NOP");
-        }
-        vTaskDelay(pdMS_TO_TICKS(100));
-    }
-}
-
-
-/**************************************************************************************************/
-/** @fcn        static void stats_task(void *arg)
- *  @brief      x
- *  @details    x
- *
- *  @param    [in]  (void *) arg - ?
- */
-/**************************************************************************************************/
-static void stats_task(void *arg) {
-	
-    xSemaphoreTake(sync_stats_task, portMAX_DELAY);
-
-    //Start all the spin tasks
-    for (int i = 0; i < NUM_OF_SPIN_TASKS; i++) {
-        xSemaphoreGive(sync_spin_task);
-    }
-
-    //Print real time stats periodically
-    while (1) {
-        
-        printf("\n\nSweating real time stats over %"PRIu32" ticks\n", STATS_TICKS);
-        
-        if (print_real_time_stats(STATS_TICKS) == ESP_OK) {
-			
-            printf("Real time stats obtained\n");
-            
-        } else {
-			
-            printf("Error getting real time stats\n");
-            
-        }
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
-    
-    return;
-}
-
-
-/**************************************************************************************************/
 /** @fcn        int app_main(void)
  *  @brief      x
  *  @details    x
  */
 /**************************************************************************************************/
-#define DEMO_IMPORT
 void app_main(void) {
 	
-    //Allow other core to finish initialization
-    vTaskDelay(pdMS_TO_TICKS(100));
+		//Initialize
+		rtos_init();
+	
+	    return;
+	}
 
-    //Create semaphores to synchronize
-    sync_spin_task = xSemaphoreCreateCounting(NUM_OF_SPIN_TASKS, 0);
-    sync_stats_task = xSemaphoreCreateBinary();
-
-    //Create spin tasks
-    for (int i = 0; i < NUM_OF_SPIN_TASKS; i++) {
-        snprintf(task_names[i], configMAX_TASK_NAME_LEN, "spin%d", i);
-        xTaskCreatePinnedToCore(spin_task, task_names[i], 1024, NULL, SPIN_TASK_PRIO, NULL, tskNO_AFFINITY);
-    }
-    
-    //Create and start stats task @open NO MAGIC NUMS & use struct fot task config info omg
-    xTaskCreatePinnedToCore(stats_task, "stats", 4096, NULL, STATS_TASK_PRIO, NULL, tskNO_AFFINITY);
-    xSemaphoreGive(sync_stats_task);
-
-    //Create and start system task
-	//@open swap to cmsis wrappers & use structs for defs
-    xTaskCreatePinnedToCore(sysTask, "system", 4096, NULL, SYSTEM_TASK_PRIO, NULL, tskNO_AFFINITY);
-    
-    //Create and start data task
-    xTaskCreatePinnedToCore(dataTask, "data", 4096, NULL, DATA_TASK_PRIO, NULL, tskNO_AFFINITY);
-    
-    //Create and start display task
-    xTaskCreatePinnedToCore(dispTask, "data", 4096, NULL, DISPLAY_TASK_PRIO, NULL, tskNO_AFFINITY);
-    
-    //Create and start control task
-    xTaskCreatePinnedToCore(ctrlTask, "data", 4096, NULL, CONTROL_TASK_PRIO, NULL, tskNO_AFFINITY);
-   
-    return;
-}
-
+	

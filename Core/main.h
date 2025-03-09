@@ -2,15 +2,14 @@
 /** @file     main.h
  *  @brief    Header for main.c file
  *  @details  This file contains the common defines of the application
- *
- *  @section    Opens
- *      none current
- *
- *  @note	freertos.c uses main.h as its interface file
  */
 /**************************************************************************************************/
 #ifndef __MAIN_H
 #define __MAIN_H
+
+//************************************************************************************************//
+//                                           DIRECTIVES                                           //
+//************************************************************************************************//
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,39 +20,19 @@ extern "C" {
 //                                            INCLUDES                                            //
 //************************************************************************************************//
 
-//BSP Includes
-#ifdef DEMO_IMPORT
-#include "stm32f4xx_hal.h"
-#endif
+//FreeRTOS Includes
+#include "cmsis_os2.h"
+
+//Utility Includes
+#include "System/utils.h"
 
 //FreeRTOS Includes
-#include "cmsis_os.h"
+#include "freertos/FreeRTOS.h"
 
 
 //************************************************************************************************//
 //                                        DEFINITIONS & TYPES                                     //
 //************************************************************************************************//
-
-//-----------------------------------------  Definitions -----------------------------------------//
-
-//Pin Definitions
-#ifdef DEMO_IMPORT
-#define B1_Pin     			(GPIO_PIN_13)
-#define B1_GPIO_Port 		(GPIOC)
-#define USART_TX_Pin 		(GPIO_PIN_2)
-#define USART_TX_GPIO_Port 	(GPIOA)
-#define USART_RX_Pin 		(GPIO_PIN_3)
-#define USART_RX_GPIO_Port 	(GPIOA)
-#define LD2_Pin 			(GPIO_PIN_5)
-#define LD2_GPIO_Port 		(GPIOA)
-#define TMS_Pin 			(GPIO_PIN_13)
-#define TMS_GPIO_Port 		(GPIOA)
-#define TCK_Pin 			(GPIO_PIN_14)
-#define TCK_GPIO_Port 		(GPIOA)
-#define SWO_Pin 			(GPIO_PIN_3)
-#define SWO_GPIO_Port 		(GPIOB)
-#endif
-
 
 //--------------------------------------- RTOS Definitions ---------------------------------------//
 
@@ -95,25 +74,6 @@ extern "C" {
 
 //Project
 extern esp_err_t print_real_time_stats(TickType_t xTicksToWait);
-
-//Error Handling
-#ifdef DEMO_IMPORT
-extern void Error_Handler(void);
-extern void Error_Catch(HAL_StatusTypeDef stat);
-#endif
-
-//Print
-#ifdef DEMO_IMPORT
-extern void _printf(const char *str);
-#endif
-
-
-//--------------------------------------------- STM32 --------------------------------------------//
-#ifdef DEMO_IMPORT
-extern TIM_HandleTypeDef  htim1;
-extern UART_HandleTypeDef huart2;
-extern WWDG_HandleTypeDef hwwdg;
-#endif
 
 
 //------------------------------------------- FreeRTOS -------------------------------------------//
@@ -165,8 +125,13 @@ extern const osSemaphoreAttr_t cntrSem_attributes;
 extern const osEventFlagsAttr_t dataStore_attributes;
 
 
+//************************************************************************************************//
+//                                           DIRECTIVES                                           //
+//************************************************************************************************//
+
 #ifdef __cplusplus
 }
 #endif
+
 
 #endif /* __MAIN_H */
