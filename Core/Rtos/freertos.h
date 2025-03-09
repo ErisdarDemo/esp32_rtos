@@ -15,7 +15,6 @@
 
 //************************************************************************************************//
 //                                        DEFINITIONS & TYPES                                     //
-// @open 	group task defs to a structure														  //
 //************************************************************************************************//
 
 //-----------------------------------------  Definitions -----------------------------------------//
@@ -23,10 +22,10 @@
 //Task Priority Definitions
 #define STAT_TASK_PRIO     	(3)
 #define SPIN_TASK_PRIO      (2)
-#define SYS_TASK_PRIO		(2)
-#define DATA_TASK_PRIO		(2)
-#define DISP_TASK_PRIO		(2)
-#define CTRL_TASK_PRIO		(2)
+#define SYS_TASK_PRIO		(4)
+#define DATA_TASK_PRIO		(4)
+#define DISP_TASK_PRIO		(4)
+#define CTRL_TASK_PRIO		(4)
 
 //Spin Task Definitions
 #define NUM_OF_SPIN_TASKS   (6)

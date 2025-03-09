@@ -21,8 +21,17 @@
 //************************************************************************************************//
 
 //-----------------------------------------  Definitions -----------------------------------------//
-#define PRINTTASK_LEN	(55)						/* num of chars on the print header			  */
+#define PRINTTASK_LEN	(73)						/* num of chars on the print header			  */
 #define TASK_STR	    (" Task")					/* Task header string						  */
+#define LOOPHEADER_LEN		(80)
+
+
+//************************************************************************************************//
+//                                             VARIABLES                                          //
+//************************************************************************************************//
+
+//Header Variables
+int loopCt = 0;
 
 
 //************************************************************************************************//
@@ -65,10 +74,6 @@ int numPlaces(int n) {
  *  @param    [in]  (char *) titleStr - x
  *
  *  @assum	console available for print output
- *
- *  @section 	Opens
- *		title
- *	    odd spaceLen maybe?
  */
 /**************************************************************************************************/
 void printTaskHeader(char *titleStr) {
@@ -106,6 +111,47 @@ void printTaskHeader(char *titleStr) {
 	//---------------------------------------- Lower Bar -----------------------------------------//
 	printf("//");
 	for(int i=0; i<(PRINTTASK_LEN-4); i++) { printf("-"); }
+	printf("//\n");
+
+	
+	return;
+}
+
+
+/**************************************************************************************************/
+/** @fcn        void printLoopHeader(void)
+ *  @brief      print output loop break header
+ *  @details    x
+ *
+ *  @assum	console available for print output
+ */
+/**************************************************************************************************/
+void printLoopHeader(void) {
+	
+	//Locals
+	int spaceLen = 0;								/* Title bar equal side spacing count         */
+	int numDigs  = numPlaces(loopCt);
+	
+	//Calc Space Needed
+	spaceLen = (PRINTTASK_LEN - (2*2) - numDigs);
+	
+	
+	//---------------------------------------- Upper Bar -----------------------------------------//
+	printf("\n//");
+	for(int i=0; i<(LOOPHEADER_LEN-4); i++) { printf("*"); }
+	printf("//\n");
+			
+			
+	//---------------------------------------- Title Bar -----------------------------------------//
+	//...
+	printf("// Loop: %d", loopCt++);
+	for(int i=0; i<spaceLen; i++) { printf(" "); }
+	printf("//\n");
+	
+	
+	//---------------------------------------- Lower Bar -----------------------------------------//
+	printf("//");
+	for(int i=0; i<(LOOPHEADER_LEN-4); i++) { printf("*"); }
 	printf("//\n");
 
 	

@@ -4,9 +4,9 @@
  *  @details  x
  *
  *  @section 	Opens
- * 		includes sec header
  *		unused-includes bug?
  *		switch to cmsis_os2 cleaner api for fcn calls
+ *		integrate disabled content
  *
  *  @note	freertos.c uses main.h for task value definitions 
  */
@@ -29,7 +29,7 @@
 #include "freertos/task.h"
 
 //Project Includes	
-#include "../Rtos/freertos.h"						/* @open 	clean that shit up				  */
+#include "../Rtos/freertos.h"
 #include "../main.h"
 
 
@@ -40,7 +40,7 @@
 //-----------------------------------------  Definitions -----------------------------------------//
 
 //Task Definitions
-#define SPIN_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(2000)	/* @warn  requires spin==stat*/
+#define SPIN_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(100)
 #define STATS_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(2000)
 #define SYSTEM_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
 #define DATA_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
@@ -60,10 +60,8 @@
 char task_names[NUM_OF_SPIN_TASKS][configMAX_TASK_NAME_LEN];
 
 //Semaphores
-#ifdef SEMAPHORE_BUG
-	SemaphoreHandle_t sync_spin_task;
-	SemaphoreHandle_t sync_stats_task;
-#endif
+SemaphoreHandle_t sync_spin_task;
+SemaphoreHandle_t sync_stats_task;
 
 
 //--------------------------------------------- Tasks --------------------------------------------//
@@ -177,7 +175,7 @@ void stats_task(void *arg);
  *
  *	@section 	Opens
  *		cmsis_os2!
- *		share task string names wow
+ *		define task string names
  */
 /**************************************************************************************************/
 void rtos_init(void) {
@@ -186,7 +184,6 @@ void rtos_init(void) {
   	vTaskDelay(pdMS_TO_TICKS(MAGIC_NUM_ONE));
 
     //Create semaphores to synchronize
-#ifdef SEMAPHORE_BUG    
     sync_spin_task  = xSemaphoreCreateCounting(NUM_OF_SPIN_TASKS, 0);
     sync_stats_task = xSemaphoreCreateBinary();
 
@@ -202,8 +199,7 @@ void rtos_init(void) {
 
     //Create and start stats task
     xTaskCreatePinnedToCore(stats_task, "stats", 4096, NULL, STAT_TASK_PRIO, NULL, tskNO_AFFINITY);
-    xSemaphoreGive(sync_stats_task);				/* @open why does stats_task Take?            */
-#endif
+    xSemaphoreGive(sync_stats_task);
 
     //Create and start system task
     xTaskCreatePinnedToCore(sysTask, "system", MAGIC_NUM_TWO, NULL, SYS_TASK_PRIO, NULL, tskNO_AFFINITY);
@@ -233,8 +229,7 @@ void rtos_init(void) {
  *  	!35 ms (!~728 * (!127-!80)) and !46 ms (!~728 * !64)
  *
  *	@section 	Opens
- *		move loop header to subroutine
- *		handle #defs!
+ *		handle #ifdefs!
  */
 /**************************************************************************************************/
 #define LOOPHEADER_LEN		(80)
@@ -251,13 +246,8 @@ void sysTask(void *argument) {
 	//Loop
 	for(;;) {
 
-		//Loop header
-		printf("\n//");
-		for(int i=0; i<(LOOPHEADER_LEN-4); i++) { printf("*"); }
-		printf("//\n");
-		
-		//Loop Notice
-		printf("Loop: %d\n", loopCt++);
+		//Print Header
+		printLoopHeader();
 
 		//Wiggle
 	    //@open
@@ -323,20 +313,24 @@ void dataTask(void *argument) {
  *  @details    Semaphore demo
  *
  *  @param    [in]  (void *) argument - x
- *
- *  @section 	Opens
- *		unroll nested conditionals .
  */
 /**************************************************************************************************/
 void dispTask(void *argument) {
 
+	//Locals
+	esp_err_t ret;									/* return status value					 	  */
+	
+	
 	//Loop
 	for(;;) {
 
 		//Notify	
 		printTaskHeader("Display");
         
-        if(print_real_time_stats(STATS_TICKS) == ESP_OK) {
+        //Print
+        ret = print_real_time_stats(STATS_TICKS);
+        
+        if(ret == ESP_OK) {
 			
             printf("Real time stats obtained\n");
             
@@ -361,9 +355,6 @@ void dispTask(void *argument) {
  *  @details    x
  *
  *  @param    [in]  (void *) argument - x
- *
- *  @section 	Opens
- *      Turn off input name recommendations
  */
 /**************************************************************************************************/
 void ctrlTask(void *argument) {
@@ -393,17 +384,15 @@ void ctrlTask(void *argument) {
 /**************************************************************************************************/
 void spin_task(void *arg) {
 	
-#ifdef SEMAPHORE_BUG	
-    xSemaphoreTake(sync_spin_task, portMAX_DELAY);s
-#endif
+    xSemaphoreTake(sync_spin_task, portMAX_DELAY);
     
     for(;;) {
 		
 		//Notify
-		printTaskHeader("Spin");
+		//? printTaskHeader("Spin");
 		
         //Consume CPU cycles
-        for (int i = 0; i < SPIN_ITER; i++) {
+        for(int i = 0; i < SPIN_ITER; i++) {
             _nop();
         }
         
@@ -462,7 +451,7 @@ void stats_task(void *arg) {
  *  @param    [in]  (void *) argument - x
  *
  *  @section 	Opens
- *  	Prints notice
+ *  	Working w/notice
  */
 /**************************************************************************************************/
 void osTimer_Callback(void *argument) {

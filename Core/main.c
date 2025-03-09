@@ -8,9 +8,6 @@
  *  @last rev 3/9/25
  *
  *   @section 	Opens
- *		deprecate main
- *		CMakeLists reloc
- *		SEMAPHORE_BUG
  *		vTaskDelay to cmsis wrapper
  *		Complete demo
  *		...
@@ -19,7 +16,6 @@
  *		...
  * 		post both updates to new www rtos page
  *		Disable display of input field names
- * 		Relocate main\CMakeLists.txt & close main\ dir
  *   		
  *	 @section 	Development Flow
  *		1. Integrate existing STM 'v0'
@@ -29,18 +25,20 @@
  *		6. Integrate WiFi (branch)
  *
  *	 @section 	Sources
- *		 FreeRTOS Real Time Stats Example 'real_time_stats_example_main'
- *		 CubeMx_RTOS_Demo 'r0'
+ *		FreeRTOS Real Time Stats Example 'real_time_stats_example_main'
+ *		CubeMx_RTOS_Demo 'r0'
  *
  *   @section 	Deferred
  * 		Get 'F11' to launch debug
  * 		Relocate main\CMakeLists.txt & close main\
  * 		post both updates to new www rtos page
  *		Get multi-line comments 'Enter' to lead with a new '*' char
- *		Consider renaming proj 'Espressif_RTOS'
  *		Ctrl + '/' for commenting out lines
  *		Include paths are direct
  *		Relocate build\ contents to Out\build\
+ *      Turn off input name recommendations
+ *		group task defs to a structure
+ *		static
  *
  *  @section    Legal Disclaimer
  * 		©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other
@@ -295,10 +293,7 @@ exit:    //Common return path
 /**************************************************************************************************/
 /** @fcn        int app_main(void)
  *  @brief      x
- *  @details    x
- *
- *	@section 	Opens
- *		add a loop delay to the ui fcn that makes sense, for the runtime demo to work w/o a halt
+ *  @details    xt
  */
 /**************************************************************************************************/
 void app_main(void) {
