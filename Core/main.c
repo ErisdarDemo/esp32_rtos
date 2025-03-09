@@ -8,6 +8,7 @@
  *  @last rev 3/9/25
  *
  *   @section 	Opens
+ *		deprecate main
  *		CMakeLists reloc
  *		SEMAPHORE_BUG
  *		vTaskDelay to cmsis wrapper
@@ -39,6 +40,7 @@
  *		Consider renaming proj 'Espressif_RTOS'
  *		Ctrl + '/' for commenting out lines
  *		Include paths are direct
+ *		Relocate build\ contents to Out\build\
  *
  *  @section    Legal Disclaimer
  * 		©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other
