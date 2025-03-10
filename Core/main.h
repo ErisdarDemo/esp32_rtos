@@ -93,10 +93,10 @@ extern void osTimer_Callback(void *argument);
 //************************************************************************************************//
 
 //Tasks
-extern osThreadId_t sysTaskHandle;
-extern osThreadId_t dataTaskHandle;
-extern osThreadId_t dispTaskHandle;
-extern osThreadId_t ctrlTaskHandle;
+extern BaseType_t sysTaskHandle;
+extern BaseType_t dataTaskHandle;
+extern BaseType_t dispTaskHandle;
+extern BaseType_t ctrlTaskHandle;
 
 //Attributes
 extern const osThreadAttr_t sysTask_attributes;

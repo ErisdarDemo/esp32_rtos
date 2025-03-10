@@ -11,6 +11,7 @@
  *		Add a pause command, from the test app with led on the UI to pause the demo!
  *		vTaskDelay to cmsis wrapper
  *		Complete demo
+ *		GET_WORKING bug
  *		...
  *		Sync with STM32
  *		Publish & host 'v1'!
@@ -40,6 +41,9 @@
  *      Turn off input name recommendations
  *		group task defs to a structure
  *		static
+ *
+ *	@section 	Desires
+ *		migration to cmsis_os2
  *
  *  @section    Legal Disclaimer
  * 		©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other
@@ -98,11 +102,15 @@
 //************************************************************************************************//
 
 //Tasks
+#ifdef GET_WORKING
 static char task_names[NUM_OF_SPIN_TASKS][configMAX_TASK_NAME_LEN];
+#endif
 
 //Semaphores
+#ifdef GET_WORKING
 static SemaphoreHandle_t sync_spin_task;
 static SemaphoreHandle_t sync_stats_task;
+#endif
 
 
 //************************************************************************************************//

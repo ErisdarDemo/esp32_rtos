@@ -6,7 +6,6 @@
  *  @section 	Opens
  *		unused-includes bug?
  *		magic nums
- *		switch to cmsis_os2 cleaner api for fcn calls
  *		integrate disabled content (switch to structure definitions for task cfg)
  */
 /**************************************************************************************************/
@@ -69,85 +68,85 @@ SemaphoreHandle_t sync_stats_task;
 //--------------------------------------------- Tasks --------------------------------------------//
 
 //Tasks
-//osThreadId_t sysTaskHandle;				    	/* System Operations Task					  */
-//osThreadId_t dataTaskHandle;						/* Data Operations Task						  */
-//osThreadId_t dispTaskHandle;						/* Console/UI Task							  */
-//osThreadId_t ctrlTaskHandle;						/* Control Flow Taslk						  */
+BaseType_t sysTaskHandle;				    	    /* System Operations Task					  */
+BaseType_t dataTaskHandle;							/* Data Operations Task						  */
+BaseType_t dispTaskHandle;							/* Console/UI Task							  */
+BaseType_t ctrlTaskHandle;	  						/* Control Flow Taslk						  */
 
 
 //Config
-//const osThreadAttr_t sysTask_attributes = {
-//  .name       = SYS_TASK_NAME,
-//  .stack_size = DFLT_STACK_SIZE,
-//  .priority   = (osPriority_t) osPriorityNormal,
-//};
+const osThreadAttr_t sysTask_attributes = {
+  .name       = SYS_TASK_NAME,
+  .stack_size = DFLT_STACK_SIZE,
+  .priority   = (osPriority_t) osPriorityNormal,
+};
 
-//const osThreadAttr_t dataTask_attributes = {
-//  .name       = DATA_TASK_NAME,
-//  .stack_size = DFLT_STACK_SIZE,
-//  .priority   = (osPriority_t) osPriorityLow,
-//};
+const osThreadAttr_t dataTask_attributes = {
+  .name       = DATA_TASK_NAME,
+  .stack_size = DFLT_STACK_SIZE,
+  .priority   = (osPriority_t) osPriorityLow,
+};
 
-//const osThreadAttr_t dispTask_attributes = {
-//  .name       = DISP_TASK_NAME,
-//  .stack_size = DFLT_STACK_SIZE,
-//  .priority   = (osPriority_t) osPriorityLow,
-//};
+const osThreadAttr_t dispTask_attributes = {
+  .name       = DISP_TASK_NAME,
+  .stack_size = DFLT_STACK_SIZE,
+  .priority   = (osPriority_t) osPriorityLow,
+};
 
-//const osThreadAttr_t ctrlTask_attributes = {
-//  .name       = CTRL_TASK_NAME,
-//  .stack_size = DFLT_STACK_SIZE,
-//  .priority   = (osPriority_t) osPriorityLow,
-//};
+const osThreadAttr_t ctrlTask_attributes = {
+  .name       = CTRL_TASK_NAME,
+  .stack_size = DFLT_STACK_SIZE,
+  .priority   = (osPriority_t) osPriorityLow,
+};
 
 
 //-------------------------------------------- Timers --------------------------------------------//
 
 //Timers
-//osTimerId_t osTimerHandle;						/* Sample FreeRTOS Timer					  */
+osTimerId_t osTimerHandle;						/* Sample FreeRTOS Timer					  */
 
 //Config
-//const osTimerAttr_t osTimer_attributes = {
-//  .name = OS_TIMER_NAME
-//};
+const osTimerAttr_t osTimer_attributes = {
+  .name = OS_TIMER_NAME
+};
 
 
 //------------------------------------------- Mutexes --------------------------------------------//
 
 //Mutexes
-//osMutexId_t dataMutexHandle;						/* Sample FreeRTOS Mutex					  */
+osMutexId_t dataMutexHandle;						/* Sample FreeRTOS Mutex					  */
 
 //Config
-//const osMutexAttr_t dataMutex_attributes = {
-//  .name = DATA_MUTEX_NAME
-//};
+const osMutexAttr_t dataMutex_attributes = {
+  .name = DATA_MUTEX_NAME
+};
 
 
 //------------------------------------------ Semaphores -------------------------------------------//
 
 //Semaphores
-//osSemaphoreId_t ctrlSemHandle;					/* Sample FreeRTOS Binary Semaphore		 	  */
-//osSemaphoreId_t cntrSemHandle;					/* Sample FreeRTOS Counting Semaphore	      */
+osSemaphoreId_t ctrlSemHandle;			  		    /* Sample FreeRTOS Binary Semaphore		 	  */
+osSemaphoreId_t cntrSemHandle;					    /* Sample FreeRTOS Counting Semaphore	      */
 
 //Config
-//const osSemaphoreAttr_t ctrlSem_attributes = {
-//  .name = CTRL_SEM_NAME
-//};
+const osSemaphoreAttr_t ctrlSem_attributes = {
+  .name = CTRL_SEM_NAME
+};
 
-//const osSemaphoreAttr_t cntrSem_attributes = {
-//  .name = CNTR_SEM_NAME
-//};
+const osSemaphoreAttr_t cntrSem_attributes = {
+  .name = CNTR_SEM_NAME
+};
 
 
 //-------------------------------------------- Events --------------------------------------------//
 
 //Events
-//osEventFlagsId_t dataStoreHandle;					/* @Sample FreeRTOS Event					  */
+osEventFlagsId_t dataStoreHandle;					/* @Sample FreeRTOS Event					  */
 
 //Config
-//const osEventFlagsAttr_t dataStore_attributes = {
-//  .name = DATA_EVENT_NAME
-//};
+const osEventFlagsAttr_t dataStore_attributes = {
+  .name = DATA_EVENT_NAME
+};
 
 
 //************************************************************************************************//
@@ -178,6 +177,7 @@ void stats_task(void *arg);
  *	@section 	Opens
  *		cmsis_os2!
  *		define task string names
+ *		subroutine with your new struct
  */
 /**************************************************************************************************/
 void rtos_init(void) {
@@ -196,25 +196,59 @@ void rtos_init(void) {
         snprintf(task_names[i], configMAX_TASK_NAME_LEN, "spin%d", i);
         
 		//Init
-        xTaskCreatePinnedToCore(spin_task, task_names[i], 1024, NULL, SPIN_TASK_PRIO, NULL, tskNO_AFFINITY);
+        xTaskCreatePinnedToCore(spin_task,
+                                task_names[i],
+                                1024,
+                                NULL,
+                                SPIN_TASK_PRIO,
+                                NULL, tskNO_AFFINITY);
     }
 
     //Create and start stats task
-    xTaskCreatePinnedToCore(stats_task, "stats", 4096, NULL, STAT_TASK_PRIO, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore(stats_task,
+                            "stats", 4096,
+                            NULL,
+                            STAT_TASK_PRIO,
+                            NULL,
+                            tskNO_AFFINITY);
+                            
     xSemaphoreGive(sync_stats_task);
 
     //Create and start system task
-    xTaskCreatePinnedToCore(sysTask, "system", MAGIC_NUM_TWO, NULL, SYS_TASK_PRIO, NULL, tskNO_AFFINITY);
+    sysTaskHandle = xTaskCreatePinnedToCore(sysTask,
+                                            "system",
+                                            MAGIC_NUM_TWO,
+                                            NULL,
+                                            SYS_TASK_PRIO,
+                                            NULL,
+                                            tskNO_AFFINITY);
     
     //Create and start data task
-    xTaskCreatePinnedToCore(dataTask, "data", MAGIC_NUM_TWO, NULL, DATA_TASK_PRIO, NULL, tskNO_AFFINITY);
+    dataTaskHandle = xTaskCreatePinnedToCore(dataTask,
+                                             "data",
+                                             MAGIC_NUM_TWO,
+                                             NULL,
+                                             DATA_TASK_PRIO,
+                                             NULL,
+                                             tskNO_AFFINITY);
 
     //Create and start display task
-    xTaskCreatePinnedToCore(dispTask, "display", MAGIC_NUM_TWO, NULL, DISP_TASK_PRIO, NULL, tskNO_AFFINITY);
+    dispTaskHandle = xTaskCreatePinnedToCore(dispTask,
+                                             "display",
+                                             MAGIC_NUM_TWO,
+                                             NULL,
+                                             DISP_TASK_PRIO,
+                                             NULL,
+                                             tskNO_AFFINITY);
     
     //Create and start control task
-    xTaskCreatePinnedToCore(ctrlTask, "control", MAGIC_NUM_TWO, NULL, CTRL_TASK_PRIO, NULL, tskNO_AFFINITY);
-
+    ctrlTaskHandle = xTaskCreatePinnedToCore(ctrlTask,
+                                             "control",
+                                             MAGIC_NUM_TWO,
+                                             NULL,
+                                             CTRL_TASK_PRIO,
+                                             NULL,
+                                             tskNO_AFFINITY);
 	return;
 }
 
@@ -232,9 +266,6 @@ void rtos_init(void) {
  */
 /**************************************************************************************************/
 void sysTask(void *argument) {
-
-	//Locals
-	static int loopCt = 0;
 
 	//Loop
 	for(;;) {
