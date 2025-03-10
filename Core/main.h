@@ -4,8 +4,8 @@
  *  @details  This file contains the common defines of the application
  */
 /**************************************************************************************************/
-#ifndef __MAIN_H
-#define __MAIN_H
+#ifndef CORE_MAIN_H_
+#define CORE_MAIN_H_
 
 //************************************************************************************************//
 //                                           DIRECTIVES                                           //
@@ -134,4 +134,4 @@ extern const osEventFlagsAttr_t dataStore_attributes;
 #endif
 
 
-#endif /* __MAIN_H */
+#endif /* CORE_MAIN_H_ */

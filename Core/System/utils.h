@@ -1,5 +1,5 @@
-#ifndef UTILS_H_
-#define UTILS_H_
+#ifndef CORE_SYSTEM_UTILS_H_
+#define CORE_SYSTEM_UTILS_H_
 
 //Math Utilities
 extern int numPlaces(int n);
@@ -8,4 +8,4 @@ extern int numPlaces(int n);
 extern void printTaskHeader(char *titleStr);
 extern void printLoopHeader(void);
 
-#endif /* UTILS_H_ */
+#endif /* CORE_SYSTEM_UTILS_H_ */

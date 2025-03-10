@@ -5,10 +5,9 @@
  *
  *  @section 	Opens
  *		unused-includes bug?
+ *		magic nums
  *		switch to cmsis_os2 cleaner api for fcn calls
- *		integrate disabled content
- *
- *  @note	freertos.c uses main.h for task value definitions 
+ *		integrate disabled content (switch to structure definitions for task cfg)
  */
 /**************************************************************************************************/
 
@@ -39,6 +38,9 @@
 
 //-----------------------------------------  Definitions -----------------------------------------//
 
+//Graphic Definitions]
+#define LOOPHEADER_LEN					(80)
+
 //Task Definitions
 #define SPIN_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(100)
 #define STATS_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(2000)
@@ -48,16 +50,16 @@
 #define CONTROL_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
 
 //Timing Definitions
-#define MAGIC_NUM_ONE		(100)
-#define MAGIC_NUM_TWO 		(4096)
+#define MAGIC_NUM_ONE					(100)
+#define MAGIC_NUM_TWO 					(4096)
 
 
 //************************************************************************************************//
 //                                             OS VARIABLES                                       //
 //************************************************************************************************//
 
-//Tasks																@open static?
-char task_names[NUM_OF_SPIN_TASKS][configMAX_TASK_NAME_LEN];
+//Tasks
+char task_names[NUM_OF_SPIN_TASKS][configMAX_TASK_NAME_LEN];		/* @open static?              */
 
 //Semaphores
 SemaphoreHandle_t sync_spin_task;
@@ -102,7 +104,7 @@ SemaphoreHandle_t sync_stats_task;
 //-------------------------------------------- Timers --------------------------------------------//
 
 //Timers
-//osTimerId_t osTimerHandle;							/* Sample FreeRTOS Timer					  */
+//osTimerId_t osTimerHandle;						/* Sample FreeRTOS Timer					  */
 
 //Config
 //const osTimerAttr_t osTimer_attributes = {
@@ -124,8 +126,8 @@ SemaphoreHandle_t sync_stats_task;
 //------------------------------------------ Semaphores -------------------------------------------//
 
 //Semaphores
-//osSemaphoreId_t ctrlSemHandle;						/* Sample FreeRTOS Binary Semaphore		 	 */
-//osSemaphoreId_t cntrSemHandle;						/* Sample FreeRTOS Counting Semaphore		 */
+//osSemaphoreId_t ctrlSemHandle;					/* Sample FreeRTOS Binary Semaphore		 	  */
+//osSemaphoreId_t cntrSemHandle;					/* Sample FreeRTOS Counting Semaphore	      */
 
 //Config
 //const osSemaphoreAttr_t ctrlSem_attributes = {
@@ -227,21 +229,12 @@ void rtos_init(void) {
  *  @section 	WDT Refresh
  *  	Update counter value to !127, the refresh window is between
  *  	!35 ms (!~728 * (!127-!80)) and !46 ms (!~728 * !64)
- *
- *	@section 	Opens
- *		handle #ifdefs!
  */
 /**************************************************************************************************/
-#define LOOPHEADER_LEN		(80)
 void sysTask(void *argument) {
 
 	//Locals
 	static int loopCt = 0;
-	
-	//Locals
-#ifdef USES_STM32
-	HAL_StatusTypeDef stat = HAL_ERROR;				/* status of HAL operations for review 		  */
-#endif
 
 	//Loop
 	for(;;) {
@@ -253,7 +246,7 @@ void sysTask(void *argument) {
 	    //@open
 
 		//Refresh
-		//@open refresh WDT
+		//@open refresh WDT & check Errors
 
 		//Console Sync
 		printf("\n");
@@ -271,6 +264,9 @@ void sysTask(void *argument) {
  *  @details    Timer demo
  *
  *  @param    [in]  (void *) argument - x
+ *
+ *  @section 	Opens
+ *		Use real timer
  */
 /**************************************************************************************************/
 void dataTask(void *argument) {
@@ -289,12 +285,9 @@ void dataTask(void *argument) {
 		//Notify
 		printTaskHeader("Data");
 
-		//Latch
-#ifdef USES_STM32_HAL_TIMER
-		timer_val = __HAL_TIM_GetCounter(&htim1);	/* grab current				                  */
-#else
-		timer_val = devTimerVal++;
-#endif
+		//Latch timer
+		timer_val = devTimerVal++;				   /* use a counter for now						 */
+
 		//Print
 		printf("Timer: 0x%"PRIu32"\n", timer_val);
 		

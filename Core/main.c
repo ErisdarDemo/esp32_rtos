@@ -8,6 +8,7 @@
  *  @last rev 3/9/25
  *
  *   @section 	Opens
+ *		Add a pause command, from the test app with led on the UI to pause the demo!
  *		vTaskDelay to cmsis wrapper
  *		Complete demo
  *		...

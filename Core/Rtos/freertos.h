@@ -5,13 +5,6 @@
 //                                            INCLUDES                                            //
 //************************************************************************************************//
 
-//RTOS Includes
-#ifdef MAYBE
-	#include "freertos/FreeRTOS.h"
-	#include "freertos/FreeRTOSConfig.h"
-	#include "freertos/task.h"
-#endif
-
 
 //************************************************************************************************//
 //                                        DEFINITIONS & TYPES                                     //
@@ -29,7 +22,7 @@
 
 //Spin Task Definitions
 #define NUM_OF_SPIN_TASKS   (6)
-#define SPIN_ITER           (500000)  	/* Actual ct used will depend on compiler optimization	  */
+#define SPIN_ITER           (500000)				/* sourced from stats task rate			      */
 #define STATS_TICKS         pdMS_TO_TICKS(1000)
 
 
