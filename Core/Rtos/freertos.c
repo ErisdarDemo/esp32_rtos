@@ -435,7 +435,6 @@ void spin_task(void *arg) {
 /**************************************************************************************************/
 void stats_task(void *arg) {
 	
-	
 	//------------------------------------ Semaphore Practice ------------------------------------//
 
 	//Grab
@@ -458,6 +457,9 @@ void stats_task(void *arg) {
         
 		//Notify
 		printTaskHeader("Statistics");
+        
+        //Temp
+        printf("Stats task\n");
         
         //Loop
         vTaskDelay(STATS_TASK_LOOP_DELAY_CTS);

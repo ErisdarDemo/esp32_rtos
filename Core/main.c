@@ -5,19 +5,26 @@
  *
  *  @author   Justin Reina, Firmware Engineer
  *  @created  3/2/25
- *  @last rev 3/9/25
+ *  @last rev 3/11/25
  *
  *   @section 	Opens
  *		Add a pause command, from the test app with led on the UI to pause the demo!
- *		vTaskDelay to cmsis wrapper
+ *		add real timer
  *		Complete demo
  *		GET_WORKING bug
  *		...
+ *		group task defs to a structure
+ *		static ccontents
+ *      ...
+ * 		Relocate main\CMakeLists.txt & close main\
+ *		Include paths are direct
+ *		Relocate build\ contents to Out\build\
+ *      ... 
  *		Sync with STM32
  *		Publish & host 'v1'!
  *		...
  * 		post both updates to new www rtos page
- *		Disable display of input field names
+ *		
  *   		
  *	 @section 	Development Flow
  *		1. Integrate existing STM 'v0'
@@ -30,17 +37,12 @@
  *		FreeRTOS Real Time Stats Example 'real_time_stats_example_main'
  *		CubeMx_RTOS_Demo 'r0'
  *
- *   @section 	Deferred
+ *	@section 	Espress-IDF Opens
+ *		Disable display of input field names
  * 		Get 'F11' to launch debug
- * 		Relocate main\CMakeLists.txt & close main\
- * 		post both updates to new www rtos page
  *		Get multi-line comments 'Enter' to lead with a new '*' char
  *		Ctrl + '/' for commenting out lines
- *		Include paths are direct
- *		Relocate build\ contents to Out\build\
  *      Turn off input name recommendations
- *		group task defs to a structure
- *		static
  *
  *	@section 	Desires
  *		migration to cmsis_os2
@@ -75,6 +77,7 @@
 //Project Includes
 #include "System/utils.h"
 #include "Rtos/freertos.h"				  /* @open 	drop dir from path							  */
+#include "Mcu/uart_handler.h"
 #include "main.h"
 
 
@@ -116,6 +119,9 @@ static SemaphoreHandle_t sync_stats_task;
 //************************************************************************************************//
 //                                       FUNCTION DECLARATIONS                                    //
 //************************************************************************************************//
+
+//Local Routines
+void sys_init(void);
 
 
 //************************************************************************************************//
@@ -307,10 +313,36 @@ exit:    //Common return path
 /**************************************************************************************************/
 void app_main(void) {
 	
-		//Initialize
-		rtos_init();
-	
-	    return;
-	}
+		//Launch
+		sys_init();
 
+		//Error Handling
+		for(;;); 									/* @todo !									  */
+			
+	    return;
+}
+
+
+/**************************************************************************************************/
+/** @fcn        int sys_init(void)
+ *  @brief      Initialize the system for use
+ *  @details    x
+ *
+ *	@section 	Opens
+ *		Consider rtos_init() inegration
+ *		Consider relocation to Core\System\system.c&h (cleaner here for now)
+ */
+/**************************************************************************************************/
+void sys_init(void) {
 	
+	//HW Init
+#ifdef COMPILE_WORKS
+	uart_init();
+#endif
+			
+	//OS Init
+	rtos_init();
+	
+	return;
+}
+
