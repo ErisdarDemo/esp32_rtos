@@ -5,7 +5,6 @@
  *
  *  @section 	Opens
  *		unused-includes bug?
- *		magic nums
  *		integrate disabled content (switch to structure definitions for task cfg)
  */
 /**************************************************************************************************/
@@ -19,7 +18,9 @@
 #include <stdio.h>
 
 //FreeRTOS Includes
+#ifdef CMSIS_OS2_BUG
 #include "cmsis_os2.h"
+#endif
 
 //RTOS Includes
 #include "freertos/FreeRTOS.h"
@@ -28,6 +29,7 @@
 
 //Project Includes	
 #include "../Rtos/freertos.h"
+#include "../Mcu/uart_handler.h"
 #include "../main.h"
 
 
@@ -47,10 +49,6 @@
 #define DATA_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
 #define DISPLAY_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
 #define CONTROL_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
-
-//Timing Definitions
-#define MAGIC_NUM_ONE					(100)
-#define MAGIC_NUM_TWO 					(4096)
 
 
 //************************************************************************************************//
@@ -72,7 +70,10 @@ BaseType_t sysTaskHandle;				    	    /* System Operations Task					  */
 BaseType_t dataTaskHandle;							/* Data Operations Task						  */
 BaseType_t dispTaskHandle;							/* Console/UI Task							  */
 BaseType_t ctrlTaskHandle;	  						/* Control Flow Taslk						  */
+BaseType_t uartTaskHandle;	  						/* Uart Flow Task						      */
 
+
+#ifdef CMSIS_OS2_BUG
 
 //Config
 const osThreadAttr_t sysTask_attributes = {
@@ -148,6 +149,8 @@ const osEventFlagsAttr_t dataStore_attributes = {
   .name = DATA_EVENT_NAME
 };
 
+#endif
+
 
 //************************************************************************************************//
 //                                        FUNCTION DECLARATIONS                                   //
@@ -158,8 +161,8 @@ void sysTask(void  *argument);
 void dataTask(void *argument);
 void dispTask(void  *argument);
 void ctrlTask(void *argument);
-void spin_task(void *arg);
-void stats_task(void *arg);
+void spinTask(void *arg);
+void statsTask(void *arg);
 
 
 //************************************************************************************************//
@@ -183,7 +186,7 @@ void stats_task(void *arg);
 void rtos_init(void) {
 
 	//Allow other core to finish initialization
-  	vTaskDelay(pdMS_TO_TICKS(MAGIC_NUM_ONE));
+  	vTaskDelay(pdMS_TO_TICKS(RTOS_BOOT_DELAY_MS));
 
     //Create semaphores to synchronize
     sync_spin_task  = xSemaphoreCreateCounting(NUM_OF_SPIN_TASKS, 0);
@@ -196,7 +199,7 @@ void rtos_init(void) {
         snprintf(task_names[i], configMAX_TASK_NAME_LEN, "spin%d", i);
         
 		//Init
-        xTaskCreatePinnedToCore(spin_task,
+        xTaskCreatePinnedToCore(spinTask,
                                 task_names[i],
                                 1024,
                                 NULL,
@@ -205,19 +208,19 @@ void rtos_init(void) {
     }
 
     //Create and start stats task
-    xTaskCreatePinnedToCore(stats_task,
+    xTaskCreatePinnedToCore(statsTask,
                             "stats", 4096,
                             NULL,
                             STAT_TASK_PRIO,
                             NULL,
                             tskNO_AFFINITY);
-                            
+                         
     xSemaphoreGive(sync_stats_task);
 
     //Create and start system task
     sysTaskHandle = xTaskCreatePinnedToCore(sysTask,
                                             "system",
-                                            MAGIC_NUM_TWO,
+                                            SYS_STACK_DEPTH,
                                             NULL,
                                             SYS_TASK_PRIO,
                                             NULL,
@@ -226,7 +229,7 @@ void rtos_init(void) {
     //Create and start data task
     dataTaskHandle = xTaskCreatePinnedToCore(dataTask,
                                              "data",
-                                             MAGIC_NUM_TWO,
+                                             DATA_STACK_DEPTH,
                                              NULL,
                                              DATA_TASK_PRIO,
                                              NULL,
@@ -235,7 +238,7 @@ void rtos_init(void) {
     //Create and start display task
     dispTaskHandle = xTaskCreatePinnedToCore(dispTask,
                                              "display",
-                                             MAGIC_NUM_TWO,
+                                             DISP_STACK_DEPTH,
                                              NULL,
                                              DISP_TASK_PRIO,
                                              NULL,
@@ -244,18 +247,23 @@ void rtos_init(void) {
     //Create and start control task
     ctrlTaskHandle = xTaskCreatePinnedToCore(ctrlTask,
                                              "control",
-                                             MAGIC_NUM_TWO,
+                                             CTRL_STACK_DEPTH,
                                              NULL,
                                              CTRL_TASK_PRIO,
                                              NULL,
                                              tskNO_AFFINITY);
+                                             
+                                             
+	//--------------------------------------- Module Tasks ---------------------------------------//
+	uart_initTasks();                                             
+                                             
 	return;
 }
 
 	
 /**************************************************************************************************/
 /** @fcn        void sysTask(void *argument)
- *  @brief      Function implementing the sysTask thread.
+ *  @brief      Function implementing the sysTask thread
  *  @details    GPIO & UART demos
  *
  *  @param    [in]  (void *) argument - x
@@ -291,7 +299,7 @@ void sysTask(void *argument) {
 
 /**************************************************************************************************/
 /** @fcn        void dataTask(void *argument)
- *  @brief      Function implementing the dataTask thread.
+ *  @brief      Function implementing the dataTask thread
  *  @details    Timer demo
  *
  *  @param    [in]  (void *) argument - x
@@ -333,7 +341,7 @@ void dataTask(void *argument) {
 
 /**************************************************************************************************/
 /** @fcn        void dispTask(void *argument)
- *  @brief      Function implementing the dispTask thread.
+ *  @brief      Function implementing the dispTask thread
  *  @details    Semaphore demo
  *
  *  @param    [in]  (void *) argument - x
@@ -375,7 +383,7 @@ void dispTask(void *argument) {
 
 /**************************************************************************************************/
 /** @fcn        void ctrlTask(void *argument)
- *  @brief      Function implementing the ctrlTask thread.
+ *  @brief      Function implementing the ctrlTask thread
  *  @details    x
  *
  *  @param    [in]  (void *) argument - x
@@ -390,7 +398,7 @@ void ctrlTask(void *argument) {
 		printTaskHeader("Control");
 		
 		//Console Sync
-		printf("\n");
+		uart_init();
 
 		//Delay
 		vTaskDelay(DISPLAY_TASK_LOOP_DELAY_CTS);
@@ -399,17 +407,17 @@ void ctrlTask(void *argument) {
 
 
 /**************************************************************************************************/
-/** @fcn        static void spin_task(void *arg)
+/** @fcn        static void spinTask(void *arg)
  *  @brief      x
  *  @details    x
  *
  *  @param    [in]  (void *) arg - ?
  */
 /**************************************************************************************************/
-void spin_task(void *arg) {
-	
+void spinTask(void *arg) {
+
     xSemaphoreTake(sync_spin_task, portMAX_DELAY);
-    
+
     for(;;) {
 		
 		//Notify
@@ -426,14 +434,14 @@ void spin_task(void *arg) {
 
 
 /**************************************************************************************************/
-/** @fcn        static void stats_task(void *arg)
+/** @fcn        static void statsTask(void *arg)
  *  @brief      x
  *  @details    x
  *
  *  @param    [in]  (void *) arg - ?
  */
 /**************************************************************************************************/
-void stats_task(void *arg) {
+void statsTask(void *arg) {
 	
 	//------------------------------------ Semaphore Practice ------------------------------------//
 

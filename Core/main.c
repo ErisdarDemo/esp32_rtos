@@ -8,13 +8,14 @@
  *  @last rev 3/11/25
  *
  *   @section 	Opens
- *		Add a pause command, from the test app with led on the UI to pause the demo!
+ *		get your Serial port to receive data from the PC?
+ *		get uart rx working
  *		add real timer
  *		Complete demo
  *		GET_WORKING bug
  *		...
  *		group task defs to a structure
- *		static ccontents
+ *		static contents
  *      ...
  * 		Relocate main\CMakeLists.txt & close main\
  *		Include paths are direct
@@ -89,31 +90,6 @@
 
 //Error Support
 #define ARRAY_SIZE_OFFSET   (5)   		/* Soln ++ iff ESP_ERR_INVALID_SIZE					      */
-
-
-//-------------------------------------------- Macros --------------------------------------------//
-
-
-//----------------------------------------- Enumerations -----------------------------------------//
-
-
-//------------------------------------------- Typedefs -------------------------------------------//
-
-
-//************************************************************************************************//
-//                                            VARIABLES                                           //
-//************************************************************************************************//
-
-//Tasks
-#ifdef GET_WORKING
-static char task_names[NUM_OF_SPIN_TASKS][configMAX_TASK_NAME_LEN];
-#endif
-
-//Semaphores
-#ifdef GET_WORKING
-static SemaphoreHandle_t sync_spin_task;
-static SemaphoreHandle_t sync_stats_task;
-#endif
 
 
 //************************************************************************************************//
@@ -317,7 +293,7 @@ void app_main(void) {
 		sys_init();
 
 		//Error Handling
-		for(;;); 									/* @todo !									  */
+		// @todo!
 			
 	    return;
 }
@@ -336,9 +312,7 @@ void app_main(void) {
 void sys_init(void) {
 	
 	//HW Init
-#ifdef COMPILE_WORKS
 	uart_init();
-#endif
 			
 	//OS Init
 	rtos_init();

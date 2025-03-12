@@ -1,0 +1,4 @@
+@brief 		how I mix camelcase and underscores!
+@details	frowned upon? No!
+@open		clear & clean for demo util
+

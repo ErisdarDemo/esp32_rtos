@@ -2,6 +2,9 @@
 /** @file     main.h
  *  @brief    Header for main.c file
  *  @details  This file contains the common defines of the application
+ *
+ *	@section 	Opens
+ *		magic nums
  */
 /**************************************************************************************************/
 #ifndef CORE_MAIN_H_
@@ -21,7 +24,9 @@ extern "C" {
 //************************************************************************************************//
 
 //FreeRTOS Includes
-#include "cmsis_os2.h"
+#ifdef CMSIS_OS2_BUG
+	#include "cmsis_os2.h"
+#endif
 
 //Utility Includes
 #include "System/utils.h"
@@ -98,6 +103,8 @@ extern BaseType_t dataTaskHandle;
 extern BaseType_t dispTaskHandle;
 extern BaseType_t ctrlTaskHandle;
 
+#ifdef CMSIS_OS2_BUG
+
 //Attributes
 extern const osThreadAttr_t sysTask_attributes;
 extern const osThreadAttr_t dataTask_attributes;
@@ -123,6 +130,8 @@ extern const osMutexAttr_t dataMutex_attributes;
 extern const osSemaphoreAttr_t ctrlSem_attributes;
 extern const osSemaphoreAttr_t cntrSem_attributes;
 extern const osEventFlagsAttr_t dataStore_attributes;
+
+#endif
 
 
 //************************************************************************************************//
