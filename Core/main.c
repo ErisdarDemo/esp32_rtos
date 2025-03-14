@@ -1,25 +1,24 @@
 /**************************************************************************************************/
 /** @file     main.c
- *  @brief    ESP32 FreeRTOS demonstration entry source file
- *  @details  FreeRTOS Real Time Stats Example 'real_time_stats_example_main'
+ *  @brief    ESP32 FreeRTOS Template
+ *  @details  Waveshare Module Support
  *
  *  @author   Justin Reina, Firmware Engineer
  *  @created  3/2/25
- *  @last rev 3/11/25
+ *  @last rev 3/13/25
  *
  *   @section 	Opens
+ * 		Relocate main\CMakeLists.txt & close main\	(walk side-by-side with demo proj to uncover)
+ *		Include paths are direct
+ *		add real timer
+ *		Relocate build\ contents to Out\build\
+ *		Complete demo
+ *		...
  *		get your Serial port to receive data from the PC?
  *		get uart rx working
- *		add real timer
- *		Complete demo
- *		GET_WORKING bug
  *		...
  *		group task defs to a structure
- *		static contents
  *      ...
- * 		Relocate main\CMakeLists.txt & close main\
- *		Include paths are direct
- *		Relocate build\ contents to Out\build\
  *      ... 
  *		Sync with STM32
  *		Publish & host 'v1'!
@@ -77,7 +76,7 @@
 
 //Project Includes
 #include "System/utils.h"
-#include "Rtos/freertos.h"				  /* @open 	drop dir from path							  */
+#include "Rtos/freertos.h"
 #include "Mcu/uart_handler.h"
 #include "main.h"
 
@@ -97,7 +96,7 @@
 //************************************************************************************************//
 
 //Local Routines
-void sys_init(void);
+static void sys_init(void);
 
 
 //************************************************************************************************//
@@ -300,7 +299,7 @@ void app_main(void) {
 
 
 /**************************************************************************************************/
-/** @fcn        int sys_init(void)
+/** @fcn        static int sys_init(void)
  *  @brief      Initialize the system for use
  *  @details    x
  *
@@ -309,7 +308,7 @@ void app_main(void) {
  *		Consider relocation to Core\System\system.c&h (cleaner here for now)
  */
 /**************************************************************************************************/
-void sys_init(void) {
+static void sys_init(void) {
 	
 	//HW Init
 	uart_init();

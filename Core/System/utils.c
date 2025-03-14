@@ -31,7 +31,7 @@
 //************************************************************************************************//
 
 //Header Variables
-int loopCt = 0;										/* loop cycle count to display on console	  */
+static int loopCt = 0;								/* loop cycle count to display on console	  */
 
 
 //************************************************************************************************//

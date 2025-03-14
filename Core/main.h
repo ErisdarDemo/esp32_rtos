@@ -81,27 +81,9 @@ extern "C" {
 extern esp_err_t print_real_time_stats(TickType_t xTicksToWait);
 
 
-//------------------------------------------- FreeRTOS -------------------------------------------//
-
-//Task Prototypes
-extern void sysTask(void *argument);
-extern void dataTask(void *argument);
-extern void dispTask(void *argument);
-extern void ctrlTask(void *argument);
-
-//Timer Prototypes
-extern void osTimer_Callback(void *argument);
-
-
 //************************************************************************************************//
 //                                             VARIABLES                                          //
 //************************************************************************************************//
-
-//Tasks
-extern BaseType_t sysTaskHandle;
-extern BaseType_t dataTaskHandle;
-extern BaseType_t dispTaskHandle;
-extern BaseType_t ctrlTaskHandle;
 
 #ifdef CMSIS_OS2_BUG
 

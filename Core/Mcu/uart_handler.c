@@ -49,7 +49,7 @@ void uart_init(void) {
 
 
 /**************************************************************************************************/
-/** @fcn        void uart_rxTask(void *argument)
+/** @fcn        static void uart_rxTask(void *argument)
  *  @brief      Function implementing the uartTask thread 
  *  @details    Handle received bytes from the uart
  *
@@ -65,7 +65,7 @@ void uart_init(void) {
 #include <stdlib.h>
 #define BUF_SIZE (1024)
 #endif
-void uart_rxTask(void *argument) {
+static void uart_rxTask(void *argument) {
 
 	//Locals
 	int len = 0;
@@ -104,6 +104,7 @@ void uart_rxTask(void *argument) {
  *
  *  @section 	Opens
  *		Consider relocation to freertos.c
+ *		Generalize with fcn call
  */
 /**************************************************************************************************/
 void uart_initTasks(void) {

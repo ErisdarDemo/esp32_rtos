@@ -56,20 +56,21 @@
 //************************************************************************************************//
 
 //Tasks
-char task_names[NUM_OF_SPIN_TASKS][configMAX_TASK_NAME_LEN];		/* @open static?              */
+static char task_names[NUM_OF_SPIN_TASKS][configMAX_TASK_NAME_LEN];
 
 //Semaphores
-SemaphoreHandle_t sync_spin_task;
-SemaphoreHandle_t sync_stats_task;
+static SemaphoreHandle_t sync_spin_task;
+static SemaphoreHandle_t sync_stats_task;
 
 
 //--------------------------------------------- Tasks --------------------------------------------//
 
 //Tasks
-BaseType_t sysTaskHandle;				    	    /* System Operations Task					  */
-BaseType_t dataTaskHandle;							/* Data Operations Task						  */
-BaseType_t dispTaskHandle;							/* Console/UI Task							  */
-BaseType_t ctrlTaskHandle;	  						/* Control Flow Taslk						  */
+static BaseType_t sysTaskHandle;		    	    /* System Operations Task					  */
+static BaseType_t dataTaskHandle;					/* Data Operations Task						  */
+static BaseType_t dispTaskHandle;					/* Console/UI Task							  */
+static BaseType_t ctrlTaskHandle;	  				/* Control Flow Taslk						  */
+
 BaseType_t uartTaskHandle;	  						/* Uart Flow Task						      */
 
 
@@ -104,7 +105,7 @@ const osThreadAttr_t ctrlTask_attributes = {
 //-------------------------------------------- Timers --------------------------------------------//
 
 //Timers
-osTimerId_t osTimerHandle;						/* Sample FreeRTOS Timer					  */
+osTimerId_t osTimerHandle;							/* Sample FreeRTOS Timer					  */
 
 //Config
 const osTimerAttr_t osTimer_attributes = {
@@ -157,12 +158,12 @@ const osEventFlagsAttr_t dataStore_attributes = {
 //************************************************************************************************//
 
 //Tasks
-void sysTask(void  *argument);
-void dataTask(void *argument);
-void dispTask(void  *argument);
-void ctrlTask(void *argument);
-void spinTask(void *arg);
-void statsTask(void *arg);
+static void sysTask(void  *argument);
+static void dataTask(void *argument);
+static void dispTask(void  *argument);
+static void ctrlTask(void *argument);
+static void spinTask(void *arg);
+static void statsTask(void *arg);
 
 
 //************************************************************************************************//
@@ -262,7 +263,7 @@ void rtos_init(void) {
 
 	
 /**************************************************************************************************/
-/** @fcn        void sysTask(void *argument)
+/** @fcn        static void sysTask(void *argument)
  *  @brief      Function implementing the sysTask thread
  *  @details    GPIO & UART demos
  *
@@ -273,7 +274,7 @@ void rtos_init(void) {
  *  	!35 ms (!~728 * (!127-!80)) and !46 ms (!~728 * !64)
  */
 /**************************************************************************************************/
-void sysTask(void *argument) {
+static void sysTask(void *argument) {
 
 	//Loop
 	for(;;) {
@@ -298,7 +299,7 @@ void sysTask(void *argument) {
 
 
 /**************************************************************************************************/
-/** @fcn        void dataTask(void *argument)
+/** @fcn        static void dataTask(void *argument)
  *  @brief      Function implementing the dataTask thread
  *  @details    Timer demo
  *
@@ -308,7 +309,7 @@ void sysTask(void *argument) {
  *		Use real timer
  */
 /**************************************************************************************************/
-void dataTask(void *argument) {
+static void dataTask(void *argument) {
 
 	//Locals
 	uint32_t timer_val     = 0; 					/* time check value 						  */
@@ -340,14 +341,14 @@ void dataTask(void *argument) {
 
 
 /**************************************************************************************************/
-/** @fcn        void dispTask(void *argument)
+/** @fcn        static void dispTask(void *argument)
  *  @brief      Function implementing the dispTask thread
  *  @details    Semaphore demo
  *
  *  @param    [in]  (void *) argument - x
  */
 /**************************************************************************************************/
-void dispTask(void *argument) {
+static void dispTask(void *argument) {
 
 	//Locals
 	esp_err_t ret;									/* return status value					 	  */
@@ -382,14 +383,14 @@ void dispTask(void *argument) {
 
 
 /**************************************************************************************************/
-/** @fcn        void ctrlTask(void *argument)
+/** @fcn        static void ctrlTask(void *argument)
  *  @brief      Function implementing the ctrlTask thread
  *  @details    x
  *
  *  @param    [in]  (void *) argument - x
  */
 /**************************************************************************************************/
-void ctrlTask(void *argument) {
+static void ctrlTask(void *argument) {
 
 	//Loop
 	for(;;) {
@@ -414,7 +415,7 @@ void ctrlTask(void *argument) {
  *  @param    [in]  (void *) arg - ?
  */
 /**************************************************************************************************/
-void spinTask(void *arg) {
+static void spinTask(void *arg) {
 
     xSemaphoreTake(sync_spin_task, portMAX_DELAY);
 
@@ -441,22 +442,18 @@ void spinTask(void *arg) {
  *  @param    [in]  (void *) arg - ?
  */
 /**************************************************************************************************/
-void statsTask(void *arg) {
+static void statsTask(void *arg) {
 	
 	//------------------------------------ Semaphore Practice ------------------------------------//
 
 	//Grab
-#ifdef SEMAPHORE_BUG
     xSemaphoreTake(sync_stats_task, portMAX_DELAY);
-#endif
 
     //Start all the spin tasks
     for(int i = 0; i < NUM_OF_SPIN_TASKS; i++) {
 		
-		//Release
-#ifdef SEMAPHORE_BUG
+		//Allow
         xSemaphoreGive(sync_spin_task);
-#endif
     }
 
 
@@ -478,7 +475,7 @@ void statsTask(void *arg) {
 
 
 /**************************************************************************************************/
-/** @fcn        void osTimer_Callback(void *argument)
+/** @fcn        static void osTimer_Callback(void *argument)
  *  @brief      osTimer_Callback function
  *  @details    x
  *
@@ -488,7 +485,7 @@ void statsTask(void *arg) {
  *  	Working w/notice
  */
 /**************************************************************************************************/
-void osTimer_Callback(void *argument) {
+static void osTimer_Callback(void *argument) {
 	return;
 }
 
