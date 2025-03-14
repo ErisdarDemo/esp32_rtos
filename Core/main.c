@@ -63,6 +63,7 @@
 //Project Includes
 #include "System/utils.h"
 #include "Rtos/freertos.h"
+#include "Mcu/timer_handler.h"
 #include "Mcu/uart_handler.h"
 #include "main.h"
 
@@ -297,6 +298,7 @@ void app_main(void) {
 static void sys_init(void) {
 	
 	//HW Init
+	timer_init();
 	uart_init();
 			
 	//OS Init

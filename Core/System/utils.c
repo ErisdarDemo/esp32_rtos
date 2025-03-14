@@ -22,7 +22,7 @@
 
 //-----------------------------------------  Definitions -----------------------------------------//
 #define PRINTTASK_LEN	(73)						/* num of chars on the print header			  */
-#define TASK_STR	    (" Task")					/* Task header string						  */
+#define TASK_STR	    (" Task")					/* Common task display header string		  */
 #define LOOPHEADER_LEN	(80)
 
 

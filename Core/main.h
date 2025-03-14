@@ -34,34 +34,8 @@ extern "C" {
 //                                        DEFINITIONS & TYPES                                     //
 //************************************************************************************************//
 
-//--------------------------------------- RTOS Definitions ---------------------------------------//
-
 //Code Definitions
 #define _nop() 				__asm__ __volatile__("NOP")
-
-//Task Definitions
-#define SYS_TASK_NAME		"sysTask"
-#define DATA_TASK_NAME		"dataTask"
-#define DISP_TASK_NAME		"dispTask"
-#define CTRL_TASK_NAME		"ctrlTask"
-
-//Timer Definitions
-#define OS_TIMER_NAME		"osTimer"
-
-//Mutex Definitions
-#define  DATA_MUTEX_NAME	"dataMutex"
-
-//Semaphore Definitions
-#define CTRL_SEM_NAME		"ctrlSem"
-#define CTRL_MAX_CT 		(1)						/* Binary counter							  */
-#define CTRL_INIT_CT 		(1)						/* Init taken (not available)				  */
-
-#define CNTR_SEM_NAME		"cntrSem"
-#define CNTR_MAX_CT 		(10)					/* Counting Semaphore						  */
-#define CNTR_INIT_CT 		(0)						/* Init empty (available)					  */
-
-//Event Definitions
-#define DATA_EVENT_NAME		"dataStore"
 
 
 //************************************************************************************************//

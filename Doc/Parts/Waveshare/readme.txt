@@ -1,8 +1,12 @@
 @brief 		Waveshare ESP32-S3 Touch-LCD
 @details 	prev
 @auth 		Justin Reina
-@date 		2/22/25
+@date 		3/14/25
 
+
+@section 	Hardware
+
+	16MB Flash + 8MB PSRAM
 
 @section 	Setup Instructions
 	

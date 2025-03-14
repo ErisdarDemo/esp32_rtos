@@ -23,9 +23,10 @@
 #include "freertos/task.h"
 
 //Project Includes	
-#include "../Rtos/freertos.h"
-#include "../Mcu/uart_handler.h"
-#include "../main.h"
+#include "Rtos/freertos.h"
+#include "Mcu/timer_handler.h"
+#include "Mcu/uart_handler.h"
+#include "main.h"
 
 
 //************************************************************************************************//
@@ -66,6 +67,7 @@ static BaseType_t dataTaskHandle;					/* Data Operations Task						  */
 static BaseType_t dispTaskHandle;					/* Console/UI Task							  */
 static BaseType_t ctrlTaskHandle;	  				/* Control Flow Taslk						  */
 
+BaseType_t timerTaskHandle;	  						/* Software Timer task						  */
 BaseType_t uartTaskHandle;	  						/* Uart Flow Task						      */
 
 
@@ -96,9 +98,7 @@ static void statsTask(void *arg);
  *
  *	@section 	Opens
  *		cmsis_os2!
- *		define task string names
  *		subroutine with your new struct
- *		pick more intentional stack sizes
  */
 /**************************************************************************************************/
 void rtos_init(void) {
@@ -114,7 +114,7 @@ void rtos_init(void) {
     for(int i = 0; i < NUM_OF_SPIN_TASKS; i++) {
 		
 		//Name
-        snprintf(task_names[i], configMAX_TASK_NAME_LEN, "spin%d", i);
+        snprintf(task_names[i], configMAX_TASK_NAME_LEN, "%s%d",SPIN_TASK_NAME, i);
         
 		//Init
         xTaskCreatePinnedToCore(spinTask,
@@ -127,7 +127,8 @@ void rtos_init(void) {
 
     //Create and start stats task
     xTaskCreatePinnedToCore(statsTask,
-                            "stats", STATS_TASK_DEPTH,
+                           STATS_TASK_NAME,
+                            STATS_TASK_DEPTH,
                             NULL,
                             STAT_TASK_PRIO,
                             NULL,
@@ -137,7 +138,7 @@ void rtos_init(void) {
 
     //Create and start system task
     sysTaskHandle = xTaskCreatePinnedToCore(sysTask,
-                                            "system",
+                                            SYS_TASK_NAME,
                                             SYS_STACK_DEPTH,
                                             NULL,
                                             SYS_TASK_PRIO,
@@ -146,7 +147,7 @@ void rtos_init(void) {
     
     //Create and start data task
     dataTaskHandle = xTaskCreatePinnedToCore(dataTask,
-                                             "data",
+                                             DATA_TASK_NAME,
                                              DATA_STACK_DEPTH,
                                              NULL,
                                              DATA_TASK_PRIO,
@@ -155,7 +156,7 @@ void rtos_init(void) {
 
     //Create and start display task
     dispTaskHandle = xTaskCreatePinnedToCore(dispTask,
-                                             "display",
+                                             TASK_TASK_NAME,
                                              DISP_STACK_DEPTH,
                                              NULL,
                                              DISP_TASK_PRIO,
@@ -164,7 +165,7 @@ void rtos_init(void) {
     
     //Create and start control task
     ctrlTaskHandle = xTaskCreatePinnedToCore(ctrlTask,
-                                             "control",
+                                             CTRL_TASK_NAME,
                                              CTRL_STACK_DEPTH,
                                              NULL,
                                              CTRL_TASK_PRIO,
@@ -173,7 +174,8 @@ void rtos_init(void) {
                                              
                                              
 	//--------------------------------------- Module Tasks ---------------------------------------//
-	uart_initTasks();                                             
+	timer_initTasks();
+	uart_initTasks();
                                              
 	return;
 }
@@ -182,13 +184,9 @@ void rtos_init(void) {
 /**************************************************************************************************/
 /** @fcn        static void sysTask(void *argument)
  *  @brief      Function implementing the sysTask thread
- *  @details    GPIO & UART demos
+ *  @details    x
  *
  *  @param    [in]  (void *) argument - x
- *
- *  @section 	WDT Refresh
- *  	Update counter value to !127, the refresh window is between
- *  	!35 ms (!~728 * (!127-!80)) and !46 ms (!~728 * !64)
  */
 /**************************************************************************************************/
 static void sysTask(void *argument) {
@@ -275,10 +273,10 @@ static void dispTask(void *argument) {
 	for(;;) {
 
 		//Notify	
-		printTaskHeader("Display");
+		printTaskHeader("DISPLAY");
         
         //Print
-        ret = print_real_time_stats(STATS_TICKS);
+        ret = print_real_time_stats(PRINT_STATS_DELAY_CTS);
         
         if(ret == ESP_OK) {
 			
@@ -388,21 +386,5 @@ static void statsTask(void *arg) {
     }
     
     return;
-}
-
-
-/**************************************************************************************************/
-/** @fcn        static void osTimer_Callback(void *argument)
- *  @brief      osTimer_Callback function
- *  @details    x
- *
- *  @param    [in]  (void *) argument - x
- *
- *  @section 	Opens
- *  	Working w/notice
- */
-/**************************************************************************************************/
-static void osTimer_Callback(void *argument) {
-	return;
 }
 
