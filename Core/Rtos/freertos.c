@@ -17,11 +17,6 @@
 #include <string.h>
 #include <stdio.h>
 
-//FreeRTOS Includes
-#ifdef CMSIS_OS2_BUG
-#include "cmsis_os2.h"
-#endif
-
 //RTOS Includes
 #include "freertos/FreeRTOS.h"
 #include "freertos/FreeRTOSConfig.h"
@@ -74,85 +69,6 @@ static BaseType_t ctrlTaskHandle;	  				/* Control Flow Taslk						  */
 BaseType_t uartTaskHandle;	  						/* Uart Flow Task						      */
 
 
-#ifdef CMSIS_OS2_BUG
-
-//Config
-const osThreadAttr_t sysTask_attributes = {
-  .name       = SYS_TASK_NAME,
-  .stack_size = DFLT_STACK_SIZE,
-  .priority   = (osPriority_t) osPriorityNormal,
-};
-
-const osThreadAttr_t dataTask_attributes = {
-  .name       = DATA_TASK_NAME,
-  .stack_size = DFLT_STACK_SIZE,
-  .priority   = (osPriority_t) osPriorityLow,
-};
-
-const osThreadAttr_t dispTask_attributes = {
-  .name       = DISP_TASK_NAME,
-  .stack_size = DFLT_STACK_SIZE,
-  .priority   = (osPriority_t) osPriorityLow,
-};
-
-const osThreadAttr_t ctrlTask_attributes = {
-  .name       = CTRL_TASK_NAME,
-  .stack_size = DFLT_STACK_SIZE,
-  .priority   = (osPriority_t) osPriorityLow,
-};
-
-
-//-------------------------------------------- Timers --------------------------------------------//
-
-//Timers
-osTimerId_t osTimerHandle;							/* Sample FreeRTOS Timer					  */
-
-//Config
-const osTimerAttr_t osTimer_attributes = {
-  .name = OS_TIMER_NAME
-};
-
-
-//------------------------------------------- Mutexes --------------------------------------------//
-
-//Mutexes
-osMutexId_t dataMutexHandle;						/* Sample FreeRTOS Mutex					  */
-
-//Config
-const osMutexAttr_t dataMutex_attributes = {
-  .name = DATA_MUTEX_NAME
-};
-
-
-//------------------------------------------ Semaphores -------------------------------------------//
-
-//Semaphores
-osSemaphoreId_t ctrlSemHandle;			  		    /* Sample FreeRTOS Binary Semaphore		 	  */
-osSemaphoreId_t cntrSemHandle;					    /* Sample FreeRTOS Counting Semaphore	      */
-
-//Config
-const osSemaphoreAttr_t ctrlSem_attributes = {
-  .name = CTRL_SEM_NAME
-};
-
-const osSemaphoreAttr_t cntrSem_attributes = {
-  .name = CNTR_SEM_NAME
-};
-
-
-//-------------------------------------------- Events --------------------------------------------//
-
-//Events
-osEventFlagsId_t dataStoreHandle;					/* @Sample FreeRTOS Event					  */
-
-//Config
-const osEventFlagsAttr_t dataStore_attributes = {
-  .name = DATA_EVENT_NAME
-};
-
-#endif
-
-
 //************************************************************************************************//
 //                                        FUNCTION DECLARATIONS                                   //
 //************************************************************************************************//
@@ -182,6 +98,7 @@ static void statsTask(void *arg);
  *		cmsis_os2!
  *		define task string names
  *		subroutine with your new struct
+ *		pick more intentional stack sizes
  */
 /**************************************************************************************************/
 void rtos_init(void) {
@@ -202,7 +119,7 @@ void rtos_init(void) {
 		//Init
         xTaskCreatePinnedToCore(spinTask,
                                 task_names[i],
-                                1024,
+                                SPIN_TASK_DEPTH,
                                 NULL,
                                 SPIN_TASK_PRIO,
                                 NULL, tskNO_AFFINITY);
@@ -210,7 +127,7 @@ void rtos_init(void) {
 
     //Create and start stats task
     xTaskCreatePinnedToCore(statsTask,
-                            "stats", 4096,
+                            "stats", STATS_TASK_DEPTH,
                             NULL,
                             STAT_TASK_PRIO,
                             NULL,

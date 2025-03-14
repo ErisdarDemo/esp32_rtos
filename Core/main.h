@@ -23,11 +23,6 @@ extern "C" {
 //                                            INCLUDES                                            //
 //************************************************************************************************//
 
-//FreeRTOS Includes
-#ifdef CMSIS_OS2_BUG
-	#include "cmsis_os2.h"
-#endif
-
 //Utility Includes
 #include "System/utils.h"
 
@@ -44,10 +39,6 @@ extern "C" {
 //Code Definitions
 #define _nop() 				__asm__ __volatile__("NOP")
 
-
-//Design Specifications
-#define DFLT_STACK_SIZE		(128 * 4)				/* @open 	capture meaning of each num		  */
-
 //Task Definitions
 #define SYS_TASK_NAME		"sysTask"
 #define DATA_TASK_NAME		"dataTask"
@@ -62,12 +53,12 @@ extern "C" {
 
 //Semaphore Definitions
 #define CTRL_SEM_NAME		"ctrlSem"
-#define CTRL_MAX_CT 		(1)						/* @open  	value descrip					  */
-#define CTRL_INIT_CT 		(1)						/* @open  	value descrip					  */
+#define CTRL_MAX_CT 		(1)						/* Binary counter							  */
+#define CTRL_INIT_CT 		(1)						/* Init taken (not available)				  */
 
 #define CNTR_SEM_NAME		"cntrSem"
-#define CNTR_MAX_CT 		(10)					/* @open  	value descrip					  */
-#define CNTR_INIT_CT 		(0)						/* @open  	value descrip					  */
+#define CNTR_MAX_CT 		(10)					/* Counting Semaphore						  */
+#define CNTR_INIT_CT 		(0)						/* Init empty (available)					  */
 
 //Event Definitions
 #define DATA_EVENT_NAME		"dataStore"

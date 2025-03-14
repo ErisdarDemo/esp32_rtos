@@ -32,7 +32,9 @@
 //Timing Definitions
 #define RTOS_BOOT_DELAY_MS	(100)
 
-//Stack Definitions
+//Stack Definitions			(8192 kB)
+#define SPIN_TASK_DEPTH 	(1024)					/* bytes 									  */
+#define STATS_TASK_DEPTH 	(4096)					/* plenty of room							  */
 #define SYS_STACK_DEPTH 	(4096)
 #define DATA_STACK_DEPTH 	(4096)
 #define DISP_STACK_DEPTH 	(4096)

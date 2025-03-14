@@ -5,27 +5,16 @@
  *
  *  @author   Justin Reina, Firmware Engineer
  *  @created  3/2/25
- *  @last rev 3/13/25
+ *  @last rev 3/14/25
  *
  *   @section 	Opens
- * 		Relocate main\CMakeLists.txt & close main\	(walk side-by-side with demo proj to uncover)
- *		Include paths are direct
  *		add real timer
- *		Relocate build\ contents to Out\build\
  *		Complete demo
  *		...
- *		get your Serial port to receive data from the PC?
- *		get uart rx working
- *		...
- *		group task defs to a structure
- *      ...
- *      ... 
  *		Sync with STM32
- *		Publish & host 'v1'!
- *		...
- * 		post both updates to new www rtos page
+ *			Publish & host 'v1'!
+ * 			post both updates to new www rtos page
  *		
- *   		
  *	 @section 	Development Flow
  *		1. Integrate existing STM 'v0'
  *		2. Update w/STM to 'v1'
@@ -37,15 +26,12 @@
  *		FreeRTOS Real Time Stats Example 'real_time_stats_example_main'
  *		CubeMx_RTOS_Demo 'r0'
  *
- *	@section 	Espress-IDF Opens
- *		Disable display of input field names
- * 		Get 'F11' to launch debug
- *		Get multi-line comments 'Enter' to lead with a new '*' char
- *		Ctrl + '/' for commenting out lines
- *      Turn off input name recommendations
+ *	@section 	Forum Help
+ *		Relocate main\ & build\ dirs
+ *		Uart Rx & Rx Thread
  *
  *	@section 	Desires
- *		migration to cmsis_os2
+ *		migration to cmsis_os2 (e.g. group task defs to a structure?)
  *
  *  @section    Legal Disclaimer
  * 		©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other
