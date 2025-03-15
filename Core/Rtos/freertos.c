@@ -18,7 +18,7 @@
 #include "freertos/FreeRTOSConfig.h"
 #include "freertos/task.h"
 
-//Project Includes	
+//Project Includes  
 #include "Rtos/freertos.h"
 #include "Mcu/timer_handler.h"
 #include "Mcu/uart_handler.h"
@@ -32,15 +32,15 @@
 //-----------------------------------------  Definitions -----------------------------------------//
 
 //Graphic Definitions]
-#define LOOPHEADER_LEN					(80)
+#define LOOPHEADER_LEN                  (80)
 
 //Task Definitions
-#define SPIN_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(300)
-#define STATS_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(3000)
-#define SYSTEM_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(6000)
-#define DATA_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(6000)
-#define DISPLAY_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(6000)
-#define CONTROL_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(6000)
+#define SPIN_TASK_LOOP_DELAY_CTS        pdMS_TO_TICKS(300)
+#define STATS_TASK_LOOP_DELAY_CTS       pdMS_TO_TICKS(3000)
+#define SYSTEM_TASK_LOOP_DELAY_CTS      pdMS_TO_TICKS(6000)
+#define DATA_TASK_LOOP_DELAY_CTS        pdMS_TO_TICKS(6000)
+#define DISPLAY_TASK_LOOP_DELAY_CTS     pdMS_TO_TICKS(6000)
+#define CONTROL_TASK_LOOP_DELAY_CTS     pdMS_TO_TICKS(6000)
 
 
 //************************************************************************************************//
@@ -58,13 +58,13 @@ static SemaphoreHandle_t sync_stats_task;
 //--------------------------------------------- Tasks --------------------------------------------//
 
 //Tasks
-static BaseType_t sysTaskHandle;		    	    /* System Operations Task					  */
-static BaseType_t dataTaskHandle;					/* Data Operations Task						  */
-static BaseType_t dispTaskHandle;					/* Console/UI Task							  */
-static BaseType_t ctrlTaskHandle;	  				/* Control Flow Taslk						  */
+static BaseType_t sysTaskHandle;                    /* System Operations Task                     */
+static BaseType_t dataTaskHandle;                   /* Data Operations Task                       */
+static BaseType_t dispTaskHandle;                   /* Console/UI Task                            */
+static BaseType_t ctrlTaskHandle;                   /* Control Flow Taslk                         */
 
-BaseType_t timerTaskHandle;	  						/* Software Timer task						  */
-BaseType_t uartTaskHandle;	  						/* Uart Flow Task						      */
+BaseType_t timerTaskHandle;                         /* Software Timer task                        */
+BaseType_t uartTaskHandle;                          /* Uart Flow Task                             */
 
 
 //************************************************************************************************//
@@ -89,14 +89,14 @@ static void statsTask(void *arg);
  *  @brief      Initialize RTOS components for operation
  *  @details    x
  *
- *  @pre 	sys_init()
- *  @post	RTOS is configured and tasks operational
+ *  @pre    sys_init()
+ *  @post   RTOS is configured and tasks operational
  */
 /**************************************************************************************************/
 void rtos_init(void) {
 
-	//Allow other core to finish initialization
-  	vTaskDelay(pdMS_TO_TICKS(RTOS_BOOT_DELAY_MS));
+    //Allow other core to finish initialization
+    vTaskDelay(pdMS_TO_TICKS(RTOS_BOOT_DELAY_MS));
 
     //Create semaphores to synchronize
     sync_spin_task  = xSemaphoreCreateCounting(NUM_OF_SPIN_TASKS, 0);
@@ -104,11 +104,11 @@ void rtos_init(void) {
 
     //Create spin tasks
     for(int i = 0; i < NUM_OF_SPIN_TASKS; i++) {
-		
-		//Name
+        
+        //Name
         snprintf(task_names[i], configMAX_TASK_NAME_LEN, "%s%d",SPIN_TASK_NAME, i);
         
-		//Init
+        //Init
         xTaskCreatePinnedToCore(spinTask,
                                 task_names[i],
                                 SPIN_TASK_DEPTH,
@@ -119,7 +119,7 @@ void rtos_init(void) {
 
     //Create and start stats task
     xTaskCreatePinnedToCore(statsTask,
-                           STATS_TASK_NAME,
+                            STATS_TASK_NAME,
                             STATS_TASK_DEPTH,
                             NULL,
                             STAT_TASK_PRIO,
@@ -165,13 +165,13 @@ void rtos_init(void) {
                                              tskNO_AFFINITY);
                                              
                                              
-	//--------------------------------------- Module Tasks ---------------------------------------//
-	uart_initTasks();
+    //--------------------------------------- Module Tasks ---------------------------------------//
+    uart_initTasks();
                                              
-	return;
+    return;
 }
 
-	
+    
 /**************************************************************************************************/
 /** @fcn        static void sysTask(void *argument)
  *  @brief      Function implementing the sysTask thread
@@ -182,19 +182,19 @@ void rtos_init(void) {
 /**************************************************************************************************/
 static void sysTask(void *argument) {
 
-	//Loop
-	for(;;) {
+    //Loop
+    for(;;) {
 
-		//Print Header
-		printLoopHeader();
+        //Print Header
+        printLoopHeader();
 
-		//Console Sync
-		printf("\n");
-		
-		//Delay
-		vTaskDelay(SYSTEM_TASK_LOOP_DELAY_CTS);
-		
-	}
+        //Console Sync
+        printf("\n");
+        
+        //Delay
+        vTaskDelay(SYSTEM_TASK_LOOP_DELAY_CTS);
+        
+    }
 }
 
 
@@ -208,32 +208,32 @@ static void sysTask(void *argument) {
 /**************************************************************************************************/
 static void dataTask(void *argument) {
 
-	//Locals
-	uint64_t timer_val     = 0; 					/* time check value 						  */
-	char buff[100]         = {0};					/* print buffer								  */
+    //Locals
+    uint64_t timer_val     = 0;                     /* time check value                           */
+    char buff[100]         = {0};                   /* print buffer                               */
 
 
-	//Init
-	memset(&buff, 0x00, sizeof(buff));
+    //Init
+    memset(&buff, 0x00, sizeof(buff));
 
-	//Loop
-	for(;;) {
+    //Loop
+    for(;;) {
 
-		//Notify
-		printTaskHeader("Data");
+        //Notify
+        printTaskHeader("Data");
 
-		//Latch timer ( %lx or %llx) 
-		timer_val = timer_getCount();
+        //Latch timer ( %lx or %llx) 
+        timer_val = timer_getCount();
 
-		//Print
-		printf("Timer: %llu\n", timer_val);
-		
-		//Console Sync
-		printf("\n");
+        //Print
+        printf("Timer: %llu\n", timer_val);
+        
+        //Console Sync
+        printf("\n");
 
-		//Delay
-		vTaskDelay(DATA_TASK_LOOP_DELAY_CTS);
-	}
+        //Delay
+        vTaskDelay(DATA_TASK_LOOP_DELAY_CTS);
+    }
 }
 
 
@@ -247,35 +247,35 @@ static void dataTask(void *argument) {
 /**************************************************************************************************/
 static void dispTask(void *argument) {
 
-	//Locals
-	esp_err_t ret;									/* return status value					 	  */
-	
-	
-	//Loop
-	for(;;) {
+    //Locals
+    esp_err_t ret;                                  /* return status value                        */
+    
+    
+    //Loop
+    for(;;) {
 
-		//Notify	
-		printTaskHeader("Display");
+        //Notify    
+        printTaskHeader("Display");
         
         //Print
         ret = print_real_time_stats(PRINT_STATS_DELAY_CTS);
         
         if(ret == ESP_OK) {
-			
+            
             printf("Real time stats obtained\n");
             
         } else {
-			
+            
             printf("Error getting real time stats\n");
             
-        }		
-		
-		//Console Sync
-		printf("\n");
-		
-		//Delay
-		vTaskDelay(DISPLAY_TASK_LOOP_DELAY_CTS);
-	}
+        }       
+        
+        //Console Sync
+        printf("\n");
+        
+        //Delay
+        vTaskDelay(DISPLAY_TASK_LOOP_DELAY_CTS);
+    }
 }
 
 
@@ -289,18 +289,18 @@ static void dispTask(void *argument) {
 /**************************************************************************************************/
 static void ctrlTask(void *argument) {
 
-	//Loop
-	for(;;) {
+    //Loop
+    for(;;) {
 
-		//Notify
-		printTaskHeader("Control");
-		
-		//Console Sync
-		printf("...!\n");
+        //Notify
+        printTaskHeader("Control");
+        
+        //Console Sync
+        printf("...!\n");
 
-		//Delay
-		vTaskDelay(DISPLAY_TASK_LOOP_DELAY_CTS);
-	}
+        //Delay
+        vTaskDelay(DISPLAY_TASK_LOOP_DELAY_CTS);
+    }
 }
 
 
@@ -317,7 +317,7 @@ static void spinTask(void *arg) {
     xSemaphoreTake(sync_spin_task, portMAX_DELAY);
 
     for(;;) {
-		
+        
         //Consume CPU cycles
         for(int i = 0; i < SPIN_ITER; i++) {
             _nop();
@@ -337,23 +337,23 @@ static void spinTask(void *arg) {
  */
 /**************************************************************************************************/
 static void statsTask(void *arg) {
-	
-	//------------------------------------ Semaphore Practice ------------------------------------//
+    
+    //------------------------------------ Semaphore Practice ------------------------------------//
 
-	//Grab
+    //Grab
     xSemaphoreTake(sync_stats_task, portMAX_DELAY);
 
     //Start all the spin tasks
     for(int i = 0; i < NUM_OF_SPIN_TASKS; i++) {
-		
-		//Allow
+        
+        //Allow
         xSemaphoreGive(sync_spin_task);
     }
 
 
-	//------------------------------------------ Print -------------------------------------------//
+    //------------------------------------------ Print -------------------------------------------//
     for(;;) {
-	        
+            
         //Loop
         vTaskDelay(STATS_TASK_LOOP_DELAY_CTS);
     }

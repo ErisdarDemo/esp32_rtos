@@ -7,41 +7,41 @@
  *  @created  3/2/25
  *  @last rev 3/14/25
  *
- *   @section 	Opens
- *		wdt to system task
- *		add LV test pause cmd
- *		Complete demo
- *		...
- *		Sync with STM32
- *		...
- *		Publish & host 'v1'!
- *			ensure access to test tool is available in subdir
- * 			post both updates to new www rtos page
- *		
- *	 @section 	Development Flow
- *		1. Integrate existing STM 'v0'
- *		2. Update w/STM to 'v1'
- *		4. Adapt to Espressif SMP demo
- *		5. Integrate Bluetooth (branch)
- *		6. Integrate WiFi (branch)
+ *   @section   Opens
+ *      wdt to system task
+ *      add LV test pause cmd
+ *      Complete demo
+ *      ...
+ *      Sync with STM32
+ *      ...
+ *      Publish & host 'v1'!
+ *          ensure access to test tool is available in subdir
+ *          post both updates to new www rtos page
+ *      
+ *   @section   Development Flow
+ *      1. Integrate existing STM 'v0'
+ *      2. Update w/STM to 'v1'
+ *      4. Adapt to Espressif SMP demo
+ *      5. Integrate Bluetooth (branch)
+ *      6. Integrate WiFi (branch)
  *
- *	 @section 	Sources
- *		FreeRTOS Real Time Stats Example 'real_time_stats_example_main'
- *		CubeMx_RTOS_Demo 'r0'
+ *   @section   Sources
+ *      FreeRTOS Real Time Stats Example 'real_time_stats_example_main'
+ *      CubeMx_RTOS_Demo 'r0'
  *
- *	@section 	Forum Help
- *		Relocate main\ & build\ dirs
- *		Uart Rx & Rx Thread
+ *  @section    Forum Help
+ *      Relocate main\ & build\ dirs
+ *      Uart Rx & Rx Thread
  *
- *	@section 	Upcoming
- *		Complete esp32_wdt & integrate tp es[32_rtos
- *		Publish timer work to esp32_timer
+ *  @section    Upcoming
+ *      Complete esp32_wdt & integrate tp es[32_rtos
+ *      Publish timer work to esp32_timer
  *
- *	@section 	Desires
- *		migration to cmsis_os2 form (e.g. group task defs to a structure?)
+ *  @section    Desires
+ *      migration to cmsis_os2 form (e.g. group task defs to a structure?)
  *
  *  @section    Legal Disclaimer
- * 		©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other
+ *      ©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other
  *      related source files are the explicit property of Justin Reina. Do not distribute.
  *      Do not copy.
  */
@@ -84,7 +84,7 @@
 //-----------------------------------------  Definitions -----------------------------------------//
 
 //Error Support
-#define ARRAY_SIZE_OFFSET   (5)   		/* Soln ++ iff ESP_ERR_INVALID_SIZE					      */
+#define ARRAY_SIZE_OFFSET   (5)         /* Soln ++ iff ESP_ERR_INVALID_SIZE                       */
 
 
 //************************************************************************************************//
@@ -131,7 +131,7 @@ static void sys_init(void);
 /**************************************************************************************************/
 esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
 
-	//Locals
+    //Locals
     TaskStatus_t *start_array = NULL, *end_array = NULL;
     UBaseType_t start_array_size, end_array_size;
     configRUN_TIME_COUNTER_TYPE start_run_time, end_run_time;
@@ -191,13 +191,13 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
     
     //Match each task in start_array to those in the end_array
     for(int i = 0; i < start_array_size; i++) {
-		
+        
         int k = -1;
         
         for(int j = 0; j < end_array_size; j++) {
-			
+            
             if(start_array[i].xHandle == end_array[j].xHandle) {
-				
+                
                 k = j;
                 
                 //Mark that task have been matched by overwriting their handles
@@ -210,48 +210,48 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
         
         //Check if matching task found
         if (k >= 0) {
-			
-			//Elapsed time count
+            
+            //Elapsed time count
             uint32_t task_elapsed_time = end_array[k].ulRunTimeCounter - start_array[i].ulRunTimeCounter;
             
             //Percentage complete
             uint32_t percentage_time = (task_elapsed_time * 100UL) / (total_elapsed_time * CONFIG_FREERTOS_NUMBER_OF_CORES);
-			
-			//----------------------------------- Calc Spacing -----------------------------------//
-			 
-			int num_elapsed_digits = numPlaces(task_elapsed_time);
+            
+            //----------------------------------- Calc Spacing -----------------------------------//
+             
+            int num_elapsed_digits = numPlaces(task_elapsed_time);
  
-			char *spaceOneStr = "!";
-			char *spaceTwoStr = "?";
+            char *spaceOneStr = "!";
+            char *spaceTwoStr = "?";
 
-			int sizeOne      = strlen(start_array[i].pcTaskName);
-			int sizeOneMax   = 6;
-			int sizeOneSpace = (sizeOneMax-sizeOne+1);
+            int sizeOne      = strlen(start_array[i].pcTaskName);
+            int sizeOneMax   = 6;
+            int sizeOneSpace = (sizeOneMax-sizeOne+1);
 
-			int sizeTwo      = num_elapsed_digits;
-			int sizeTwoMax   = 8;					/* pick a big size for KISS					  */					
-			int sizeTwoSpace = (sizeTwoMax-sizeTwo);
-			
-			char stringOne[10] = {0};				/* static size for KISS						  */
-			char stringTwo[10] = {0};
-			
-			//Gen Spaces
-			for(int i=0; i<sizeOneSpace; i++) { stringOne[i] = ' '; }
-			for(int i=0; i<sizeTwoSpace; i++) { stringTwo[i] = ' '; }
-			stringOne[sizeOneSpace] = 0x00;			// EOS
-			stringTwo[sizeTwoSpace] = 0x00;			// EOS
+            int sizeTwo      = num_elapsed_digits;
+            int sizeTwoMax   = 8;                   /* pick a big size for KISS                   */                    
+            int sizeTwoSpace = (sizeTwoMax-sizeTwo);
+            
+            char stringOne[10] = {0};               /* static size for KISS                       */
+            char stringTwo[10] = {0};
+            
+            //Gen Spaces
+            for(int i=0; i<sizeOneSpace; i++) { stringOne[i] = ' '; }
+            for(int i=0; i<sizeTwoSpace; i++) { stringTwo[i] = ' '; }
+            stringOne[sizeOneSpace] = 0x00;         // EOS
+            stringTwo[sizeTwoSpace] = 0x00;         // EOS
 
-			spaceOneStr = &stringOne[0];
-			spaceTwoStr = &stringTwo[0];
+            spaceOneStr = &stringOne[0];
+            spaceTwoStr = &stringTwo[0];
 
 
-			//----------------------------------- Print Console-----------------------------------//
-			
+            //----------------------------------- Print Console-----------------------------------//
+            
             printf("| %s%s| %"PRIu32" %s| %"PRIu32"%%\n", start_array[i].pcTaskName, 
-											              spaceOneStr, 
-											              task_elapsed_time, 
-											              spaceTwoStr, 
-											              percentage_time);
+                                                          spaceOneStr, 
+                                                          task_elapsed_time, 
+                                                          spaceTwoStr, 
+                                                          percentage_time);
         }
     }
     
@@ -260,18 +260,18 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
 
     //Print unmatched tasks
     for(int i = 0; i < start_array_size; i++) {
-		
+        
         if(start_array[i].xHandle != NULL) {
-			
+            
             printf("| %s | Deleted\n", start_array[i].pcTaskName);
         }
     }
     
     
     for(int i = 0; i < end_array_size; i++) {
-		
+        
         if(end_array[i].xHandle != NULL) {
-			
+            
             printf("| %s | Created\n", end_array[i].pcTaskName);
         }
     }
@@ -279,7 +279,7 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
     ret = ESP_OK;
 
 exit:   
-	//Common return path
+    //Common return path
     free(start_array);
     free(end_array);
     return ret;
@@ -293,13 +293,13 @@ exit:
  */
 /**************************************************************************************************/
 void app_main(void) {
-	
-	//Launch
-	sys_init();										/* boot system & launch RTOS				  */
+    
+    //Launch
+    sys_init();                                     /* boot system & launch RTOS                  */
 
-	//Error Handling
-	ESP_LOGI(APP_TAG, "%s", APP_MAIN_ABORT_MSG);
-		
+    //Error Handling
+    ESP_LOGI(APP_TAG, "%s", APP_MAIN_ABORT_MSG);
+        
     return;
 }
 
@@ -309,22 +309,22 @@ void app_main(void) {
  *  @brief      Initialize the system for use
  *  @details    x
  *
- *	@section 	Opens
- *		Consider relocation to Core\System\system.c&h (cleaner here for now)
+ *  @section    Opens
+ *      Consider relocation to Core\System\system.c&h (cleaner here for now)
  */
 /**************************************************************************************************/
 static void sys_init(void) {
-	
-	//Console Init
-	printf("\n\n");									/* clean delim								  */
-		
-	//HW Init
-	timer_init();
-	uart_init();
-			
-	//OS Init
-	rtos_init();
-	
-	return;
+    
+    //Console Init
+    printf("\n\n");                                 /* clean delim                                */
+        
+    //HW Init
+    timer_init();
+    uart_init();
+            
+    //OS Init
+    rtos_init();
+    
+    return;
 }
 

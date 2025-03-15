@@ -2,9 +2,9 @@
 /** @file     uart_handler.c
  *  @brief    UART Application API
  *  @details  x
- *	
- *	@section 	Opens
- *		handle pause command - "<P>, from the test app with led on the UI to pause the demo
+ *  
+ *  @section    Opens
+ *      handle pause command - "<P>, from the test app with led on the UI to pause the demo
  */
 /**************************************************************************************************/
 
@@ -36,17 +36,17 @@
 /** @fcn        void uart_init(void)
  *  @brief      Initialize the uart api for use
  *  @details    x
- *	
- *	@pre	start_cpu0 () - Application Startup & Port Initialization
- *	@post	uart driver utilities are prepared for use
+ *  
+ *  @pre    start_cpu0 () - Application Startup & Port Initialization
+ *  @post   uart driver utilities are prepared for use
  */
 /**************************************************************************************************/
 void uart_init(void) {
-	
-	printf("Uart initialization complete.\n");
-	
-	return;
-	
+    
+    printf("Uart initialization complete.\n");
+    
+    return;
+    
  }
 
 
@@ -57,37 +57,38 @@ void uart_init(void) {
  *
  *  @param    [in]  (void *) argument - x
  *
- *  @section 	Opens
- *		rx working (port is blocked?)
- *		#define delay value
- *		switch to explicit uart initialization
+ *  @section    Opens
+ *      rx working (port is blocked?)
+ *      #define delay value
+ *      switch to explicit uart initialization
  */
 /**************************************************************************************************/
 static void uart_rxTask(void *argument) {
 
 #ifdef UART_RX_WORKING
 
-	//Locals
-	int len = 0;
+    //Locals
+    int len = 0;
 
-	// Configure a temporary buffer for the incoming data
+    // Configure a temporary buffer for the incoming data
     uint8_t *data = (uint8_t *) malloc(BUF_SIZE);
+
 #endif   
-	//Loop
-	//@open set uart & buff length explicitly
-	for(;;) {
+    //Loop
+    //@open set uart & buff length explicitly
+    for(;;) {
 
 #ifdef UART_RX_WORKING
-		int len;		
-		uart_get_buffered_data_len(ECHO_UART_PORT_NUM, (size_t*)&len);
-		uart_read_bytes(ECHO_UART_PORT_NUM, data, (BUF_SIZE - 1), 20 / portTICK_PERIOD_MS);
+        int len;        
+        uart_get_buffered_data_len(ECHO_UART_PORT_NUM, (size_t*)&len);
+        uart_read_bytes(ECHO_UART_PORT_NUM, data, (BUF_SIZE - 1), 20 / portTICK_PERIOD_MS);
 
-		printf("uart_rxTask(): %d bytes\n", len);
+        printf("uart_rxTask(): %d bytes\n", len);
 #endif
-		
-		//Delay
-		vTaskDelay(UART_THREAD_DELAY_CTS);
-	}
+        
+        //Delay
+        vTaskDelay(UART_THREAD_DELAY_CTS);
+    }
 } 
 
 
@@ -95,17 +96,17 @@ static void uart_rxTask(void *argument) {
 /** @fcn        void uart_initTasks(void)
  *  @brief      Initialize the uart api for use
  *  @details    x
- *	
- *	@pre	uart_init() & rtos_init()
- *	@post	uart prepared for data reception
+ *  
+ *  @pre    uart_init() & rtos_init()
+ *  @post   uart prepared for data reception
  *
- *  @section 	Opens
- *		Generalize with xTaskCreatePinnedToCore() call with freertos.c lib taking a struct like
- *		cmsis_os2
+ *  @section    Opens
+ *      Generalize with xTaskCreatePinnedToCore() call with freertos.c lib taking a struct like
+ *      cmsis_os2
  */
 /**************************************************************************************************/
 void uart_initTasks(void) {
-	
+    
     //Create and start control task
     uartTaskHandle = xTaskCreatePinnedToCore(uart_rxTask,
                                              UART_TASK_NAME,
@@ -114,6 +115,6 @@ void uart_initTasks(void) {
                                              UART_TASK_PRIO,
                                              NULL,
                                              tskNO_AFFINITY);
-	return; 
+    return; 
 } 
 
