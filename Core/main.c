@@ -8,12 +8,14 @@
  *  @last rev 3/14/25
  *
  *   @section 	Opens
- *		scrub opens
- *		add test pause cmd
+ *		wdt to system task
+ *		add LV test pause cmd
  *		Complete demo
  *		...
  *		Sync with STM32
- *			Publish & host 'v1'!
+ *		...
+ *		Publish & host 'v1'!
+ *			ensure access to test tool is available in subdir
  * 			post both updates to new www rtos page
  *		
  *	 @section 	Development Flow
@@ -31,8 +33,12 @@
  *		Relocate main\ & build\ dirs
  *		Uart Rx & Rx Thread
  *
+ *	@section 	Upcoming
+ *		Complete esp32_wdt & integrate tp es[32_rtos
+ *		Publish timer work to esp32_timer
+ *
  *	@section 	Desires
- *		migration to cmsis_os2 (e.g. group task defs to a structure?)
+ *		migration to cmsis_os2 form (e.g. group task defs to a structure?)
  *
  *  @section    Legal Disclaimer
  * 		©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other

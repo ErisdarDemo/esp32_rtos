@@ -100,8 +100,8 @@ static void uart_rxTask(void *argument) {
  *	@post	uart prepared for data reception
  *
  *  @section 	Opens
- *		Consider relocation to freertos.c
- *		Generalize with fcn call
+ *		Generalize with xTaskCreatePinnedToCore() call with freertos.c lib taking a struct like
+ *		cmsis_os2
  */
 /**************************************************************************************************/
 void uart_initTasks(void) {

@@ -2,10 +2,6 @@
 /** @file     freertos.c
  *  @brief    Code for freertos applications
  *  @details  x
- *
- *  @section 	Opens
- *		unused-includes bug?
- *		integrate disabled content (switch to structure definitions for task cfg)
  */
 /**************************************************************************************************/
 
@@ -90,15 +86,11 @@ static void statsTask(void *arg);
 
 /**************************************************************************************************/
 /** @fcn        void rtos_init(void)
- *  @brief      x
+ *  @brief      Initialize RTOS components for operation
  *  @details    x
  *
- *  @pre 	x
- *  @post	x
- *
- *	@section 	Opens
- *		cmsis_os2!
- *		subroutine with your new struct
+ *  @pre 	sys_init()
+ *  @post	RTOS is configured and tasks operational
  */
 /**************************************************************************************************/
 void rtos_init(void) {
@@ -196,12 +188,6 @@ static void sysTask(void *argument) {
 		//Print Header
 		printLoopHeader();
 
-		//Wiggle
-	    //@open
-
-		//Refresh
-		//@open refresh WDT & check Errors
-
 		//Console Sync
 		printf("\n");
 		
@@ -218,9 +204,6 @@ static void sysTask(void *argument) {
  *  @details    Timer demo
  *
  *  @param    [in]  (void *) argument - x
- *
- *  @section 	Opens
- *		Use real timer
  */
 /**************************************************************************************************/
 static void dataTask(void *argument) {
@@ -334,9 +317,6 @@ static void spinTask(void *arg) {
     xSemaphoreTake(sync_spin_task, portMAX_DELAY);
 
     for(;;) {
-		
-		//Notify
-		//? printTaskHeader("Spin");
 		
         //Consume CPU cycles
         for(int i = 0; i < SPIN_ITER; i++) {

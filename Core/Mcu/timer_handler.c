@@ -5,9 +5,7 @@
  *	
  *	@section 	Opens
  *		handle pause command - "<P>, from the test app with led on the UI to pause the demo
- *		scrub freertos includes
- *		"../"!
- */
+	 */
 /**************************************************************************************************/
 
 //************************************************************************************************//
@@ -26,7 +24,11 @@
 #include "Rtos/freertos.h"
 #include "timer_handler.h"
 
-//Definitions
+
+//************************************************************************************************//
+//                                        DEFINITIONS & TYPES                                     //
+//************************************************************************************************//
+
 #define TIMER_NAME			"timer1Sec"
 #define TIMER_DELAY_CTS		pdMS_TO_TICKS(1000)
 #define TIMER_ID			((void *)0)
@@ -73,15 +75,12 @@ static void timer_callback(TimerHandle_t pxTimer) {
  *
  *	@section 	Reference
  *		mcuoneclipse/Examples/MCUXpresso/FRDM-K64F_FreeRTOS_Timer/main.c	 
- *
- *		@url 	https://github.com/ErichStyger/mcuoneclipse/blob/master/Examples/
- *				MCUXpresso/FRDM-K64F/FRDM-K64F_FreeRTOS_Timer/source/main.c
  */
 /**************************************************************************************************/
 void timer_init(void) {
 
 	//Local Variables	
-	TimerHandle_t timerHandle;
+	TimerHandle_t timerHandle;						/* timer for api							  */
 	BaseType_t stat;								/* sdk response values						  */
 
 
@@ -111,6 +110,7 @@ void timer_init(void) {
     }
 	
 	
+	//Notify
 	printf("Timer initialization complete.\n");
 	
 	return;
@@ -120,8 +120,8 @@ void timer_init(void) {
 
 /**************************************************************************************************/
 /** @fcn        uint64_t timer_getCount(void)
- *  @brief      x
- *  @details    x
+ *  @brief      Get timer value
+ *  @details    TIMER_UNSET_VALUE for un-initialized timer 
  *	
  *	@return (uint64_t) software timer value
  */
