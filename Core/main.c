@@ -5,18 +5,15 @@
  *
  *  @author   Justin Reina, Firmware Engineer
  *  @created  3/2/25
- *  @last rev 3/14/25
+ *  @last rev 3/15/25
  *
  *   @section   Opens
- *      wdt to system task
+ *		Rename main\ 								(sticky & slow) 
+ *      Uart Rx & Rx Thread 						(forum help & debug)
+ *      Complete esp32_wdt demo & integrate
+ *      Publish timer work to esp32_timer
  *      add LV test pause cmd
- *      Complete demo
- *      ...
- *      Sync with STM32
- *      ...
- *      Publish & host 'v1'!
- *          ensure access to test tool is available in subdir
- *          post both updates to new www rtos page
+ *      Complete demo & sync with STM32 vers		'v1'
  *      
  *   @section   Development Flow
  *      1. Integrate existing STM 'v0'
@@ -28,14 +25,6 @@
  *   @section   Sources
  *      FreeRTOS Real Time Stats Example 'real_time_stats_example_main'
  *      CubeMx_RTOS_Demo 'r0'
- *
- *  @section    Forum Help
- *      Relocate main\ & build\ dirs
- *      Uart Rx & Rx Thread
- *
- *  @section    Upcoming
- *      Complete esp32_wdt & integrate tp es[32_rtos
- *      Publish timer work to esp32_timer
  *
  *  @section    Desires
  *      migration to cmsis_os2 form (e.g. group task defs to a structure?)
