@@ -8,7 +8,8 @@
  *  @last rev 3/14/25
  *
  *   @section 	Opens
- *		add real timer
+ *		scrub opens
+ *		add test pause cmd
  *		Complete demo
  *		...
  *		Sync with STM32
@@ -51,8 +52,10 @@
 #include <inttypes.h>
 
 //SDK Includes
+#include "esp_log_level.h"
 #include "sdkconfig.h"
 #include "esp_err.h"
+#include "esp_log.h"
 
 //FreeRTOS Includes
 #include "freertos/FreeRTOS.h"
@@ -155,7 +158,7 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
     end_array_size = uxTaskGetNumberOfTasks() + ARRAY_SIZE_OFFSET;
     end_array = malloc(sizeof(TaskStatus_t) * end_array_size);
     
-    if (end_array == NULL) {
+    if(end_array == NULL) {
         ret = ESP_ERR_NO_MEM;
         goto exit;
     }
@@ -164,7 +167,7 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
     //Get post delay task states
     end_array_size = uxTaskGetSystemState(end_array, end_array_size, &end_run_time);
     
-    if (end_array_size == 0) {
+    if(end_array_size == 0) {
         ret = ESP_ERR_INVALID_SIZE;
         goto exit;
     }
@@ -172,7 +175,8 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
 
     //Calculate total_elapsed_time in units of run time stats clock period.
     uint32_t total_elapsed_time = (end_run_time - start_run_time);
-    if (total_elapsed_time == 0) {
+    
+    if(total_elapsed_time == 0) {
         ret = ESP_ERR_INVALID_STATE;
         goto exit;
     }
@@ -180,19 +184,19 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
     printf("| Task   | Run Time | Percentage\n");
     
     //Match each task in start_array to those in the end_array
-    for (int i = 0; i < start_array_size; i++) {
+    for(int i = 0; i < start_array_size; i++) {
 		
         int k = -1;
         
-        for (int j = 0; j < end_array_size; j++) {
+        for(int j = 0; j < end_array_size; j++) {
 			
-            if (start_array[i].xHandle == end_array[j].xHandle) {
+            if(start_array[i].xHandle == end_array[j].xHandle) {
 				
                 k = j;
                 
                 //Mark that task have been matched by overwriting their handles
                 start_array[i].xHandle = NULL;
-                end_array[j].xHandle = NULL;
+                end_array[j].xHandle   = NULL;
                 
                 break;
             }
@@ -247,20 +251,29 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
     
     printf("\nTasks:\n");
 
+
     //Print unmatched tasks
-    for (int i = 0; i < start_array_size; i++) {
-        if (start_array[i].xHandle != NULL) {
+    for(int i = 0; i < start_array_size; i++) {
+		
+        if(start_array[i].xHandle != NULL) {
+			
             printf("| %s | Deleted\n", start_array[i].pcTaskName);
         }
     }
-    for (int i = 0; i < end_array_size; i++) {
-        if (end_array[i].xHandle != NULL) {
+    
+    
+    for(int i = 0; i < end_array_size; i++) {
+		
+        if(end_array[i].xHandle != NULL) {
+			
             printf("| %s | Created\n", end_array[i].pcTaskName);
         }
     }
+    
     ret = ESP_OK;
 
-exit:    //Common return path
+exit:   
+	//Common return path
     free(start_array);
     free(end_array);
     return ret;
@@ -270,18 +283,18 @@ exit:    //Common return path
 /**************************************************************************************************/
 /** @fcn        int app_main(void)
  *  @brief      x
- *  @details    xt
+ *  @details    x
  */
 /**************************************************************************************************/
 void app_main(void) {
 	
-		//Launch
-		sys_init();
+	//Launch
+	sys_init();										/* boot system & launch RTOS				  */
 
-		//Error Handling
-		// @todo!
-			
-	    return;
+	//Error Handling
+	ESP_LOGI(APP_TAG, "%s", APP_MAIN_ABORT_MSG);
+		
+    return;
 }
 
 
@@ -291,12 +304,14 @@ void app_main(void) {
  *  @details    x
  *
  *	@section 	Opens
- *		Consider rtos_init() inegration
  *		Consider relocation to Core\System\system.c&h (cleaner here for now)
  */
 /**************************************************************************************************/
 static void sys_init(void) {
 	
+	//Console Init
+	printf("\n\n");									/* clean delim								  */
+		
 	//HW Init
 	timer_init();
 	uart_init();

@@ -22,6 +22,11 @@
 #include "Rtos/freertos.h"
 #include "main.h"
 
+#ifdef UART_RX_WORKING
+#include <stdlib.h>
+#define BUF_SIZE (1024)
+#endif
+
 
 //************************************************************************************************//
 //                                          PUBLIC FUNCTIONS                                      //
@@ -58,21 +63,16 @@ void uart_init(void) {
  *		switch to explicit uart initialization
  */
 /**************************************************************************************************/
-#ifdef UART_RX_WORKING
-#include <stdlib.h>
-#define BUF_SIZE (1024)
-#endif
-
 static void uart_rxTask(void *argument) {
+
+#ifdef UART_RX_WORKING
 
 	//Locals
 	int len = 0;
 
-#ifdef UART_RX_WORKING
 	// Configure a temporary buffer for the incoming data
     uint8_t *data = (uint8_t *) malloc(BUF_SIZE);
-  #endif
-   
+#endif   
 	//Loop
 	//@open set uart & buff length explicitly
 	for(;;) {
@@ -81,10 +81,9 @@ static void uart_rxTask(void *argument) {
 		int len;		
 		uart_get_buffered_data_len(ECHO_UART_PORT_NUM, (size_t*)&len);
 		uart_read_bytes(ECHO_UART_PORT_NUM, data, (BUF_SIZE - 1), 20 / portTICK_PERIOD_MS);
-#else	
-		len++;
-#endif
+
 		printf("uart_rxTask(): %d bytes\n", len);
+#endif
 		
 		//Delay
 		vTaskDelay(UART_THREAD_DELAY_CTS);

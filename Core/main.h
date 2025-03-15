@@ -35,7 +35,13 @@ extern "C" {
 //************************************************************************************************//
 
 //Code Definitions
-#define _nop() 				__asm__ __volatile__("NOP")
+#define _nop() 					__asm__ __volatile__("NOP")
+
+//Names
+#define APP_TAG					"APP_MAIN"
+
+//Messages
+#define APP_MAIN_ABORT_MSG		"app_main() unexpectedly returned and exited"
 
 
 //************************************************************************************************//

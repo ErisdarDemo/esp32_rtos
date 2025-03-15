@@ -39,12 +39,12 @@
 #define LOOPHEADER_LEN					(80)
 
 //Task Definitions
-#define SPIN_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(100)
-#define STATS_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(2000)
-#define SYSTEM_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
-#define DATA_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
-#define DISPLAY_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
-#define CONTROL_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
+#define SPIN_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(300)
+#define STATS_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(3000)
+#define SYSTEM_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(6000)
+#define DATA_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(6000)
+#define DISPLAY_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(6000)
+#define CONTROL_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(6000)
 
 
 //************************************************************************************************//
@@ -174,7 +174,6 @@ void rtos_init(void) {
                                              
                                              
 	//--------------------------------------- Module Tasks ---------------------------------------//
-	timer_initTasks();
 	uart_initTasks();
                                              
 	return;
@@ -227,9 +226,9 @@ static void sysTask(void *argument) {
 static void dataTask(void *argument) {
 
 	//Locals
-	uint32_t timer_val     = 0; 					/* time check value 						  */
+	uint64_t timer_val     = 0; 					/* time check value 						  */
 	char buff[100]         = {0};					/* print buffer								  */
-	static int devTimerVal = 0;						/* temp for dev							      */
+
 
 	//Init
 	memset(&buff, 0x00, sizeof(buff));
@@ -240,11 +239,11 @@ static void dataTask(void *argument) {
 		//Notify
 		printTaskHeader("Data");
 
-		//Latch timer
-		timer_val = devTimerVal++;				   /* use a counter for now						 */
+		//Latch timer ( %lx or %llx) 
+		timer_val = timer_getCount();
 
 		//Print
-		printf("Timer: 0x%"PRIu32"\n", timer_val);
+		printf("Timer: %llu\n", timer_val);
 		
 		//Console Sync
 		printf("\n");
@@ -273,7 +272,7 @@ static void dispTask(void *argument) {
 	for(;;) {
 
 		//Notify	
-		printTaskHeader("DISPLAY");
+		printTaskHeader("Display");
         
         //Print
         ret = print_real_time_stats(PRINT_STATS_DELAY_CTS);
@@ -314,7 +313,7 @@ static void ctrlTask(void *argument) {
 		printTaskHeader("Control");
 		
 		//Console Sync
-		uart_init();
+		printf("...!\n");
 
 		//Delay
 		vTaskDelay(DISPLAY_TASK_LOOP_DELAY_CTS);
@@ -374,13 +373,7 @@ static void statsTask(void *arg) {
 
 	//------------------------------------------ Print -------------------------------------------//
     for(;;) {
-        
-		//Notify
-		printTaskHeader("Statistics");
-        
-        //Temp
-        printf("Stats task\n");
-        
+	        
         //Loop
         vTaskDelay(STATS_TASK_LOOP_DELAY_CTS);
     }
