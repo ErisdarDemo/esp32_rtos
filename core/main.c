@@ -1,6 +1,6 @@
 /**************************************************************************************************/
 /** @file     main.c
- *  @brief    Template for Application development 
+ *  @brief    Template for Application RTOS development 
  *  @details  x
  *
  *  @author   Justin Reina, Firmware Engineer

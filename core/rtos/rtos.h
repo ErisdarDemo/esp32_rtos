@@ -22,6 +22,11 @@
 //-----------------------------------------  Definitions -----------------------------------------//
 
 //Task Priority Definitions
+#define STAT_TASK_PRIO     	(3)
+#define SYS_TASK_PRIO		(4)
+#define DATA_TASK_PRIO		(4)
+#define DISP_TASK_PRIO		(4)
+#define CTRL_TASK_PRIO		(4)
 
 
 //************************************************************************************************//

@@ -29,6 +29,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>doc</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>lbr</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -60,6 +65,36 @@
 		</link>
 		<link>
 			<name>core/system</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/ESP32 - Justin Reina - Confluence.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/ESP32%20-%20Justin%20Reina%20-%20Confluence.url</locationURI>
+		</link>
+		<link>
+			<name>doc/esp32_base - ErisdarDemo - GitHub.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp32_base%20-%20ErisdarDemo%20-%20GitHub.url</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/parts</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/style</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/vscode</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -107,6 +142,271 @@
 			<name>core/system/system.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/core/system/system.h</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/clangd_bug</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/cmake</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/code_dirs</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/fieldnames</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/icsp</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/main</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/main - ESP32 Build System -  ESP-IDF Programming Guide v5.2.5.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp_idf/main%20-%20ESP32%20Build%20System%20-%20%20ESP-IDF%20Programming%20Guide%20v5.2.5.url</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/esp32-s3</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/esp32-s3-wroom</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/freenove</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/readme.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/readme.txt</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/waveshare</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/style/Src</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/style/source.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/style/source.c</locationURI>
+		</link>
+		<link>
+			<name>doc/style/source.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/style/source.h</locationURI>
+		</link>
+		<link>
+			<name>doc/style/style.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/style/style.h</locationURI>
+		</link>
+		<link>
+			<name>doc/vscode/Multi-root Workspaces.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/vscode/Multi-root%20Workspaces.url</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/clangd_bug/readme.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp_idf/clangd_bug/readme.txt</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/cmake/CMake lesson Hello-world example using CMake - CodeRefinery.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp_idf/cmake/CMake%20lesson%20Hello-world%20example%20using%20CMake%20-%20CodeRefinery.url</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/cmake/cmake example hello workd - Google Search.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp_idf/cmake/cmake%20example%20hello%20workd%20-%20Google%20Search.url</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/code_dirs/c++ - How to add source files from another directory in a cmake file_ - Stack Overflow.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp_idf/code_dirs/c++%20-%20How%20to%20add%20source%20files%20from%20another%20directory%20in%20a%20cmake%20file_%20-%20Stack%20Overflow.url</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/code_dirs/cmakelists add separate directory for source - Google Search.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp_idf/code_dirs/cmakelists%20add%20separate%20directory%20for%20source%20-%20Google%20Search.url</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/code_dirs/subdirectory - Multiple source directories for one executable with CMake - Stack Overflow.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp_idf/code_dirs/subdirectory%20-%20Multiple%20source%20directories%20for%20one%20executable%20with%20CMake%20-%20Stack%20Overflow.url</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/fieldnames/Ref - ESP IDE 3.0.0 Disable in place editor content assist (IEP-1319) · Issue #1043 · espressif_idf-eclipse-plugin.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp_idf/fieldnames/Ref%20-%20ESP%20IDE%203.0.0%20Disable%20in%20place%20editor%20content%20assist%20(IEP-1319)%20%C2%B7%20Issue%20%231043%20%C2%B7%20espressif_idf-eclipse-plugin.url</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/fieldnames/Soln - LSP C_C++ Editor - - — Espressif-IDE latest documentation.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp_idf/fieldnames/Soln%20-%20LSP%20C_C++%20Editor%20-%20-%20%E2%80%94%20Espressif-IDE%20latest%20documentation.url</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/fieldnames/readme.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp_idf/fieldnames/readme.txt</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/icsp/readme.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp_idf/icsp/readme.txt</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/main/Application Startup Flow - ESP32 - — ESP-IDF Programming Guide v5.4.1 documentation.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp_idf/main/Application%20Startup%20Flow%20-%20ESP32%20-%20%E2%80%94%20ESP-IDF%20Programming%20Guide%20v5.4.1%20documentation.url</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/main/How to relocate or rename main &amp; build dirs - ESP32 Forum.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp_idf/main/How%20to%20relocate%20or%20rename%20main%20&amp;%20build%20dirs%20-%20ESP32%20Forum.url</locationURI>
+		</link>
+		<link>
+			<name>doc/esp_idf/main/Renaming the main component - ESP-IDF Programming Guide.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/esp_idf/main/Renaming%20the%20main%20component%20-%20ESP-IDF%20Programming%20Guide.url</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/esp32-s3/Main - ESP32-S3 Wi-Fi &amp; BLE 5 SoC _ Espressif Systems.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/esp32-s3/Main%20-%20ESP32-S3%20Wi-Fi%20&amp;%20BLE%205%20SoC%20_%20Espressif%20Systems.url</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/esp32-s3/Src</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/esp32-s3/esp32-s3_datasheet_en.pdf</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/esp32-s3/esp32-s3_datasheet_en.pdf</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/esp32-s3-wroom/Buy - ESP32-S3-WROOM-1-N16R8 - DigiKey.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/esp32-s3-wroom/Buy%20-%20ESP32-S3-WROOM-1-N16R8%20-%20DigiKey.url</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/esp32-s3-wroom/Datasheet - esp32-s3-wroom-1.pdf</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/esp32-s3-wroom/Datasheet%20-%20esp32-s3-wroom-1.pdf</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/esp32-s3-wroom/Schematic - esp32-s3-wroom.pdf</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/esp32-s3-wroom/Schematic%20-%20esp32-s3-wroom.pdf</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/freenove/Buy - Freenove ESP32-S3-WROOM CAM Board - amazon.com.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/freenove/Buy%20-%20Freenove%20ESP32-S3-WROOM%20CAM%20Board%20-%20amazon.com.url</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/freenove/ESP32S3_Pinout.png</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/freenove/ESP32S3_Pinout.png</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/freenove/Getting Started with the Freenove ESP32-Wrover CAM Board _ Random Nerd Tutorials.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/freenove/Getting%20Started%20with%20the%20Freenove%20ESP32-Wrover%20CAM%20Board%20_%20Random%20Nerd%20Tutorials.url</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/freenove/Repo - Freenove_ESP32_S3_WROOM_Board - Freenove.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/freenove/Repo%20-%20Freenove_ESP32_S3_WROOM_Board%20-%20Freenove.url</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/freenove/readme.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/freenove/readme.txt</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/waveshare/Components</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/waveshare/Main -  ESP32-S3-Touch-LCD-4.3B.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/waveshare/Main%20-%20%20ESP32-S3-Touch-LCD-4.3B.url</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/waveshare/Schematic - ESP32-S3-Touch-LCD-4.3B-Sch.pdf</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/waveshare/Schematic%20-%20ESP32-S3-Touch-LCD-4.3B-Sch.pdf</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/waveshare/Wiki - ESP32-S3-Touch-LCD-4.3B.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/waveshare/Wiki%20-%20ESP32-S3-Touch-LCD-4.3B.url</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/waveshare/readme.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/waveshare/readme.txt</locationURI>
+		</link>
+		<link>
+			<name>doc/style/Src/Repo - Style - Justin Reina · GitLab.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/style/Src/Repo%20-%20Style%20-%20Justin%20Reina%20%C2%B7%20GitLab.url</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/esp32-s3/Src/esp32-s3_datasheet_en.pdf.url</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/esp32-s3/Src/esp32-s3_datasheet_en.pdf.url</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/waveshare/Components/CH343DS1-en.pdf</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/waveshare/Components/CH343DS1-en.pdf</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/waveshare/Components/CH422DS1_EN.pdf</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/waveshare/Components/CH422DS1_EN.pdf</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/waveshare/Components/GT911_EN_Datasheet.pdf</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/waveshare/Components/GT911_EN_Datasheet.pdf</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/waveshare/Components/ST7262.pdf</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/waveshare/Components/ST7262.pdf</locationURI>
+		</link>
+		<link>
+			<name>doc/parts/waveshare/Components/TJA1051.pdf</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/doc/parts/waveshare/Components/TJA1051.pdf</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
