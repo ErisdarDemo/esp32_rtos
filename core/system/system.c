@@ -10,6 +10,7 @@
 
 //Project Includes
 #include "mcu.h"
+#include "timer_handler.h"
 #include "rtos.h"
 
 
@@ -26,6 +27,9 @@ void system_initialize(void) {
 
 	//----------------------------------------- Init MCU -----------------------------------------// 
     mcu_print_info();
+    
+    //Peripherals
+    timer_init();
 	        
 	        
     //---------------------------------------- Init RTOS -----------------------------------------//

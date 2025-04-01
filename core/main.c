@@ -10,17 +10,16 @@
  *  @note   Private functions & variables are declared static
  *
  *  @section    Opens
- *		console demo
- *		- [.] add stats in app
- *		- poke in fcn SLOW
- *		- add real_time_stats fcn
- *		- SLOW IN STEPS
  *		binary semaphores demo
  *		counting semaphores demo
  *		mutex demo
  *		event demo
  *		queue demo ('v1')
+ *		sync with stm32 'v1' demo
  *		C++ base version ('v2')
+ *
+ *	@section 	For Consideration
+ *		Absolute paths for includes in project
  *
  *  @section    Legal Disclaimer
  *      ©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other
@@ -107,9 +106,6 @@
 /**************************************************************************************************/
 void app_main(void) {
 	
-	//Locals
-//	int ctr = 0;									/* loop counter 							  */
-
     //-------------------------------------- Initialization --------------------------------------//
 
 	//Init        
@@ -121,9 +117,7 @@ void app_main(void) {
     for(;;) {
 
     	//------------------------------------- Update -------------------------------------------//
-		
-		//Notify
-//        printf("Hello from app_main - %d\n", ctr++);
+
 			
 	    //------------------------------------- Reset --------------------------------------------//
         

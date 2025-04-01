@@ -2,6 +2,9 @@
 /** @file     stats.c
  *  @brief    Application utilities
  *  @details  x
+ *
+ *	@section 	Opens
+ *		absolute paths for includes in system\
  */
 /**************************************************************************************************/
 
@@ -17,7 +20,7 @@
 #include "freertos/FreeRTOS.h"
 
 //Project Includes
-#include "../core/system/utils.h"					/* @open  	absolute path 					  */
+#include "../core/system/utils.h"
 
 
 //************************************************************************************************//
@@ -83,9 +86,6 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
     start_array_size = (uxTaskGetNumberOfTasks() + ARRAY_SIZE_OFFSET);
     start_array = malloc(sizeof(TaskStatus_t) * start_array_size);
 
-    //Notify
-    printf("print_real_time_stats(): Getting real time stats\n");
-    
     //Safety
     if(start_array == NULL) {
         stat = ESP_ERR_NO_MEM;

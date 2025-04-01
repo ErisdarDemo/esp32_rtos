@@ -3,7 +3,8 @@
  *  @brief    Application RTOS components
  *  @details  x
  *
- *	@warn	 no magic nums
+ *	@section 	Opens
+ *		absolute paths for includes in system\ & mcu\
  */
 /**************************************************************************************************/
 
@@ -22,6 +23,8 @@
 
 //Project Includes	
 #include "rtos.h"
+#include "../system/utils.h"
+#include "../mcu/timer_handler.h"
 #include "stats.h"
 #include "main.h"
 
@@ -237,7 +240,11 @@ static void sysTask(void *argument) {
 	//Loop
 	for(;;) {
 			
-		printf("sysTask()\n");
+        //Print Header
+        printLoopHeader();
+
+        //Console Sync
+        printf("\n");
 		
 		//Delay
 		vTaskDelay(SYSTEM_TASK_LOOP_DELAY_CTS);		
@@ -255,11 +262,28 @@ static void sysTask(void *argument) {
 /**************************************************************************************************/
 static void dataTask(void *argument) {
 
+    //Locals
+    uint64_t timer_val     = 0;                     /* time check value                           */
+    char buff[100]         = {0};                   /* print buffer                               */
+
+    //Init
+    memset(&buff, 0x00, sizeof(buff));
+
 	//Loop
 	for(;;) {
 		
-		printf("dataTask()\n");
-		
+        //Notify
+        printTaskHeader("Data");
+
+        //Latch timer ( %lx or %llx) 
+        timer_val = timer_getCount();
+
+        //Print
+        printf("Timer: %llu\n", timer_val);
+        
+        //Console Sync
+        printf("\n");
+	
 		//Delay
 		vTaskDelay(DATA_TASK_LOOP_DELAY_CTS);
 	}
@@ -276,10 +300,27 @@ static void dataTask(void *argument) {
 /**************************************************************************************************/
 static void dispTask(void *argument) {
 
+    //Locals
+    esp_err_t ret;                                  /* return status value                        */
+
 	//Loop
 	for(;;) {
 		
-		printf("dispTask()\n");
+        //Notify    
+        printTaskHeader("Display");
+        
+        //Print
+        ret = print_real_time_stats(PRINT_STATS_DELAY_CTS);
+        
+        //Safety
+        if(ret == ESP_OK) {            
+            printf("\nReal time stats obtained\n");
+        } else {
+            printf("\nError getting real time stats\n");
+        }       
+        
+        //Console Sync
+        printf("\n");
 		
 		//Delay
 		vTaskDelay(DISPLAY_TASK_LOOP_DELAY_CTS);
@@ -300,7 +341,11 @@ static void ctrlTask(void *argument) {
 	//Loop
 	for(;;) {
 		
-		printf("ctrlTask()\n");
+        //Notify
+        printTaskHeader("Control");
+        
+        //Console Sync
+        printf("...!\n");
 		
 		//Delay
 		vTaskDelay(DISPLAY_TASK_LOOP_DELAY_CTS);
@@ -320,8 +365,6 @@ static void statsTask(void *argument) {
 	
 	//------------------------------------------ Print -------------------------------------------//
     for(;;) {
-		
-		print_real_time_stats(PRINT_STATS_DELAY_CTS);
 		  
         //Loop
         vTaskDelay(STATS_TASK_LOOP_DELAY_CTS);

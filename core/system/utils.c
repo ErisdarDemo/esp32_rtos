@@ -63,3 +63,96 @@ int numPlaces(int n) {
     
     return r;
 }
+
+/**************************************************************************************************/
+/** @fcn        void printTaskHeader(char *titleStr)
+ *  @brief      x
+ *  @details    x
+ *
+ *  @param    [in]  (char *) titleStr - x
+ *
+ *  @assum  console available for print output
+ */
+/**************************************************************************************************/
+void printTaskHeader(char *titleStr) {
+    
+    //Locals
+    int spaceLen = 0;                               /* Title bar equal side spacing count         */
+    int diffVal  = 0;                               /* Extra title bar space needed?              */
+    
+    
+    //Calc Space Needed
+    spaceLen = (PRINTTASK_LEN - (2*2) - strlen(titleStr) - strlen(TASK_STR)) / 2;
+    
+    //Extra Space Check
+    diffVal  =  PRINTTASK_LEN - (2*2) - strlen(titleStr) - strlen(TASK_STR) - (2*spaceLen);
+    
+    
+    //---------------------------------------- Upper Bar -----------------------------------------//
+    printf("\n//");
+    for(int i=0; i<(PRINTTASK_LEN-4); i++) { printf("-"); }
+    printf("//\n");
+        
+        
+    //---------------------------------------- Title Bar -----------------------------------------//
+    printf("//");                                   /* upper line                                 */
+    for(int i=0;i<spaceLen; i++) {printf(" "); }
+    
+    printf("%s", titleStr);                         /* title line                                 */
+    printf("%s", TASK_STR);
+    
+    for(int i=0;i<spaceLen; i++) {printf(" "); }    /* lower line                                 */
+    if(diffVal != 0) { printf(" "); }
+    printf("//\n");
+    
+        
+    //---------------------------------------- Lower Bar -----------------------------------------//
+    printf("//");
+    for(int i=0; i<(PRINTTASK_LEN-4); i++) { printf("-"); }
+    printf("//\n");
+
+    
+    return;
+}
+
+
+/**************************************************************************************************/
+/** @fcn        void printLoopHeader(void)
+ *  @brief      print output loop break header
+ *  @details    x
+ *
+ *  @assum  console available for print output
+ */
+/**************************************************************************************************/
+void printLoopHeader(void) {
+    
+    //Locals
+    int spaceLen = 0;                               /* Title bar equal side spacing count         */
+    int numDigs  = numPlaces(loopCt);
+    
+    //Calc Space Needed
+    spaceLen = (PRINTTASK_LEN - (2*2) - numDigs);
+    
+    
+    //---------------------------------------- Upper Bar -----------------------------------------//
+    printf("\n//");
+    for(int i=0; i<(LOOPHEADER_LEN-4); i++) { printf("*"); }
+    printf("//\n");
+            
+            
+    //---------------------------------------- Title Bar -----------------------------------------//
+    //...
+    printf("// Loop: %d", loopCt++);
+    for(int i=0; i<spaceLen; i++) { printf(" "); }
+    printf("//\n");
+    
+    
+    //---------------------------------------- Lower Bar -----------------------------------------//
+    printf("//");
+    for(int i=0; i<(LOOPHEADER_LEN-4); i++) { printf("*"); }
+    printf("//\n");
+
+    
+    return;
+}	
+	
