@@ -22,6 +22,7 @@
 
 //Project Includes	
 #include "rtos.h"
+#include "stats.h"
 #include "main.h"
 
 
@@ -54,6 +55,7 @@
 
 //Timing Definitions
 #define BOOT_DELAY_CTS					pdMS_TO_TICKS(100)
+#define PRINT_STATS_DELAY_CTS   		pdMS_TO_TICKS(1000)
 
 
 //************************************************************************************************//
@@ -319,7 +321,7 @@ static void statsTask(void *argument) {
 	//------------------------------------------ Print -------------------------------------------//
     for(;;) {
 		
-		printf("statsTask()\n");      
+		print_real_time_stats(PRINT_STATS_DELAY_CTS);
 		  
         //Loop
         vTaskDelay(STATS_TASK_LOOP_DELAY_CTS);

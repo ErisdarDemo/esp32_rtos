@@ -24,6 +24,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/README.md</locationURI>
 		</link>
 		<link>
+			<name>app</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>core</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -37,6 +42,21 @@
 			<name>lbr</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>app/CMakeLists.txt</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/app/CMakeLists.txt</locationURI>
+		</link>
+		<link>
+			<name>app/stats.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/app/stats.c</locationURI>
+		</link>
+		<link>
+			<name>app/stats.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/app/stats.h</locationURI>
 		</link>
 		<link>
 			<name>core/CMakeLists.txt</name>
@@ -142,6 +162,16 @@
 			<name>core/system/system.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/core/system/system.h</locationURI>
+		</link>
+		<link>
+			<name>core/system/utils.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/core/system/utils.c</locationURI>
+		</link>
+		<link>
+			<name>core/system/utils.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/core/system/utils.h</locationURI>
 		</link>
 		<link>
 			<name>doc/esp_idf/clangd_bug</name>

@@ -5,12 +5,16 @@
  *
  *  @author   Justin Reina, Firmware Engineer
  *  @created  3/31/25
- *  @last rev 3/31/25
+ *  @last rev 4/1/25
  *
  *  @note   Private functions & variables are declared static
  *
  *  @section    Opens
  *		console demo
+ *		- [.] add stats in app
+ *		- poke in fcn SLOW
+ *		- add real_time_stats fcn
+ *		- SLOW IN STEPS
  *		binary semaphores demo
  *		counting semaphores demo
  *		mutex demo
@@ -104,8 +108,7 @@
 void app_main(void) {
 	
 	//Locals
-	int ctr = 0;									/* loop counter 							  */
-
+//	int ctr = 0;									/* loop counter 							  */
 
     //-------------------------------------- Initialization --------------------------------------//
 
@@ -120,9 +123,8 @@ void app_main(void) {
     	//------------------------------------- Update -------------------------------------------//
 		
 		//Notify
-        printf("Hello from app_main - %d\n", ctr++);
-		
-
+//        printf("Hello from app_main - %d\n", ctr++);
+			
 	    //------------------------------------- Reset --------------------------------------------//
         
         //Delay
