@@ -27,17 +27,17 @@
  *  @brief      test print for mcu config
  *  @details    display contents from hello_world
  *
- *	@pre 	system_initialize()
+ *  @pre    system_initialize()
  */
 /**************************************************************************************************/
 void mcu_print_info(void) {
-	
-	//Locals
-	esp_err_t stat;								    /* sdk response code						  */
-    esp_chip_info_t chip_info;						/* Chip information from EEPROM               */
-    unsigned major_rev;								/* Chip ID major revision number              */
-    unsigned minor_rev;								/* Chip ID minor revision number              */
-    uint32_t flash_size;							/* flash bank memory size in bytes            */
+    
+    //Locals
+    esp_err_t stat;                                 /* sdk response code                          */
+    esp_chip_info_t chip_info;                      /* Chip information from EEPROM               */
+    unsigned major_rev;                             /* Chip ID major revision number              */
+    unsigned minor_rev;                             /* Chip ID minor revision number              */
+    uint32_t flash_size;                            /* flash bank memory size in bytes            */
 
 
     /* Get information */
@@ -51,7 +51,7 @@ void mcu_print_info(void) {
            (chip_info.features & CHIP_FEATURE_BLE)        ? "BLE"   : "",
            (chip_info.features & CHIP_FEATURE_IEEE802154) ? ", 802.15.4 (Zigbee/Thread)" : "");
 
-	//Get ID
+    //Get ID
     major_rev = (chip_info.revision / 100);
     minor_rev = (chip_info.revision % 100);
     
@@ -67,11 +67,11 @@ void mcu_print_info(void) {
     }
 
     printf("%" PRIu32 "MB %s flash\n", 
-    		flash_size / (uint32_t)(1024 * 1024),
-           	(chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
+            flash_size / (uint32_t)(1024 * 1024),
+            (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
 
     printf("Minimum free heap size: %" PRIu32 " bytes\n", esp_get_minimum_free_heap_size());
 
-	return;
+    return;
 }
 

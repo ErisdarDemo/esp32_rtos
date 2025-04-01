@@ -19,26 +19,26 @@
  *  @brief      Prepare the system for application
  *  @details    x
  *
- *  @pre 	app_main()
- *	@post	System is initialized and prepared for Application requirements
+ *  @pre    app_main()
+ *  @post   System is initialized and prepared for Application requirements
  */
 /**************************************************************************************************/
 void system_initialize(void) {
 
-	//----------------------------------------- Init MCU -----------------------------------------// 
+    //----------------------------------------- Init MCU -----------------------------------------// 
     mcu_print_info();
     
     //Peripherals
     timer_init();
-	        
-	        
+            
+            
     //---------------------------------------- Init RTOS -----------------------------------------//
-	rtos_init();
+    rtos_init();
 
-	
-	//Notify
-	printf("System initialization complete\n");
-	
-	return;
+    
+    //Notify
+    printf("System initialization complete\n");
+    
+    return;
 }
 

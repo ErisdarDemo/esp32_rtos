@@ -4,7 +4,7 @@
  *  @details  FreeRTOS timer right now
  *  
  *  @section    Opens
- *      handle pause command - "<P>, from the test app with led on the UI to pause the demo
+ *      handle pause command from the user with led on the test UI to pause demo
  */
 /**************************************************************************************************/
 
@@ -74,7 +74,10 @@ static void timer_callback(TimerHandle_t pxTimer) {
  *  @post   timer driver utilities & api are prepared for use
  *
  *  @section    Reference
- *      mcuoneclipse/Examples/MCUXpresso/FRDM-K64F_FreeRTOS_Timer/main.c     
+ *      mcuoneclipse/Examples/MCUXpresso/FRDM-K64F_FreeRTOS_Timer/main.c
+ *
+ *  @section 	Opens
+ *      Non-blocking safety catch  
  */
 /**************************************************************************************************/
 void timer_init(void) {

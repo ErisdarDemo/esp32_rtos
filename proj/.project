@@ -39,11 +39,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>lbr</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
 			<name>app/CMakeLists.txt</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/app/CMakeLists.txt</locationURI>
@@ -117,21 +112,6 @@
 			<name>doc/vscode</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>lbr/CMakeLists.txt</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/lbr/CMakeLists.txt</locationURI>
-		</link>
-		<link>
-			<name>lbr/utils.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/lbr/utils.c</locationURI>
-		</link>
-		<link>
-			<name>lbr/utils.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/lbr/utils.h</locationURI>
 		</link>
 		<link>
 			<name>core/mcu/mcu.c</name>

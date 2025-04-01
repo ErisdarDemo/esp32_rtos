@@ -3,14 +3,14 @@
  *  @brief    Application RTOS components
  *  @details  x
  *
- *	@section 	Opens
- *		absolute paths for includes in system\ & mcu\
+ *  @section    Opens
+ *      Absolute paths for includes in system\ & mcu\
  *
- *  @section  	Binary Semaphore Demo
- *		Exclusive use for the console output stream
+ *  @section    Binary Semaphore Demo
+ *      Exclusive use for the console output stream
  *
- *  @section  	Counting Semaphore Demo
- *		Counting system task events 
+ *  @section    Counting Semaphore Demo
+ *      Counting system task events 
  */
 /**************************************************************************************************/
 
@@ -27,7 +27,7 @@
 #include "freertos/FreeRTOSConfig.h"
 #include "freertos/task.h"
 
-//Project Includes	
+//Project Includes
 #include "rtos.h"
 #include "../system/utils.h"
 #include "../mcu/timer_handler.h"
@@ -42,33 +42,33 @@
 //-----------------------------------------  Definitions -----------------------------------------//
 
 //Task Names
-#define STATS_TASK_NAME 				"statisticsTask"
-#define SYS_TASK_NAME 					"systemTask"
-#define DATA_TASK_NAME 					"dataTask"
-#define DISP_TASK_NAME 					"displayTask"
-#define CTRL_TASK_NAME 					"controlTask"
+#define STATS_TASK_NAME                 "statisticsTask"
+#define SYS_TASK_NAME                   "systemTask"
+#define DATA_TASK_NAME                  "dataTask"
+#define DISP_TASK_NAME                  "displayTask"
+#define CTRL_TASK_NAME                  "controlTask"
 
 //Task Definitions
-#define SPIN_STACK_SIZE_BYTES 			(1024)
-#define STACK_SIZE_BYTES 				(4096)
-#define NUM_SPIN_TASKS 					(6)
-#define CTRL_LOOP_CT					(10)
+#define SPIN_STACK_SIZE_BYTES           (1024)
+#define STACK_SIZE_BYTES                (4096)
+#define NUM_SPIN_TASKS                  (6)
+#define CTRL_LOOP_CT                    (10)
 
 //Task Timing Definitions
-#define SPIN_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(100)
-#define STATS_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(2000)
-#define SYSTEM_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
-#define DATA_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
-#define DISPLAY_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
-#define CONTROL_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(20000)
+#define SPIN_TASK_LOOP_DELAY_CTS        pdMS_TO_TICKS(100)
+#define STATS_TASK_LOOP_DELAY_CTS       pdMS_TO_TICKS(2000)
+#define SYSTEM_TASK_LOOP_DELAY_CTS      pdMS_TO_TICKS(4000)
+#define DATA_TASK_LOOP_DELAY_CTS        pdMS_TO_TICKS(4000)
+#define DISPLAY_TASK_LOOP_DELAY_CTS     pdMS_TO_TICKS(4000)
+#define CONTROL_TASK_LOOP_DELAY_CTS     pdMS_TO_TICKS(20000)
 
 //Timing Definitions
-#define BOOT_DELAY_CTS					pdMS_TO_TICKS(100)
-#define PRINT_STATS_DELAY_CTS   		pdMS_TO_TICKS(1000)
+#define BOOT_DELAY_CTS                  pdMS_TO_TICKS(100)
+#define PRINT_STATS_DELAY_CTS           pdMS_TO_TICKS(1000)
 
 //Semaphores
-#define CTS_SEMAPHORE_MAX 				(UINT32_MAX)
-#define CTS_SEMAPHORE_INIT				(0)
+#define CTS_SEMAPHORE_MAX               (UINT32_MAX)
+#define CTS_SEMAPHORE_INIT              (0)
 
 
 //************************************************************************************************//
@@ -93,94 +93,70 @@ static BaseType_t rtos_creatTask(const RtosTaskConfig *cfg);
 //--------------------------------------------- Tasks --------------------------------------------//
 
 //Tasks
-BaseType_t sysTaskHandle;				    	    /* System Operations Task					  */
-BaseType_t dataTaskHandle;							/* Data Operations Task						  */
-BaseType_t dispTaskHandle;							/* Console/UI Task							  */
-BaseType_t ctrlTaskHandle;	  						/* Control Flow Task						  */
-BaseType_t statsTaskHandle;	  						/* Statistics Task						      */
+BaseType_t sysTaskHandle;                           /* System Operations Task                     */
+BaseType_t dataTaskHandle;                          /* Data Operations Task                       */
+BaseType_t dispTaskHandle;                          /* Console/UI Task                            */
+BaseType_t ctrlTaskHandle;                          /* Control Flow Task                          */
+BaseType_t statsTaskHandle;                         /* Statistics Task                            */
 
 
 //Config
 const RtosTaskConfig statsCfg ={
-								.pvTaskCode    = statsTask,
-								.pcName        = STATS_TASK_NAME,
-								.usStackDepth  = STACK_SIZE_BYTES,
-								.pvParameters  = NULL,
-								.uxPriority    = STAT_TASK_PRIO,
-								.pvCreatedTask = NULL,
-								.xCoreID       = tskNO_AFFINITY
-							   };
+                                .pvTaskCode    = statsTask,
+                                .pcName        = STATS_TASK_NAME,
+                                .usStackDepth  = STACK_SIZE_BYTES,
+                                .pvParameters  = NULL,
+                                .uxPriority    = STAT_TASK_PRIO,
+                                .pvCreatedTask = NULL,
+                                .xCoreID       = tskNO_AFFINITY
+                               };
 
 const RtosTaskConfig sysCfg =  {
-								.pvTaskCode    = sysTask,
-								.pcName        = SYS_TASK_NAME,
-								.usStackDepth  = STACK_SIZE_BYTES,
-								.pvParameters  = NULL,
-								.uxPriority    = SYS_TASK_PRIO,
-								.pvCreatedTask = NULL,
-								.xCoreID       = tskNO_AFFINITY
-							   };
-							   
+                                .pvTaskCode    = sysTask,
+                                .pcName        = SYS_TASK_NAME,
+                                .usStackDepth  = STACK_SIZE_BYTES,
+                                .pvParameters  = NULL,
+                                .uxPriority    = SYS_TASK_PRIO,
+                                .pvCreatedTask = NULL,
+                                .xCoreID       = tskNO_AFFINITY
+                               };
+
 const RtosTaskConfig dataCfg = {
-								.pvTaskCode    = dataTask,
-								.pcName        = DATA_TASK_NAME,
-								.usStackDepth  = STACK_SIZE_BYTES,
-								.pvParameters  = NULL,
-								.uxPriority    = DATA_TASK_PRIO,
-								.pvCreatedTask = NULL,
-								.xCoreID       = tskNO_AFFINITY
-							   };
-							   
+                                .pvTaskCode    = dataTask,
+                                .pcName        = DATA_TASK_NAME,
+                                .usStackDepth  = STACK_SIZE_BYTES,
+                                .pvParameters  = NULL,
+                                .uxPriority    = DATA_TASK_PRIO,
+                                .pvCreatedTask = NULL,
+                                .xCoreID       = tskNO_AFFINITY
+                               };
+
 const RtosTaskConfig dispCfg = {
-								.pvTaskCode    = dispTask,
-								.pcName        = DISP_TASK_NAME,
-								.usStackDepth  = STACK_SIZE_BYTES,
-								.pvParameters  = NULL,
-								.uxPriority    = DISP_TASK_PRIO,
-								.pvCreatedTask = NULL,
-								.xCoreID       = tskNO_AFFINITY
-							   };
+                                .pvTaskCode    = dispTask,
+                                .pcName        = DISP_TASK_NAME,
+                                .usStackDepth  = STACK_SIZE_BYTES,
+                                .pvParameters  = NULL,
+                                .uxPriority    = DISP_TASK_PRIO,
+                                .pvCreatedTask = NULL,
+                                .xCoreID       = tskNO_AFFINITY
+                               };
 
 const RtosTaskConfig ctrlCfg = {
-								.pvTaskCode    = ctrlTask,
-								.pcName        = CTRL_TASK_NAME,
-								.usStackDepth  = STACK_SIZE_BYTES,
-								.pvParameters  = NULL,
-								.uxPriority    = CTRL_TASK_PRIO,
-								.pvCreatedTask = NULL,
-								.xCoreID       = tskNO_AFFINITY
-							   };
-							   
-
-//-------------------------------------------- Timers --------------------------------------------//
-
-//Timers
-
-
-//Config
-
-
-//------------------------------------------- Mutexes --------------------------------------------//
-
-//Mutexes
-
-
-//Config
+                                .pvTaskCode    = ctrlTask,
+                                .pcName        = CTRL_TASK_NAME,
+                                .usStackDepth  = STACK_SIZE_BYTES,
+                                .pvParameters  = NULL,
+                                .uxPriority    = CTRL_TASK_PRIO,
+                                .pvCreatedTask = NULL,
+                                .xCoreID       = tskNO_AFFINITY
+                               };
 
 
 //------------------------------------------ Semaphores ------------------------------------------//
 
 //Semaphores
-SemaphoreHandle_t consoleSemaphore;					/* Exclusive access to uninterrupted console  */
-SemaphoreHandle_t taskCtSemaphore;					/* Counting Tasks Semaphore 				  */
-
-
-//-------------------------------------------- Events --------------------------------------------//
-
-//Events
-
-
-//Config
+SemaphoreHandle_t consoleSemaphore;                 /* Exclusive access to uninterrupted console  */
+SemaphoreHandle_t taskCtSemaphore;                  /* Counting Tasks Semaphore                   */
 
 
 //************************************************************************************************//
@@ -192,60 +168,52 @@ SemaphoreHandle_t taskCtSemaphore;					/* Counting Tasks Semaphore 				  */
  *  @brief      x
  *  @details    x
  *
- *  @pre 	system_initialize()
- *  @post	rtos tasks & mechanisms are operational 
+ *  @pre    system_initialize()
+ *  @post   rtos tasks & mechanisms are operational 
  *
- * 	@section 	Opens
- *		Drop those magic numbers
- *		subroutine for task initialization using struct
- *		Update catches to non-blocking with error report
+ *  @section    Opens
+ *      Non-blocking safety catches
  */
 /**************************************************************************************************/
 void rtos_init(void) {
-	
-	//Allow other core to finish initialization
-  	vTaskDelay(BOOT_DELAY_CTS);
-  	
-  	
-	//---------------------------------------- Semaphores ----------------------------------------//
-	
-	//Binary
-	consoleSemaphore = xSemaphoreCreateBinary();
-	
-	//Safety
+
+    //Allow other core to finish initialization
+    vTaskDelay(BOOT_DELAY_CTS);
+
+
+    //---------------------------------------- Semaphores ----------------------------------------//
+
+    //Binary
+    consoleSemaphore = xSemaphoreCreateBinary();
+
+    //Safety
     if(consoleSemaphore == NULL) {
-    	for(;;);
-  	}	
-	
-	//Counting
-	taskCtSemaphore = xSemaphoreCreateCounting(CTS_SEMAPHORE_MAX, CTS_SEMAPHORE_INIT);
-	
-	//Safety
+        for(;;);
+    }
+
+    //Counting
+    taskCtSemaphore = xSemaphoreCreateCounting(CTS_SEMAPHORE_MAX, CTS_SEMAPHORE_INIT);
+
+    //Safety
     if(taskCtSemaphore == NULL) {
-    	for(;;);
-  	}	
-	
-	
-	//------------------------------------------ Queues ------------------------------------------//
-	
-	
-	//------------------------------------------ Events ------------------------------------------//
-	
-							   
-	//------------------------------------------ Tasks -------------------------------------------//
-
-	//Init Tasks
-	rtos_creatTask(&statsCfg);
-	rtos_creatTask(&sysCfg);
-	rtos_creatTask(&dataCfg);
-	rtos_creatTask(&dispCfg);
-	rtos_creatTask(&ctrlCfg);
+        for(;;);
+    }   
 
 
-	//Notify	
-	printf("RTOS is initialized and prepared for use\n");
-	
-	return;
+    //------------------------------------------ Tasks -------------------------------------------//
+
+    //Init Tasks
+    rtos_creatTask(&statsCfg);
+    rtos_creatTask(&sysCfg);
+    rtos_creatTask(&dataCfg);
+    rtos_creatTask(&dispCfg);
+    rtos_creatTask(&ctrlCfg);
+
+
+    //Notify
+    printf("RTOS is initialized and prepared for use\n");
+
+    return;
 }
 
 
@@ -260,30 +228,30 @@ void rtos_init(void) {
  *
  *  @param    [in]  (void *) argument - x
  *
- *	@section 	Opens
- *		handle FreeRTOS api status messages
+ *  @section    Opens
+ *      handle FreeRTOS api status messages
  */
 /**************************************************************************************************/
 static void sysTask(void *argument) {
 
-	//Loop
-	for(;;) {
-			
+    //Loop
+    for(;;) {
+
         //Print Header
         printLoopHeader();
 
         //Console Sync
         printf("\n");
-		
-		
-		//--------------------------------------- Cycle ------------------------------------------// 
-		
-		//Report
-		xSemaphoreGive(taskCtSemaphore);
-		
-		//Delay
-		vTaskDelay(SYSTEM_TASK_LOOP_DELAY_CTS);		
-	}
+
+
+        //--------------------------------------- Cycle ------------------------------------------// 
+
+        //Report
+        xSemaphoreGive(taskCtSemaphore);
+
+        //Delay
+        vTaskDelay(SYSTEM_TASK_LOOP_DELAY_CTS);
+    }
 }
 
 
@@ -304,9 +272,9 @@ static void dataTask(void *argument) {
     //Init
     memset(&buff, 0x00, sizeof(buff));
 
-	//Loop
-	for(;;) {
-		
+    //Loop
+    for(;;) {
+
         //Notify
         printTaskHeader("Data");
 
@@ -318,16 +286,16 @@ static void dataTask(void *argument) {
         
         //Console Sync
         printf("\n");
-	
-	
-		//--------------------------------------- Cycle ------------------------------------------// 
 
-		//Report
-		xSemaphoreGive(taskCtSemaphore);
-		
-		//Delay
-		vTaskDelay(DATA_TASK_LOOP_DELAY_CTS);
-	}
+
+        //--------------------------------------- Cycle ------------------------------------------// 
+
+        //Report
+        xSemaphoreGive(taskCtSemaphore);
+
+        //Delay
+        vTaskDelay(DATA_TASK_LOOP_DELAY_CTS);
+    }
 }
 
 
@@ -344,9 +312,9 @@ static void dispTask(void *argument) {
     //Locals
     esp_err_t ret;                                  /* return status value                        */
 
-	//Loop
-	for(;;) {
-		
+    //Loop
+    for(;;) {
+
         //Notify    
         printTaskHeader("Display");
         
@@ -362,16 +330,16 @@ static void dispTask(void *argument) {
         
         //Console Sync
         printf("\n");
-		
-		
-		//--------------------------------------- Cycle ------------------------------------------// 
 
-		//Report
-		xSemaphoreGive(taskCtSemaphore);
-		
-		//Delay
-		vTaskDelay(DISPLAY_TASK_LOOP_DELAY_CTS);
-	}
+
+        //--------------------------------------- Cycle ------------------------------------------// 
+
+        //Report
+        xSemaphoreGive(taskCtSemaphore);
+
+        //Delay
+        vTaskDelay(DISPLAY_TASK_LOOP_DELAY_CTS);
+    }
 }
 
 
@@ -385,13 +353,13 @@ static void dispTask(void *argument) {
 /**************************************************************************************************/
 static void ctrlTask(void *argument) {
 
-	//Locals
-	int taskCt;										/* task activity count report by application  */
-	
-	
-	//Loop
-	for(;;) {
-		
+    //Locals
+    int taskCt;                                     /* task activity count report by application  */
+
+
+    //Loop
+    for(;;) {
+
         //Notify
         printTaskHeader("Control");
         
@@ -404,25 +372,25 @@ static void ctrlTask(void *argument) {
         
         //Catch
         if(taskCt > CTRL_LOOP_CT) {        
-	        
-	        //Reset
-	        semaphoreClear(taskCtSemaphore);
 
-			//Notify
-			printf("ctrlTask(): Operation complete.\n");
+            //Reset
+            semaphoreClear(taskCtSemaphore);
+
+            //Notify
+            printf("ctrlTask(): Operation complete.\n");
 
         } else {
-			
-			//Wait
-			printf("No we are still waiting - %d\n", taskCt);
-		}        
-        
-        
-		//--------------------------------------- Cycle ------------------------------------------// 
 
-		//Delay
-		vTaskDelay(CONTROL_TASK_LOOP_DELAY_CTS);
-	}
+            //Wait
+            printf("No we are still waiting - %d\n", taskCt);
+        }        
+        
+        
+        //--------------------------------------- Cycle ------------------------------------------// 
+
+        //Delay
+        vTaskDelay(CONTROL_TASK_LOOP_DELAY_CTS);
+    }
 }
 
 
@@ -435,15 +403,15 @@ static void ctrlTask(void *argument) {
  */
 /**************************************************************************************************/
 static void statsTask(void *argument) {
-	
-	//------------------------------------------ Print -------------------------------------------//
+    
+    //------------------------------------------ Print -------------------------------------------//
     for(;;) {
   
-		//--------------------------------------- Cycle ------------------------------------------// 
+        //--------------------------------------- Cycle ------------------------------------------// 
 
-		//Report
-		xSemaphoreGive(taskCtSemaphore);
-		  
+        //Report
+        xSemaphoreGive(taskCtSemaphore);
+
         //Loop
         vTaskDelay(STATS_TASK_LOOP_DELAY_CTS);
     }
@@ -459,30 +427,30 @@ static void statsTask(void *argument) {
  *
  *  @param    [in]  (const RtosTaskConfig *) cfg - task configuration parameters
  *
- *  @pre 	x
- *  @post 	x
+ *  @pre    x
+ *  @post   x
  */
 /**************************************************************************************************/
 static BaseType_t rtos_creatTask(const RtosTaskConfig *cfg) {
-	
-	//Locals
-	BaseType_t stat;								/* sdk response value 						  */
-	
-	
-	//Create and start the task
+
+    //Locals
+    BaseType_t stat;                                /* sdk response value                         */
+
+
+    //Create and start the task
     stat = xTaskCreatePinnedToCore(cfg->pvTaskCode,
-								   cfg->pcName,
-								   cfg->usStackDepth,
-								   cfg->pvParameters,
-								   cfg->uxPriority,
-								   cfg->pvCreatedTask,
-								   cfg->xCoreID);
-								   
-	//Safety
-	if(stat != pdPASS) {
-		printf("Error initializing task %s\n", cfg->pcName);
-	}
-	
-	return stat;
+                                   cfg->pcName,
+                                   cfg->usStackDepth,
+                                   cfg->pvParameters,
+                                   cfg->uxPriority,
+                                   cfg->pvCreatedTask,
+                                   cfg->xCoreID);
+
+    //Safety
+    if(stat != pdPASS) {
+        printf("Error initializing task %s\n", cfg->pcName);
+    }
+
+    return stat;
 }
 

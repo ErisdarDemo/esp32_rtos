@@ -3,8 +3,8 @@
  #  @brief    Project Description
  #  @details  x
  #
- #  @section 	Detail
- #		Standard cmake components for compile
+ #  @section    Detail
+ #      Standard cmake components for compile
  #
 ####################################################################################################
 cmake_minimum_required(VERSION 3.16)

@@ -1,28 +1,26 @@
 ####################################################################################################
-# @brief 	core\ CMake Description
-# @details 	IDF Progrmming Guide -> Build system -> component CMakeLists.txt 
+# @brief    core\ CMake Description
+# @details  IDF Progrmming Guide -> Build system -> component CMakeLists.txt 
 #
-# @warn 	adding SRC & SRC_DIRS together not recommended
+# @warn     adding SRC & SRC_DIRS together not recommended
 #
 ####################################################################################################
 
 # Build Config
 idf_component_register(
-					   SRC_DIRS
-					     "."
-					     "../app"
-					     "../lbr"
-					     "mcu"
-					     "rtos"
-					     "system"
-					   PRIV_REQUIRES
-					     spi_flash
-					   INCLUDE_DIRS
-					     "."
-					     "../app" 
-					     "../lbr"
-					     "mcu"
-					     "rtos"
-					     "system"
-					  )
+                       SRC_DIRS
+                         "."
+                         "../app"
+                         "mcu"
+                         "rtos"
+                         "system"
+                       PRIV_REQUIRES
+                         spi_flash
+                       INCLUDE_DIRS
+                         "."
+                         "../app" 
+                         "mcu"
+                         "rtos"
+                         "system"
+                      )
 

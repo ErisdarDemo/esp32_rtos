@@ -64,6 +64,7 @@ int numPlaces(int n) {
     return r;
 }
 
+
 /**************************************************************************************************/
 /** @fcn        void printTaskHeader(char *titleStr)
  *  @brief      x
@@ -154,5 +155,5 @@ void printLoopHeader(void) {
 
     
     return;
-}	
-	
+}
+

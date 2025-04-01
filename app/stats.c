@@ -3,8 +3,8 @@
  *  @brief    Application utilities
  *  @details  x
  *
- *	@section 	Opens
- *		absolute paths for includes in system\
+ *  @section    Opens
+ *      absolute paths for includes in system\
  */
 /**************************************************************************************************/
 
@@ -30,11 +30,11 @@
 //-----------------------------------------  Definitions -----------------------------------------//
 
 //Error Support
-#define ARRAY_SIZE_OFFSET   	(5)        			/* Soln ++ iff ESP_ERR_INVALID_SIZE           */
+#define ARRAY_SIZE_OFFSET       (5)                 /* Soln ++ iff ESP_ERR_INVALID_SIZE           */
 
 //String Defs
-#define EOS_CHAR 				(0x00)
-#define DFLT_STR_BUFF_SIZE 		(10)
+#define EOS_CHAR                (0x00)
+#define DFLT_STR_BUFF_SIZE      (10)
 
 
 //************************************************************************************************//
@@ -74,12 +74,12 @@
 esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
 
     //Locals
-    TaskStatus_t *start_array = NULL;				/* ?                                          */
-    TaskStatus_t *end_array   = NULL;				/* ?                                          */
-    UBaseType_t start_array_size;					/* ?                                          */
-    UBaseType_t end_array_size;						/* ?                                          */
-    configRUN_TIME_COUNTER_TYPE start_run_time;		/* ?                                          */
-    configRUN_TIME_COUNTER_TYPE end_run_time;		/* ?                                          */
+    TaskStatus_t *start_array = NULL;               /* ?                                          */
+    TaskStatus_t *end_array   = NULL;               /* ?                                          */
+    UBaseType_t start_array_size;                   /* ?                                          */
+    UBaseType_t end_array_size;                     /* ?                                          */
+    configRUN_TIME_COUNTER_TYPE start_run_time;     /* ?                                          */
+    configRUN_TIME_COUNTER_TYPE end_run_time;       /* ?                                          */
     esp_err_t stat;
 
     //Allocate array to store current task states
@@ -125,17 +125,17 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
     //Calculate total_elapsed_time in units of run time stats clock period.
     uint32_t total_elapsed_time = (end_run_time - start_run_time);
 
-	//BUG
-	if(total_elapsed_time == 0) {
-	    total_elapsed_time = 100;
-	}
+    //BUG
+    if(total_elapsed_time == 0) {
+        total_elapsed_time = 100;
+    }
     
     if(total_elapsed_time == 0) {
         stat = ESP_ERR_INVALID_STATE;
         goto exit;
     }
 
-    printf("| Task           | Run Time | Percentage\n");	/* @open  dynamic spacing 			  */
+    printf("| Task           | Run Time | Percentage\n");   /* @open  dynamic spacing             */
     
     //Match each task in start_array to those in the end_array
     for(int i = 0; i < start_array_size; i++) {
@@ -173,11 +173,11 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
             char *spaceTwoStr = "?";
 
             int sizeOne      = strlen(start_array[i].pcTaskName);
-            int sizeOneMax   = 14;                  /* clean spacing                 			  */
+            int sizeOneMax   = 14;                  /* clean spacing                              */
             int sizeOneSpace = (sizeOneMax-sizeOne+1);
 
             int sizeTwo      = num_elapsed_digits;
-            int sizeTwoMax   = 8;                   /* clean spacing                 			  */                    
+            int sizeTwoMax   = 8;                   /* clean spacing                              */                    
             int sizeTwoSpace = (sizeTwoMax-sizeTwo);
             
             char stringOne[DFLT_STR_BUFF_SIZE] = {0};
@@ -202,14 +202,14 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
                                                           percentage_time);
         }
     }
-	
-	stat = ESP_OK;
-	
+    
+    stat = ESP_OK;
+    
 exit:   
     //------------------------------------ Common return path ------------------------------------//
     free(start_array);
     free(end_array);
 
-	return stat;
+    return stat;
 }
 
