@@ -10,16 +10,16 @@
  *  @note   Private functions & variables are declared static
  *
  *  @section    Opens
- *		binary semaphores demo
- *		counting semaphores demo
  *		mutex demo
  *		event demo
  *		queue demo ('v1')
+ *		binary semaphores demo (Console sleeping till available)
  *		sync with stm32 'v1' demo
  *		C++ base version ('v2')
  *
  *	@section 	For Consideration
  *		Absolute paths for includes in project
+ *		Tasks have mutual exclusion to console printing (system.c: consoleSemaphore)
  *
  *  @section    Legal Disclaimer
  *      ©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other
@@ -52,6 +52,7 @@
 //Project Includes
 #include "utils.h"
 #include "system.h"
+#include "rtos.h"
 #include "main.h"
 
 
@@ -62,7 +63,7 @@
 //-----------------------------------------  Definitions -----------------------------------------//
 
 //Timing
-#define SLEEP_DELAY_S		(1)
+#define SLEEP_DELAY_S		(10)
 
 
 //-------------------------------------------- Macros --------------------------------------------//
@@ -102,6 +103,9 @@
  *
  *	@pre	second stage bootloader
  *	@post	no return
+ *
+ *	@section 	Opens
+ *		Consider safety catch on FreeRTOS api
  */
 /**************************************************************************************************/
 void app_main(void) {
@@ -115,10 +119,10 @@ void app_main(void) {
     //--------------------------------------- Application ----------------------------------------//
 
     for(;;) {
-
+		
     	//------------------------------------- Update -------------------------------------------//
 
-			
+        	
 	    //------------------------------------- Reset --------------------------------------------//
         
         //Delay

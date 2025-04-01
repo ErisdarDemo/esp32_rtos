@@ -5,6 +5,12 @@
  *
  *	@section 	Opens
  *		absolute paths for includes in system\ & mcu\
+ *
+ *  @section  	Binary Semaphore Demo
+ *		Exclusive use for the console output stream
+ *
+ *  @section  	Counting Semaphore Demo
+ *		Counting system task events 
  */
 /**************************************************************************************************/
 
@@ -46,6 +52,7 @@
 #define SPIN_STACK_SIZE_BYTES 			(1024)
 #define STACK_SIZE_BYTES 				(4096)
 #define NUM_SPIN_TASKS 					(6)
+#define CTRL_LOOP_CT					(10)
 
 //Task Timing Definitions
 #define SPIN_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(100)
@@ -53,12 +60,15 @@
 #define SYSTEM_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
 #define DATA_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
 #define DISPLAY_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
-#define CONTROL_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(4000)
-
+#define CONTROL_TASK_LOOP_DELAY_CTS		pdMS_TO_TICKS(20000)
 
 //Timing Definitions
 #define BOOT_DELAY_CTS					pdMS_TO_TICKS(100)
 #define PRINT_STATS_DELAY_CTS   		pdMS_TO_TICKS(1000)
+
+//Semaphores
+#define CTS_SEMAPHORE_MAX 				(UINT32_MAX)
+#define CTS_SEMAPHORE_INIT				(0)
 
 
 //************************************************************************************************//
@@ -158,12 +168,11 @@ const RtosTaskConfig ctrlCfg = {
 //Config
 
 
-//------------------------------------------ Semaphores -------------------------------------------//
+//------------------------------------------ Semaphores ------------------------------------------//
 
 //Semaphores
-
-
-//Config
+SemaphoreHandle_t consoleSemaphore;					/* Exclusive access to uninterrupted console  */
+SemaphoreHandle_t taskCtSemaphore;					/* Counting Tasks Semaphore 				  */
 
 
 //-------------------------------------------- Events --------------------------------------------//
@@ -189,6 +198,7 @@ const RtosTaskConfig ctrlCfg = {
  * 	@section 	Opens
  *		Drop those magic numbers
  *		subroutine for task initialization using struct
+ *		Update catches to non-blocking with error report
  */
 /**************************************************************************************************/
 void rtos_init(void) {
@@ -198,6 +208,22 @@ void rtos_init(void) {
   	
   	
 	//---------------------------------------- Semaphores ----------------------------------------//
+	
+	//Binary
+	consoleSemaphore = xSemaphoreCreateBinary();
+	
+	//Safety
+    if(consoleSemaphore == NULL) {
+    	for(;;);
+  	}	
+	
+	//Counting
+	taskCtSemaphore = xSemaphoreCreateCounting(CTS_SEMAPHORE_MAX, CTS_SEMAPHORE_INIT);
+	
+	//Safety
+    if(taskCtSemaphore == NULL) {
+    	for(;;);
+  	}	
 	
 	
 	//------------------------------------------ Queues ------------------------------------------//
@@ -233,6 +259,9 @@ void rtos_init(void) {
  *  @details    GPIO & UART demos
  *
  *  @param    [in]  (void *) argument - x
+ *
+ *	@section 	Opens
+ *		handle FreeRTOS api status messages
  */
 /**************************************************************************************************/
 static void sysTask(void *argument) {
@@ -245,6 +274,12 @@ static void sysTask(void *argument) {
 
         //Console Sync
         printf("\n");
+		
+		
+		//--------------------------------------- Cycle ------------------------------------------// 
+		
+		//Report
+		xSemaphoreGive(taskCtSemaphore);
 		
 		//Delay
 		vTaskDelay(SYSTEM_TASK_LOOP_DELAY_CTS);		
@@ -284,6 +319,12 @@ static void dataTask(void *argument) {
         //Console Sync
         printf("\n");
 	
+	
+		//--------------------------------------- Cycle ------------------------------------------// 
+
+		//Report
+		xSemaphoreGive(taskCtSemaphore);
+		
 		//Delay
 		vTaskDelay(DATA_TASK_LOOP_DELAY_CTS);
 	}
@@ -322,6 +363,12 @@ static void dispTask(void *argument) {
         //Console Sync
         printf("\n");
 		
+		
+		//--------------------------------------- Cycle ------------------------------------------// 
+
+		//Report
+		xSemaphoreGive(taskCtSemaphore);
+		
 		//Delay
 		vTaskDelay(DISPLAY_TASK_LOOP_DELAY_CTS);
 	}
@@ -338,17 +385,43 @@ static void dispTask(void *argument) {
 /**************************************************************************************************/
 static void ctrlTask(void *argument) {
 
+	//Locals
+	int taskCt;										/* task activity count report by application  */
+	
+	
 	//Loop
 	for(;;) {
 		
         //Notify
         printTaskHeader("Control");
         
-        //Console Sync
-        printf("...!\n");
-		
+        //-------------------------------------- Check Count -------------------------------------//
+        
+        taskCt = uxSemaphoreGetCount(taskCtSemaphore);
+        
+        
+        //------------------------------------ Handle Response -----------------------------------//
+        
+        //Catch
+        if(taskCt > CTRL_LOOP_CT) {        
+	        
+	        //Reset
+	        semaphoreClear(taskCtSemaphore);
+
+			//Notify
+			printf("ctrlTask(): Operation complete.\n");
+
+        } else {
+			
+			//Wait
+			printf("No we are still waiting - %d\n", taskCt);
+		}        
+        
+        
+		//--------------------------------------- Cycle ------------------------------------------// 
+
 		//Delay
-		vTaskDelay(DISPLAY_TASK_LOOP_DELAY_CTS);
+		vTaskDelay(CONTROL_TASK_LOOP_DELAY_CTS);
 	}
 }
 
@@ -365,6 +438,11 @@ static void statsTask(void *argument) {
 	
 	//------------------------------------------ Print -------------------------------------------//
     for(;;) {
+  
+		//--------------------------------------- Cycle ------------------------------------------// 
+
+		//Report
+		xSemaphoreGive(taskCtSemaphore);
 		  
         //Loop
         vTaskDelay(STATS_TASK_LOOP_DELAY_CTS);
@@ -399,6 +477,11 @@ static BaseType_t rtos_creatTask(const RtosTaskConfig *cfg) {
 								   cfg->uxPriority,
 								   cfg->pvCreatedTask,
 								   cfg->xCoreID);
+								   
+	//Safety
+	if(stat != pdPASS) {
+		printf("Error initializing task %s\n", cfg->pcName);
+	}
 	
 	return stat;
 }

@@ -3,6 +3,9 @@
  *  @brief    RTOS Interface File
  *  @details  x
  *
+ *	@section	Opens
+ *		Update to non-blocking clear of semaphore
+ *
  *	@section  	Notes
  *		Interface file headers like this are not recommended in preference for the source header
  */
@@ -27,11 +30,20 @@
 //-----------------------------------------  Definitions -----------------------------------------//
 
 //Task Priority Definitions
-#define STAT_TASK_PRIO     	(3)
-#define SYS_TASK_PRIO		(4)
-#define DATA_TASK_PRIO		(4)
-#define DISP_TASK_PRIO		(4)
-#define CTRL_TASK_PRIO		(4)
+#define STAT_TASK_PRIO     			(3)
+#define SYS_TASK_PRIO				(4)
+#define DATA_TASK_PRIO				(4)
+#define DISP_TASK_PRIO				(4)
+#define CTRL_TASK_PRIO				(4)
+
+
+//-------------------------------------------  Macros --------------------------------------------//
+
+//Semaphores
+#define semaphoreWait(semName) 		xSemaphoreTake(semName, portMAX_DELAY)
+#define semaphoreRelease(semName)	xSemaphoreGive(semName)
+
+#define semaphoreClear(semName) 	while(xSemaphoreTake(semName, 0) != pdFAIL);
 
 //-------------------------------------------- Typedefs ------------------------------------------//
 
@@ -52,6 +64,14 @@ typedef struct rtosTaskConfig {
 	const BaseType_t xCoreID;						/* Task core affinity						  */
 
 } RtosTaskConfig;
+
+
+//************************************************************************************************//
+//                                            VARIABLES                                           //
+//************************************************************************************************//
+
+//Semaphores
+extern SemaphoreHandle_t binSemaphore;
 
 
 //************************************************************************************************//
