@@ -14,6 +14,11 @@
 //                                            INCLUDES                                            //
 //************************************************************************************************//
 
+//FreeRTOS Includes
+#include "freertos/FreeRTOS.h"
+#include "freertos/FreeRTOSConfig.h"
+#include "freertos/task.h"
+
 
 //************************************************************************************************//
 //                                        DEFINITIONS & TYPES                                     //
@@ -27,6 +32,26 @@
 #define DATA_TASK_PRIO		(4)
 #define DISP_TASK_PRIO		(4)
 #define CTRL_TASK_PRIO		(4)
+
+//-------------------------------------------- Typedefs ------------------------------------------//
+
+typedef struct rtosTaskConfig {
+	
+	TaskFunction_t pvTaskCode;						/* Pointer to the task entry function         */
+	
+	const char *const pcName;						/* A descriptive name for the task            */
+	
+	const uint32_t usStackDepth;					/* Task stack size in bytes                   */
+	
+	void *const pvParameters;						/* Param Pointer for the task being created   */
+	
+	UBaseType_t uxPriority;							/* The priority at which the task should run  */
+	
+	TaskHandle_t *const pvCreatedTask;				/* Used to pass back a handle for ref         */
+	
+	const BaseType_t xCoreID;						/* Task core affinity						  */
+
+} RtosTaskConfig;
 
 
 //************************************************************************************************//

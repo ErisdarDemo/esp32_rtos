@@ -57,6 +57,21 @@
 
 
 //************************************************************************************************//
+//                                        FUNCTION DECLARATIONS                                   //
+//************************************************************************************************//
+
+//Tasks
+static void sysTask(void   *argument);
+static void dataTask(void  *argument);
+static void dispTask(void  *argument);
+static void ctrlTask(void  *argument);
+static void statsTask(void *argument);
+
+//API
+static BaseType_t rtos_creatTask(const RtosTaskConfig *cfg);
+
+
+//************************************************************************************************//
 //                                             OS VARIABLES                                       //
 //************************************************************************************************//
 
@@ -71,7 +86,56 @@ BaseType_t statsTaskHandle;	  						/* Statistics Task						      */
 
 
 //Config
+const RtosTaskConfig statsCfg ={
+								.pvTaskCode    = statsTask,
+								.pcName        = STATS_TASK_NAME,
+								.usStackDepth  = STACK_SIZE_BYTES,
+								.pvParameters  = NULL,
+								.uxPriority    = STAT_TASK_PRIO,
+								.pvCreatedTask = NULL,
+								.xCoreID       = tskNO_AFFINITY
+							   };
 
+const RtosTaskConfig sysCfg =  {
+								.pvTaskCode    = sysTask,
+								.pcName        = SYS_TASK_NAME,
+								.usStackDepth  = STACK_SIZE_BYTES,
+								.pvParameters  = NULL,
+								.uxPriority    = SYS_TASK_PRIO,
+								.pvCreatedTask = NULL,
+								.xCoreID       = tskNO_AFFINITY
+							   };
+							   
+const RtosTaskConfig dataCfg = {
+								.pvTaskCode    = dataTask,
+								.pcName        = DATA_TASK_NAME,
+								.usStackDepth  = STACK_SIZE_BYTES,
+								.pvParameters  = NULL,
+								.uxPriority    = DATA_TASK_PRIO,
+								.pvCreatedTask = NULL,
+								.xCoreID       = tskNO_AFFINITY
+							   };
+							   
+const RtosTaskConfig dispCfg = {
+								.pvTaskCode    = dispTask,
+								.pcName        = DISP_TASK_NAME,
+								.usStackDepth  = STACK_SIZE_BYTES,
+								.pvParameters  = NULL,
+								.uxPriority    = DISP_TASK_PRIO,
+								.pvCreatedTask = NULL,
+								.xCoreID       = tskNO_AFFINITY
+							   };
+
+const RtosTaskConfig ctrlCfg = {
+								.pvTaskCode    = ctrlTask,
+								.pcName        = CTRL_TASK_NAME,
+								.usStackDepth  = STACK_SIZE_BYTES,
+								.pvParameters  = NULL,
+								.uxPriority    = CTRL_TASK_PRIO,
+								.pvCreatedTask = NULL,
+								.xCoreID       = tskNO_AFFINITY
+							   };
+							   
 
 //-------------------------------------------- Timers --------------------------------------------//
 
@@ -106,18 +170,6 @@ BaseType_t statsTaskHandle;	  						/* Statistics Task						      */
 
 
 //************************************************************************************************//
-//                                        FUNCTION DECLARATIONS                                   //
-//************************************************************************************************//
-
-//Tasks
-static void sysTask(void   *argument);
-static void dataTask(void  *argument);
-static void dispTask(void  *argument);
-static void ctrlTask(void  *argument);
-static void statsTask(void *argument);
-
-
-//************************************************************************************************//
 //                                          PUBLIC FUNCTIONS                                      //
 //************************************************************************************************//
 
@@ -148,53 +200,16 @@ void rtos_init(void) {
 	
 	//------------------------------------------ Events ------------------------------------------//
 	
-	
+							   
 	//------------------------------------------ Tasks -------------------------------------------//
-	
-    //Create and start stats task
-    statsTaskHandle = xTaskCreatePinnedToCore(statsTask,
-                            				  STATS_TASK_NAME,
-                            				  STACK_SIZE_BYTES,
-                            				  NULL,
-                            				  STAT_TASK_PRIO,
-                            				  NULL,
-                            				  tskNO_AFFINITY);
-                                                  
-      //Create and start system task
-    sysTaskHandle = xTaskCreatePinnedToCore(sysTask,
-                                            SYS_TASK_NAME,
-                                            STACK_SIZE_BYTES,
-                                            NULL,
-                                            SYS_TASK_PRIO,
-                                            NULL,
-                                            tskNO_AFFINITY);
-  
-    //Create and start data task
-    dataTaskHandle = xTaskCreatePinnedToCore(dataTask,
-                                             DATA_TASK_NAME,
-                                             STACK_SIZE_BYTES,
-                                             NULL,
-                                             DATA_TASK_PRIO,
-                                             NULL,
-                                             tskNO_AFFINITY);
 
-    //Create and start display task
-   dispTaskHandle = xTaskCreatePinnedToCore(dispTask,
-                                             DISP_TASK_NAME,
-                                             STACK_SIZE_BYTES,
-                                             NULL,
-                                             DISP_TASK_PRIO,
-                                             NULL,
-                                             tskNO_AFFINITY);
-    
-    //Create and start control task
-  ctrlTaskHandle = xTaskCreatePinnedToCore(ctrlTask,
-                                             CTRL_TASK_NAME,
-                                             STACK_SIZE_BYTES,
-                                             NULL,
-                                             CTRL_TASK_PRIO,
-                                             NULL,
-                                             tskNO_AFFINITY);
+	//Init Tasks
+	rtos_creatTask(&statsCfg);
+	rtos_creatTask(&sysCfg);
+	rtos_creatTask(&dataCfg);
+	rtos_creatTask(&dispCfg);
+	rtos_creatTask(&ctrlCfg);
+
 
 	//Notify	
 	printf("RTOS is initialized and prepared for use\n");
@@ -311,5 +326,35 @@ static void statsTask(void *argument) {
     }
     
     return;
+}
+
+
+/**************************************************************************************************/
+/** @fcn        static BaseType_t  rtos_creatTask(const RtosTaskConfig *cfg)
+ *  @brief      Create & begin a new FreeRTOS task
+ *  @details    x
+ *
+ *  @param    [in]  (const RtosTaskConfig *) cfg - task configuration parameters
+ *
+ *  @pre 	x
+ *  @post 	x
+ */
+/**************************************************************************************************/
+static BaseType_t rtos_creatTask(const RtosTaskConfig *cfg) {
+	
+	//Locals
+	BaseType_t stat;								/* sdk response value 						  */
+	
+	
+	//Create and start the task
+    stat = xTaskCreatePinnedToCore(cfg->pvTaskCode,
+								   cfg->pcName,
+								   cfg->usStackDepth,
+								   cfg->pvParameters,
+								   cfg->uxPriority,
+								   cfg->pvCreatedTask,
+								   cfg->xCoreID);
+	
+	return stat;
 }
 

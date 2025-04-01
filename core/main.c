@@ -10,6 +10,12 @@
  *  @note   Private functions & variables are declared static
  *
  *  @section    Opens
+ *		console demo
+ *		binary semaphores demo
+ *		counting semaphores demo
+ *		mutex demo
+ *		event demo
+ *		queue demo ('v1')
  *		C++ base version ('v2')
  *
  *  @section    Legal Disclaimer
