@@ -19,6 +19,7 @@
 #include "freertos/task.h"
 
 //Project Includes
+#include "demo.h"
 #include "utils.h"
 #include "rtos.h"
 #include "timer_handler.h"
@@ -285,8 +286,8 @@ static void sysTask(void *argument) {
         //Print Header
         printLoopHeader();
 
-        //Console Sync
-        printf("\n");
+		//Task 
+		demo_routine();
 
 
         //--------------------------------------- Cycle ------------------------------------------// 

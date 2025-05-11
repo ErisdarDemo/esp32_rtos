@@ -23,22 +23,27 @@
 //Print Definitions
 #define     MAX_BUFF_LEN    (50)                    /* enough to print string                     */
 
+//************************************************************************************************//
+//                                            VARIABLES                                           //
+//************************************************************************************************//
+
+//Locals
+static int demo_ct = 0;                             /* local count of calls to demo               */
+
 
 //************************************************************************************************//
 //                                          PUBLIC FUNCTIONS                                      //
 //************************************************************************************************//
 
 /**************************************************************************************************/
-/** @fcn        void demo_routine(int ct)
+/** @fcn        void demo_routine(void)
  *  @brief      Demo application routine
  *  @details    x
- * 
- *  @param [in] (int) ct - count value for console display
  * 
  *  @pre    system_initialize()
  */
 /**************************************************************************************************/
-void demo_routine(int ct) {
+void demo_routine(void) {
 
     //Locals
     char buff[MAX_BUFF_LEN] = {0};
@@ -52,8 +57,8 @@ void demo_routine(int ct) {
 
     //----------------------------------------- Operate ------------------------------------------//
 
-    //Load
-    sprintf(&buff[0], "demo_routine(): ct - %d\n\n", ct);
+    //Task
+    sprintf(&buff[0], "demo_routine(): ct - %d\n\n", demo_ct++);
 
 
     //------------------------------------------- Post -------------------------------------------//

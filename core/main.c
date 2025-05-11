@@ -10,15 +10,13 @@
  *  @note   Private functions & variables are declared static
  *
  *  @section    Opens
- *		Deprecate demo.c/h
- *      Blocking Console Access (no overwrites)
- *		binary semaphores demo
- *		counting semaphores demo
- *		mutex demo
- *		event demo
- *		queue demo ('v1'?)
- *		FreeRTOS component examples (README:RTOS Demonstrations)
- *      C++ RTOS template project ('v2')
+ *		binary semaphores demo      (Blocking Console Access (no overwrites)
+ *		counting semaphores demo    (task activity counter)
+ *		mutex demo                  (tasks have mutual exclusion on console access)
+ *		event demo                  (threads wake up on key console messages)
+ *		queue demo                  (console print messages)                           <- ('v1'?)
+ *		Sync FreeRTOS component examples (README:RTOS Demonstrations)
+ *      C++ RTOS template project                                                      <- ('v2')
  *
  *  @section    Legal Disclaimer
  *      ©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other
@@ -38,7 +36,6 @@
 #include "system.h"
 
 //Application Includes
-#include "demo.h"
 #include "utils.h"
 #include "rtos.h"
 
@@ -93,14 +90,11 @@ void app_main(void) {
     for(;;) {
 
         //------------------------------------- Update -------------------------------------------//
-        
-        //C Operate 
-        demo_routine(ctr);
-        
+
         //Notify
         printf("app_main(): loop %d\n\n", ctr++);
 
-        
+
         //------------------------------------- Reset --------------------------------------------//
 
         //Catch

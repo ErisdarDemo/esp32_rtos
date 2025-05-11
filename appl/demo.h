@@ -6,7 +6,7 @@
 //************************************************************************************************//
 
 //Public
-extern void demo_routine(int ct);
+extern void demo_routine(void);
 
 
 #endif /*  APPL_DEMO_H */
