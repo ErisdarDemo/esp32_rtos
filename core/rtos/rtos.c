@@ -73,7 +73,7 @@ static void ctrlTask(void  *argument);
 static void statsTask(void *argument);
 
 //API
-static BaseType_t rtos_creatTask(const RtosTaskConfig *cfg);
+static BaseType_t rtos_createTask(const RtosTaskConfig *cfg);
 
 
 //************************************************************************************************//
@@ -143,11 +143,38 @@ const RtosTaskConfig ctrlCfg = {
                                };
 
 
+//-------------------------------------------- Timers --------------------------------------------//
+
+//Timers
+
+
+//Config
+
+
+//------------------------------------------- Mutexes --------------------------------------------//
+
+//Mutexes
+
+
+//Config
+
+
 //------------------------------------------ Semaphores ------------------------------------------//
 
 //Semaphores
 SemaphoreHandle_t consoleSemaphore;                 /* Exclusive access to uninterrupted console  */
 SemaphoreHandle_t taskCtSemaphore;                  /* Counting Tasks Semaphore                   */
+
+
+//Config
+
+
+//-------------------------------------------- Events --------------------------------------------//
+
+//Events
+
+
+//Config
 
 
 //************************************************************************************************//
@@ -185,20 +212,49 @@ void rtos_init(void) {
     if(taskCtSemaphore == NULL) {
         for(;;);
     }
-        
+   
+	
+	//------------------------------------------ Queues ------------------------------------------//
+
+
+	//------------------------------------------ Events ------------------------------------------//
+	
+	
     //------------------------------------------ Tasks -------------------------------------------//
 
     //Init Tasks
-    rtos_creatTask(&statsCfg);
-    rtos_creatTask(&sysCfg);
-    rtos_creatTask(&dataCfg);
-    rtos_creatTask(&dispCfg);
-    rtos_creatTask(&ctrlCfg);
-    
-    
+    rtos_createTask(&statsCfg);
+    rtos_createTask(&sysCfg);
+    rtos_createTask(&dataCfg);
+    rtos_createTask(&dispCfg);
+    rtos_createTask(&ctrlCfg);
+
+
     //Notify
     printf("rtos_init(): RTOS is initialized and prepared for use\n\n");
     
+    return;
+}
+
+
+/**************************************************************************************************/
+/** @fcn        void rtos_stop(void)
+ *  @brief      Stop rtos tasks & activities
+ *  @details    x
+ *
+ *  @pre    rtos_init()
+ *  @post   rtos tasks & activities are stopped
+ *  
+ *  @section    Opens
+ *      Research common apis
+ *      Something still running?
+ */
+/**************************************************************************************************/
+void rtos_stop(void) {
+
+    //Suspend Operations
+    vTaskEndScheduler();
+
     return;
 }
 
@@ -216,6 +272,7 @@ void rtos_init(void) {
  *
  *  @section    Opens
  *      handle FreeRTOS api status messages
+ *		print_real_time_stats()
  */
 /**************************************************************************************************/
 static void sysTask(void *argument) {
@@ -223,8 +280,8 @@ static void sysTask(void *argument) {
     //Loop
     for(;;) {
 
-		//-------------------------------------- Operate -----------------------------------------//
-		 
+        //-------------------------------------- Operate -----------------------------------------//
+         
         //Print Header
         printLoopHeader();
 
@@ -264,8 +321,8 @@ static void dataTask(void *argument) {
     //Loop
     for(;;) {
 
-		//-------------------------------------- Operate -----------------------------------------//
-		
+        //-------------------------------------- Operate -----------------------------------------//
+        
         //Notify
         printTaskHeader("Data");
 
@@ -306,8 +363,8 @@ static void dispTask(void *argument) {
     //Loop
     for(;;) {
 
-		//-------------------------------------- Operate -----------------------------------------//
-		
+        //-------------------------------------- Operate -----------------------------------------//
+        
         //Notify    
         printTaskHeader("Display");
         
@@ -353,14 +410,13 @@ static void ctrlTask(void *argument) {
     //Loop
     for(;;) {
 
-		//-------------------------------------- Operate -----------------------------------------//
-		
+        //-------------------------------------- Operate -----------------------------------------//
+        
         //Notify
         printTaskHeader("Control");
         
-        //Check        
+        //Check
         taskCt = uxSemaphoreGetCount(taskCtSemaphore);
-        
         
         //Catch & Handle
         if(taskCt > CTRL_LOOP_CT) {        
@@ -412,7 +468,7 @@ static void statsTask(void *argument) {
 
 
 /**************************************************************************************************/
-/** @fcn        static BaseType_t  rtos_creatTask(const RtosTaskConfig *cfg)
+/** @fcn        static BaseType_t  rtos_createTask(const RtosTaskConfig *cfg)
  *  @brief      Create & begin a new FreeRTOS task
  *  @details    x
  *
@@ -422,7 +478,7 @@ static void statsTask(void *argument) {
  *  @post   task prepared to begin operation
  */
 /**************************************************************************************************/
-static BaseType_t rtos_creatTask(const RtosTaskConfig *cfg) {
+static BaseType_t rtos_createTask(const RtosTaskConfig *cfg) {
 
     //Locals
     BaseType_t stat;                                /* sdk response value                         */

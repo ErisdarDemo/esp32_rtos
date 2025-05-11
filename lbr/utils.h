@@ -20,6 +20,9 @@ extern int numPlaces(int n);
 extern void printTaskHeader(char *titleStr);
 extern void printLoopHeader(void);
 
+//State Utilities
+int getLoopCt(void);
+
 //Static Utilities
 extern esp_err_t print_real_time_stats(TickType_t xTicksToWait);
 

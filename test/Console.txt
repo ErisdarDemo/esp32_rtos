@@ -1,0 +1,404 @@
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0x2a (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x15a0
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd20
+load:0x403cb700,len:0x2f00
+entry 0x403c8928
+I (27) boot: ESP-IDF v5.4.1-1-g73d0173b0d 2nd stage bootloader
+I (27) boot: compile time May 10 2025 21:52:51
+I (27) boot: Multicore bootloader
+I (28) boot: chip revision: v0.2
+I (31) boot: efuse block revision: v1.3
+I (35) boot.esp32s3: Boot SPI Speed : 80MHz
+I (39) boot.esp32s3: SPI Mode       : DIO
+I (42) boot.esp32s3: SPI Flash Size : 2MB
+I (46) boot: Enabling RNG early entropy source...
+I (51) boot: Partition Table:
+I (53) boot: ## Label            Usage          Type ST Offset   Length
+I (60) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (73) boot:  2 factory          factory app      00 00 00010000 00100000
+I (79) boot: End of partition table
+I (82) esp_image: segment 0: paddr=00010020 vaddr=3c020020 size=0ab38h ( 43832) map
+I (97) esp_image: segment 1: paddr=0001ab60 vaddr=3fc92f00 size=02a18h ( 10776) load
+I (100) esp_image: segment 2: paddr=0001d580 vaddr=40374000 size=02a98h ( 10904) load
+I (107) esp_image: segment 3: paddr=00020020 vaddr=42000020 size=1b1f8h (111096) map
+I (132) esp_image: segment 4: paddr=0003b220 vaddr=40376a98 size=0c35ch ( 50012) load
+I (143) esp_image: segment 5: paddr=00047584 vaddr=600fe100 size=0001ch (    28) load
+I (149) boot: Loaded app from partition at offset 0x10000
+I (149) boot: Disabling RNG early entropy source...
+I (161) cpu_start: Multicore app
+I (170) cpu_start: Pro cpu start user code
+I (170) cpu_start: cpu freq: 160000000 Hz
+I (170) app_init: Application information:
+I (170) app_init: Project name:     esp32_proj
+I (174) app_init: App version:      f3f29bc-dirty
+I (178) app_init: Compile time:     May 10 2025 21:52:29
+I (183) app_init: ELF file SHA256:  20e51dcdd...
+I (188) app_init: ESP-IDF:          v5.4.1-1-g73d0173b0d
+I (193) efuse_init: Min chip rev:     v0.0
+I (197) efuse_init: Max chip rev:     v0.99
+I (201) efuse_init: Chip rev:         v0.2
+I (205) heap_init: Initializing. RAM available for dynamic allocation:
+I (211) heap_init: At 3FC96328 len 000533E8 (332 KiB): RAM
+I (216) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (221) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (226) heap_init: At 600FE11C len 00001ECC (7 KiB): RTCRAM
+I (233) spi_flash: detected chip: gd
+I (235) spi_flash: flash io: dio
+W (238) spi_flash: Detected size(8192k) larger than the size in the binary image header(2048k).                       Using the size in the binary image header.
+I (250) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (256) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (263) main_task: Started on CPU0
+I (283) main_task: Calling app_main()
+
+
+
+//****************************************************************************//
+//                                                                            //
+//****************************************************************************//
+
+system_initialize(): System is beginning initialization
+
+Timer initialization complete.
+mcu_initialize(): MCU is prepared for application.
+
+    - Chip: esp32s3 (2 cores)
+    - Wifi: Y
+    - BLE: Y
+    - Silicon revision v0.2
+    - 2MB external flash
+    - Minimum free heap size: 384108 bytes
+
+
+//****************************************************************************//
+// Loop: 0                                                                    //
+//****************************************************************************//
+
+
+//---------------------------------------------------------------------//
+//                              Data Task                              //
+//---------------------------------------------------------------------//
+Timer: 0
+
+
+//---------------------------------------------------------------------//
+//                            Display Task                             //
+//---------------------------------------------------------------------//
+
+//---------------------------------------------------------------------//
+//                            Control Task                             //
+//---------------------------------------------------------------------//
+No we are still waiting - 3
+rtos_init(): RTOS is initialized and prepared for use
+
+system_initialize(): System is prepared for application.
+
+demo_routine(): ct - 0
+
+app_main(): loop 0
+
+| Task           | Run Time | Percentage
+| displayTask    | 0        | 0%
+| main           | 0        | 0%
+| IDLE1          | 0        | 0%
+| IDLE0          | 0        | 0%
+| statisticsTask | 0        | 0%
+| systemTask     | 0        | 0%
+| dataTask       | 0        | 0%
+| Tmr Svc        | 0        | 0%
+| ipc1           | 0        | 0%
+| ipc0           | 0        | 0%
+
+Real time stats obtained
+
+demo_routine(): ct - 1
+
+app_main(): loop 1
+
+
+//****************************************************************************//
+// Loop: 1                                                                    //
+//****************************************************************************//
+
+
+//---------------------------------------------------------------------//
+//                              Data Task                              //
+//---------------------------------------------------------------------//
+Timer: 4
+
+demo_routine(): ct - 2
+
+app_main(): loop 2
+
+
+//---------------------------------------------------------------------//
+//                            Display Task                             //
+//---------------------------------------------------------------------//
+| Task           | Run Time | Percentage
+| displayTask    | 0        | 0%
+| IDLE1          | 0        | 0%
+| IDLE0          | 0        | 0%
+| statisticsTask | 0        | 0%
+| main           | 0        | 0%
+| systemTask     | 0        | 0%
+| dataTask       | 0        | 0%
+| controlTask    | 0        | 0%
+| Tmr Svc        | 0        | 0%
+| ipc1           | 0        | 0%
+| ipc0           | 0        | 0%
+
+Real time stats obtained
+
+demo_routine(): ct - 3
+
+app_main(): loop 3
+
+
+//****************************************************************************//
+// Loop: 2                                                                    //
+//****************************************************************************//
+
+
+//---------------------------------------------------------------------//
+//                              Data Task                              //
+//---------------------------------------------------------------------//
+Timer: 8
+
+demo_routine(): ct - 4
+
+app_main(): loop 4
+
+
+//---------------------------------------------------------------------//
+//                            Display Task                             //
+//---------------------------------------------------------------------//
+demo_routine(): ct - 5
+
+app_main(): loop 5
+
+I (10533) main_task: Returned from app_main()
+| Task           | Run Time | Percentage
+| displayTask    | 0        | 0%
+| IDLE1          | 0        | 0%
+| IDLE0          | 0        | 0%
+| Tmr Svc        | 0        | 0%
+| statisticsTask | 0        | 0%
+| systemTask     | 0        | 0%
+| dataTask       | 0        | 0%
+| controlTask    | 0        | 0%
+| ipc1           | 0        | 0%
+| ipc0           | 0        | 0%
+
+Real time stats obtained
+
+
+//****************************************************************************//
+// Loop: 3                                                                    //
+//****************************************************************************//
+
+
+//---------------------------------------------------------------------//
+//                              Data Task                              //
+//---------------------------------------------------------------------//
+Timer: 12
+
+
+//---------------------------------------------------------------------//
+//                            Display Task                             //
+//---------------------------------------------------------------------//
+
+//****************************************************************************//
+// Loop: 4                                                                    //
+//****************************************************************************//
+
+
+//---------------------------------------------------------------------//
+//                              Data Task                              //
+//---------------------------------------------------------------------//
+Timer: 16
+
+| Task           | Run Time | Percentage
+| displayTask    | 0        | 0%
+| IDLE1          | 0        | 0%
+| IDLE0          | 0        | 0%
+| statisticsTask | 0        | 0%
+| systemTask     | 0        | 0%
+| dataTask       | 0        | 0%
+| controlTask    | 0        | 0%
+| Tmr Svc        | 0        | 0%
+| ipc1           | 0        | 0%
+| ipc0           | 0        | 0%
+
+Real time stats obtained
+
+
+//****************************************************************************//
+// Loop: 5                                                                    //
+//****************************************************************************//
+
+
+//---------------------------------------------------------------------//
+//                            Control Task                             //
+//---------------------------------------------------
+//---------------------------------------------------------------//
+-----ctrlTask(): Operation complete.
+-------------------//
+//                              Data Task                              //
+//---------------------------------------------------------------------//
+Timer: 20
+
+
+//---------------------------------------------------------------------//
+//                            Display Task                             //
+//---------------------------------------------------------------------//
+| Task           | Run Time | Percentage
+| displayTask    | 0        | 0%
+| IDLE1          | 0        | 0%
+| IDLE0          | 0        | 0%
+| statisticsTask | 0        | 0%
+| systemTask     | 0        | 0%
+| dataTask       | 0        | 0%
+| controlTask    | 0        | 0%
+| Tmr Svc        | 0        | 0%
+| ipc1           | 0        | 0%
+| ipc0           | 0        | 0%
+
+Real time stats obtained
+
+
+//****************************************************************************//
+// Loop: 6                                                                    //
+//****************************************************************************//
+
+
+//---------------------------------------------------------------------//
+//                              Data Task                              //
+//---------------------------------------------------------------------//
+Timer: 24
+
+
+//---------------------------------------------------------------------//
+//                            Display Task                             //
+//---------------------------------------------------------------------//
+| Task           | Run Time | Percentage
+| displayTask    | 0        | 0%
+| IDLE1          | 0        | 0%
+| IDLE0          | 0        | 0%
+| statisticsTask | 0        | 0%
+| systemTask     | 0        | 0%
+| dataTask       | 0        | 0%
+| controlTask    | 0        | 0%
+| Tmr Svc        | 0        | 0%
+| ipc1           | 0        | 0%
+| ipc0           | 0        | 0%
+
+Real time stats obtained
+
+
+//****************************************************************************//
+// Loop: 7                                                                    //
+//****************************************************************************//
+
+
+//---------------------------------------------------------------------//
+//                              Data Task                              //
+//---------------------------------------------------------------------//
+Timer: 28
+
+
+//---------------------------------------------------------------------//
+//                            Display Task                             //
+//---------------------------------------------------------------------//
+| Task           | Run Time | Percentage
+| displayTask    | 0        | 0%
+| IDLE1          | 0        | 0%
+| IDLE0          | 0        | 0%
+| statisticsTask | 0        | 0%
+| systemTask     | 0        | 0%
+| dataTask       | 0        | 0%
+| controlTask    | 0        | 0%
+| Tmr Svc        | 0        | 0%
+| ipc1           | 0        | 0%
+| ipc0           | 0        | 0%
+
+Real time stats obtained
+
+
+//****************************************************************************//
+// Loop: 8                                                                    //
+//****************************************************************************//
+
+
+//---------------------------------------------------------------------//
+//                              Data Task                              //
+//---------------------------------------------------------------------//
+Timer: 32
+
+
+//---------------------------------------------------------------------//
+//                            Display Task                             //
+//---------------------------------------------------------------------//
+
+//****************************************************************************//
+// Loop: 9                                                                    //
+//****************************************************************************//
+
+
+//---------------------------------------------------------------------//
+//                              Data Task                              //
+//---------------------------------------------------------------------//
+Timer: 36
+
+| Task           | Run Time | Percentage
+| displayTask    | 0        | 0%
+| IDLE1          | 0        | 0%
+| IDLE0          | 0        | 0%
+| statisticsTask | 0        | 0%
+| systemTask     | 0        | 0%
+| dataTask       | 0        | 0%
+| controlTask    | 0        | 0%
+| Tmr Svc        | 0        | 0%
+| ipc1           | 0        | 0%
+| ipc0           | 0        | 0%
+
+Real time stats obtained
+
+
+//---------------------------------------------------------------------//
+//                            Control Task                             //
+//---------------------------------------------------------------------//
+ctrlTask(): Operation complete.
+
+//****************************************************************************//
+// Loop: 10                                                                   //
+//****************************************************************************//
+
+
+//---------------------------------------------------------------------//
+//                              Data Task                              //
+//---------------------------------------------------------------------//
+Timer: 40
+
+
+//---------------------------------------------------------------------//
+//                            Display Task                             //
+//---------------------------------------------------------------------//
+| Task           | Run Time | Percentage
+| displayTask    | 0        | 0%
+| IDLE1          | 0        | 0%
+| IDLE0          | 0        | 0%
+| statisticsTask | 0        | 0%
+| systemTask     | 0        | 0%
+| dataTask       | 0        | 0%
+| controlTask    | 0        | 0%
+| Tmr Svc        | 0        | 0%
+| ipc1           | 0        | 0%
+| ipc0           | 0        | 0%
+
+Real time stats obtained
+

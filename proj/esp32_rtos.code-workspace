@@ -1,40 +1,39 @@
 {
-    "folders": [
-        {
-            "name": "proj",
-            "path": "."
-        },
-        {
-            "name": "doc",
-            "path": "../doc"
-        },
-        {
-            "name": "lbr",
-            "path": "../lbr"
-        },
-        {
-            "name": "core",
-            "path": "../core"
-        },
-        {
-            "path": "../appl"
-        }
-    ],
-    "settings": {
-        "window.title": "esp32_rtos",
-        "files.associations": {
-            "task.h": "c",
-            "freertos.h": "c",
-            "sdkconfig.h": "c",
-            "esp_chip_info.h": "c",
-            "stdio.h": "c",
-            "esp_flash.h": "c",
-            "stdbool.h": "c",
-            "esp_system.h": "c",
-            "utils.h": "c",
+	"folders": [
+		{
+			"name": "proj",
+			"path": "."
+		},
+		{
+			"name": "doc",
+			"path": "../doc"
+		},
+		{
+			"name": "lbr",
+			"path": "../lbr"
+		},
+		{
+			"path": "../core"
+		},
+		{
+			"path": "../appl"
+		}
+	],
+	"settings": {
+		"window.title": "esp32_rtos",
+		"files.associations": {
+			"task.h": "c",
+			"freertos.h": "c",
+			"sdkconfig.h": "c",
+			"esp_chip_info.h": "c",
+			"stdio.h": "c",
+			"esp_flash.h": "c",
+			"stdbool.h": "c",
+			"esp_system.h": "c",
+			"utils.h": "c",
+			"system.h": "c",
 			"main.h": "c",
 			"mcu.h": "c"
-        },
-        "editor.rulers": [100],
-    }
+		},
+	}
 }

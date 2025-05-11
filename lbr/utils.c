@@ -228,7 +228,7 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
     
     //Get current task states
     start_array_size = uxTaskGetSystemState(start_array, start_array_size, &start_run_time);
-    
+
     //Safety
     if(start_array_size == 0) {
         stat = ESP_ERR_INVALID_SIZE;
@@ -249,7 +249,7 @@ esp_err_t print_real_time_stats(TickType_t xTicksToWait) {
 
     //Get post delay task states
     end_array_size = uxTaskGetSystemState(end_array, end_array_size, &end_run_time);
-    
+
     //Safety
     if(end_array_size == 0) {
         stat = ESP_ERR_INVALID_SIZE;
@@ -345,5 +345,18 @@ exit:
     free(end_array);
 
     return stat;
+}
+
+
+/**************************************************************************************************/
+/** @fcn        int getLoopCt(void)
+ *  @brief      x
+ *  @details    x 
+ *  
+ *  @return (int) active demo loop count
+ */
+/**************************************************************************************************/
+int getLoopCt(void) {
+    return loopCt;
 }
 

@@ -5,6 +5,7 @@
  *
  *  @section    Opens
  *      Update to non-blocking clear of semaphore
+ *		Consider integration of FreeRTOSConfig.h
  *
  *  @section    Notes
  *      Interface file headers like this are not recommended in preference for the source header
@@ -73,6 +74,8 @@ typedef struct rtosTaskConfig {
 
 //Init
 extern void rtos_init(void);
+extern void rtos_stop(void);
+
 
 #endif /* CORE_RTOS_RTOS_H_ */
 

@@ -10,8 +10,15 @@
  *  @note   Private functions & variables are declared static
  *
  *  @section    Opens
+ *		Deprecate demo.c/h
+ *      Blocking Console Access (no overwrites)
+ *		binary semaphores demo
+ *		counting semaphores demo
+ *		mutex demo
+ *		event demo
+ *		queue demo ('v1'?)
  *		FreeRTOS component examples (README:RTOS Demonstrations)
- *      C++ RTOS template project
+ *      C++ RTOS template project ('v2')
  *
  *  @section    Legal Disclaimer
  *      ©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other
@@ -32,6 +39,8 @@
 
 //Application Includes
 #include "demo.h"
+#include "utils.h"
+#include "rtos.h"
 
 
 //************************************************************************************************//
@@ -68,17 +77,17 @@
  */
 /**************************************************************************************************/
 void app_main(void) {
-    
+
     //Locals
     int ctr = 0;                                    /* loop counter                               */
 
-    
+
     //-------------------------------------- Initialization --------------------------------------//
 
     //Init
     system_initialize();
 
-   
+
     //--------------------------------------- Application ----------------------------------------//
 
     for(;;) {
@@ -102,5 +111,14 @@ void app_main(void) {
         //Delay
         delay_ms(SLEEP_DELAY_MS);
     }
+    
+    
+    //Halt RTOS
+    rtos_stop();
+    
+    //Notify
+    printf("app_main(): Goodybye on loop %d, where count %d has expired.\n\n", getLoopCt(), ctr);
+    
+    return;
 }
 
