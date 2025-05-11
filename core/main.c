@@ -1,7 +1,7 @@
 /**************************************************************************************************/
 /** @file     main.c
- *  @brief    ESP32 Base C Project Template
- *  @details  For new ESP32 development
+ *  @brief    ESP32 RTOS Base Project Template
+ *  @details  For new ESP32 RTOS development
  *
  *  @author   Justin Reina, Firmware Engineer
  *  @created  4/16/25
@@ -10,7 +10,8 @@
  *  @note   Private functions & variables are declared static
  *
  *  @section    Opens
- *      Extension to C++
+ *		FreeRTOS component examples (README:RTOS Demonstrations)
+ *      C++ RTOS template project
  *
  *  @section    Legal Disclaimer
  *      ©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other

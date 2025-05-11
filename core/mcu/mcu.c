@@ -22,6 +22,7 @@
 #include "freertos/task.h"
 
 //Project Includes
+#include "timer_handler.h"
 #include "system.h"
 
 
@@ -45,14 +46,13 @@
 /**************************************************************************************************/
 status_code mcu_initialize(void) {
 
-    //Locals
-
-
     //---------------------------------------- Initialize ----------------------------------------//
 
+	//Peripherals
+	timer_init();
 
+	
     //------------------------------------------ Operate -----------------------------------------//
-
 
     //Notify
     printf("mcu_initialize(): MCU is prepared for application.\n\n");

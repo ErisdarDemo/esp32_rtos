@@ -53,6 +53,8 @@ status_code system_initialize(void) {
     printf("//                                                                            //\n");
     printf("//****************************************************************************//\n");
     printf("\n");
+    
+    printf("system_initialize(): System is beginning initialization\n\n");
 
     
     //----------------------------------------- Init MCU -----------------------------------------// 
@@ -68,6 +70,7 @@ status_code system_initialize(void) {
 
     //Notify
     printf("system_initialize(): System is prepared for application.\n\n");
+
 
     return STATUS_OK;
 }

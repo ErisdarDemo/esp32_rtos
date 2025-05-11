@@ -1,8 +1,28 @@
 #ifndef LBR_UTILS_H_
 #define LBR_UTILS_H_
 
-//Global Routines
-extern void utils_test_fcn(void);                   /* and section divs (e.g. 'DECLARATIONS' here)
-                                                       are also not recommended for lightweight 
-                                                       interface files like this either - 'KISS'  */
+//************************************************************************************************//
+//                                            INCLUDES                                            //
+//************************************************************************************************//
+
+//FreeRTOS Includes
+#include "freertos/FreeRTOS.h"
+
+
+//************************************************************************************************//
+//                                       FUNCTION DECLARATIONS                                    //
+//************************************************************************************************//
+
+//Math Utilities
+extern int numPlaces(int n);
+
+//Print Utilities
+extern void printTaskHeader(char *titleStr);
+extern void printLoopHeader(void);
+
+//Static Utilities
+extern esp_err_t print_real_time_stats(TickType_t xTicksToWait);
+
+
 #endif /* LBR_UTILS_H_ */
+

@@ -104,6 +104,16 @@
 			<locationURI>PARENT-1-PROJECT_LOC/core/mcu/mcu.h</locationURI>
 		</link>
 		<link>
+			<name>core/mcu/timer_handler.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/core/mcu/timer_handler.c</locationURI>
+		</link>
+		<link>
+			<name>core/mcu/timer_handler.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/core/mcu/timer_handler.h</locationURI>
+		</link>
+		<link>
 			<name>core/rtos/rtos.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/core/rtos/rtos.c</locationURI>
