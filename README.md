@@ -27,7 +27,7 @@ The following demonstrations are provided in this template example
 
 ## Binary Semaphore
 
-- currently console printing access
+- consoleSemaphore - Exclusive console write access (no overwrites)
 
 ## Counting Semaphores
 

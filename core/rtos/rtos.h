@@ -18,6 +18,9 @@
 //                                            INCLUDES                                            //
 //************************************************************************************************//
 
+//Standard Library Includes
+#include <stdbool.h>
+
 //FreeRTOS Includes
 #include "freertos/FreeRTOS.h"
 #include "freertos/FreeRTOSConfig.h"
@@ -75,6 +78,11 @@ typedef struct rtosTaskConfig {
 //Init
 extern void rtos_init(void);
 extern void rtos_stop(void);
+
+//Console Semaphore
+extern bool consoleSem_status(void);
+extern void consoleSem_acquire(void);
+extern void consoleSem_release(void);
 
 
 #endif /* CORE_RTOS_RTOS_H_ */

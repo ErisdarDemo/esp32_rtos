@@ -11,6 +11,7 @@
 
 //Standard Library Includes
 #include <string.h>
+#include <stdbool.h>
 #include <stdio.h>
 
 //FreeRTOS Includes
@@ -60,6 +61,14 @@
 //Semaphores
 #define CTS_SEMAPHORE_MAX               (UINT32_MAX)
 #define CTS_SEMAPHORE_INIT              (0)
+
+
+//************************************************************************************************//
+//                                       FUNCTION DECLARATIONS                                    //
+//************************************************************************************************//
+
+//Console Semaphore
+static bool consoleSem_init(void);
 
 
 //************************************************************************************************//
@@ -199,12 +208,7 @@ void rtos_init(void) {
     //---------------------------------------- Semaphores ----------------------------------------//
     
     //Binary
-    consoleSemaphore = xSemaphoreCreateBinary();
-
-    //Safety
-    if(consoleSemaphore == NULL) {
-        for(;;);
-    }
+    consoleSem_init();
 
     //Counting
     taskCtSemaphore = xSemaphoreCreateCounting(CTS_SEMAPHORE_MAX, CTS_SEMAPHORE_INIT);
@@ -269,8 +273,11 @@ void rtos_stop(void) {
  *  @brief      Function implementing the sysTask thread.
  *  @details    GPIO & UART demos
  *
- *  @param    [in]  (void *) argument - x
- *
+ *  @param    [in]  (void *) argument - pointer from task creation to access task-specific content
+ *  
+ *  @pre    rtos_init()
+ *  @post   no return
+ *  
  *  @section    Opens
  *      handle FreeRTOS api status messages
  *		print_real_time_stats()
@@ -281,6 +288,9 @@ static void sysTask(void *argument) {
     //Loop
     for(;;) {
 
+        //Access Console
+        consoleSem_acquire();
+        
         //-------------------------------------- Operate -----------------------------------------//
          
         //Print Header
@@ -291,6 +301,9 @@ static void sysTask(void *argument) {
 
 
         //--------------------------------------- Cycle ------------------------------------------// 
+
+        //Release Console
+	    consoleSem_release();
 
         //Report
         xSemaphoreGive(taskCtSemaphore);
@@ -306,7 +319,10 @@ static void sysTask(void *argument) {
  *  @brief      Function implementing the dataTask thread.
  *  @details    Timer demo
  *
- *  @param    [in]  (void *) argument - x
+ *   @param    [in]  (void *) argument - pointer from task creation to access task-specific content
+ *  
+ *  @pre    rtos_init()
+ *  @post   no return
  */
 /**************************************************************************************************/
 static void dataTask(void *argument) {
@@ -321,6 +337,9 @@ static void dataTask(void *argument) {
 
     //Loop
     for(;;) {
+
+        //Access Console
+        consoleSem_acquire();
 
         //-------------------------------------- Operate -----------------------------------------//
         
@@ -339,6 +358,9 @@ static void dataTask(void *argument) {
 
         //--------------------------------------- Cycle ------------------------------------------// 
 
+        //Release Console
+	    consoleSem_release();
+
         //Report
         xSemaphoreGive(taskCtSemaphore);
 
@@ -353,7 +375,10 @@ static void dataTask(void *argument) {
  *  @brief      Function implementing the dispTask thread
  *  @details    Semaphore demo
  *
- *  @param    [in]  (void *) argument - x
+ *   @param    [in]  (void *) argument - pointer from task creation to access task-specific content
+ *
+ *  @pre    rtos_init()
+ *  @post   no return
  */
 /**************************************************************************************************/
 static void dispTask(void *argument) {
@@ -363,6 +388,9 @@ static void dispTask(void *argument) {
 
     //Loop
     for(;;) {
+
+        //Access Console
+        consoleSem_acquire();
 
         //-------------------------------------- Operate -----------------------------------------//
         
@@ -385,6 +413,9 @@ static void dispTask(void *argument) {
 
         //--------------------------------------- Cycle ------------------------------------------// 
 
+        //Release Console
+	    consoleSem_release();
+
         //Report
         xSemaphoreGive(taskCtSemaphore);
 
@@ -399,7 +430,10 @@ static void dispTask(void *argument) {
  *  @brief      Function implementing the ctrlTask thread.
  *  @details    x
  *
- *  @param    [in]  (void *) argument - x
+ *   @param    [in]  (void *) argument - pointer from task creation to access task-specific content
+ *
+ *  @pre    rtos_init()
+ *  @post   no return
  */
 /**************************************************************************************************/
 static void ctrlTask(void *argument) {
@@ -410,6 +444,9 @@ static void ctrlTask(void *argument) {
 
     //Loop
     for(;;) {
+
+        //Access Console
+        consoleSem_acquire();
 
         //-------------------------------------- Operate -----------------------------------------//
         
@@ -437,6 +474,9 @@ static void ctrlTask(void *argument) {
         
         //--------------------------------------- Cycle ------------------------------------------// 
 
+        //Release Console
+	    consoleSem_release();
+        
         //Delay
         vTaskDelay(CONTROL_TASK_LOOP_DELAY_CTS);
     }
@@ -448,7 +488,10 @@ static void ctrlTask(void *argument) {
  *  @brief      x
  *  @details    x
  *
- *  @param    [in]  (void *) argument - ?
+ *   @param    [in]  (void *) argument - pointer from task creation to access task-specific content
+ *
+ *  @pre    rtos_init()
+ *  @post   no return
  */
 /**************************************************************************************************/
 static void statsTask(void *argument) {
@@ -499,5 +542,136 @@ static BaseType_t rtos_createTask(const RtosTaskConfig *cfg) {
     }
 
     return stat;
+}
+
+
+//************************************************************************************************//
+//                                         RTOS UTILITIES                                         //
+//************************************************************************************************//
+
+/**************************************************************************************************/
+/** @fcn        static bool consoleSem_init(void)
+ *  @brief      Initialize the console semaphore
+ *  @details    x
+ *
+ *  @return (bool) descr
+ *
+ *  @pre    rtos_init()
+ *  @post   consoleSemaphore is initialized and available for use
+ *
+ *  @section    Opens
+ *      Handle safety hang
+ */
+/**************************************************************************************************/
+static bool consoleSem_init(void) {
+
+    //Init
+    consoleSemaphore = xSemaphoreCreateBinary();
+
+    //Safety
+    if(consoleSemaphore == NULL) {
+        for(;;);
+    }
+
+    //Make Available
+    consoleSem_release();
+
+    return true;
+}
+
+
+/**************************************************************************************************/
+/** @fcn        bool consoleSem_status(void)
+ *  @brief      Retrieve status of console semaphore
+ *  @details    x
+ *
+ *  @return (bool) status of semaphore (T: Free & available, F: Taken & not available)
+ *
+ *  @pre    rtos_init(), consoleSem_init()
+ *  @post   x
+ *
+ *  @section  Blocking Check Time
+ *      xBlockTime The time in ticks to wait for the semaphore to become available.  The macro 
+ *      portTICK_PERIOD_MS can be used to convert this to a real time.  A block time of zero 
+ *      can be used to poll the semaphore.  A block time of portMAX_DELAY can be used to block 
+ *      indefinitely (if INCLUDE_vTaskSuspend is set to 1 in FreeRTOSConfig.h) (@src semphr.h)
+ */
+/**************************************************************************************************/
+bool consoleSem_status(void) {
+	
+	//Locals
+	BaseType_t stat = pdFALSE;
+
+    
+    //Check
+	stat = xSemaphoreTake(consoleSemaphore, 0);
+
+    //Handle
+    if(stat == pdTRUE) {
+        
+        //Release  
+        xSemaphoreGive(consoleSemaphore);           /* Release if acquired during this check      */
+    }
+
+    //Process
+    return (stat == pdTRUE);
+}
+
+
+/**************************************************************************************************/
+/** @fcn        void consoleSem_acquire(void)
+ *  @brief      acquire consoleSemaphore
+ *  @details    x
+ *
+ *  @pre    rtos_init(), consoleSem_init()
+ *  @post   consoleSemaphore is acquired and unavailable for use
+ *
+ *	@section 	Opens
+ *		timeout value for wait (portTICK_PERIOD_MS?)
+ */
+/**************************************************************************************************/
+void consoleSem_acquire(void) {
+
+	//Locals
+	BaseType_t stat = pdFALSE;
+	
+    //Process
+	stat = xSemaphoreTake(consoleSemaphore, portMAX_DELAY);
+
+    //Handle
+    if(stat == pdFALSE) {
+        printf("consoleSem_acquire(): general error\n");
+    }
+	
+	return;	
+}
+
+
+
+/**************************************************************************************************/
+/** @fcn        void consoleSem_release(void)
+ *  @brief      release consoleSemaphore
+ *  @details    x
+ *
+ *  @pre    rtos_init(), consoleSem_init()
+ *  @post   consoleSemaphore is released and available for use
+ *
+ *  @assum  you are allowed to release the consoleSemaphore
+ */
+/**************************************************************************************************/
+void consoleSem_release(void) {
+
+	//Locals
+	BaseType_t stat = pdFALSE;
+
+	//Process
+	stat = xSemaphoreGive(consoleSemaphore);
+
+    //Handle
+    if(stat == pdFALSE) {
+        printf("consoleSem_release(): general error\n");
+    }
+
+	return;
 }
 

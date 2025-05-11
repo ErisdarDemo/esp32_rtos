@@ -5,18 +5,21 @@
  *
  *  @author   Justin Reina, Firmware Engineer
  *  @created  4/16/25
- *  @last rev 5/10/25
+ *  @last rev 5/11/25
  *
  *  @note   Private functions & variables are declared static
  *
  *  @section    Opens
- *		binary semaphores demo      (Blocking Console Access (no overwrites)
  *		counting semaphores demo    (task activity counter)
+ *		interrupt semaphore example	([1]?)
  *		mutex demo                  (tasks have mutual exclusion on console access)
  *		event demo                  (threads wake up on key console messages)
  *		queue demo                  (console print messages)                           <- ('v1'?)
  *		Sync FreeRTOS component examples (README:RTOS Demonstrations)
  *      C++ RTOS template project                                                      <- ('v2')
+ *
+ *  @section 	Reference
+ *		1. https://esp32tutorials.com/esp32-esp-idf-freertos-semaphore-tutorial
  *
  *  @section    Legal Disclaimer
  *      ©2025 Justin Reina. All rights reserved. All contents of this source file and/or any other

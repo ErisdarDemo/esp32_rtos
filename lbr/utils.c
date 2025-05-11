@@ -2,6 +2,10 @@
 /** @file     utils.c
  *  @brief    Common code utilities
  *  @details  x
+ *
+ *  @section    Opens
+ *      Get these stats printing again, not sure what is hanging. Check the real_time_stats
+ *      ESP demo
  */
 /**************************************************************************************************/
 
